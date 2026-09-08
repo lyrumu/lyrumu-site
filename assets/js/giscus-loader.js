@@ -46,7 +46,7 @@
 
   const script = document.createElement("script");
   script.src = "https://giscus.app/client.js";
-  script.setAttribute("data-repo", "lyrumu/knowledge-base");
+  script.setAttribute("data-repo", "lyrumu/lyrumu-site");
   script.setAttribute("data-repo-id", "R_kgDOSCENwg");
   script.setAttribute("data-category", "Announcements");
   script.setAttribute("data-category-id", "DIC_kwDOSCENws4DAnhH");

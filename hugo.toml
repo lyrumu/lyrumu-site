@@ -141,7 +141,7 @@ enableEmoji = true
     showLikes = false
     # 仅提供编辑入口，真正能否改内容仍由 GitHub 仓库权限决定。
     # 这里先提供基础编辑 URL，是否显示由具体页面/section 控制。
-    editURL = 'https://github.com/lyrumu/knowledge-base/edit/master/content'
+    editURL = 'https://github.com/lyrumu/lyrumu-site/edit/master/content'
     editAppendPath = true
     sharingLinks = ['github', 'twitter', 'email']
 

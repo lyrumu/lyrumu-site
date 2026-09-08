@@ -22,4 +22,4 @@ cover:
   show_stats: true
   # 全站顶部导航品牌头像；首页封面不再重复显示
   avatar: "image/melody.webp"
-  repo_url: "https://github.com/lyrumu/knowledge-base"
+  repo_url: "https://github.com/lyrumu/lyrumu-site"

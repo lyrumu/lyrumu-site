@@ -10,9 +10,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/lyrumu/knowledge-base"><img src="https://img.shields.io/github/last-commit/lyrumu/knowledge-base?label=last%20commit&color=ff69b4&style=flat-square&display_timestamp=committer" alt="Last Commit" /></a>
+  <a href="https://github.com/lyrumu/lyrumu-site"><img src="https://img.shields.io/github/last-commit/lyrumu/lyrumu-site?label=last%20commit&color=ff69b4&style=flat-square&display_timestamp=committer" alt="Last Commit" /></a>
   <img src="https://visitor-badge.laobi.icu/badge?page_id=lyrumu.knowledge-base" alt="Visitors" />
-  <a href="https://deepwiki.com/lyrumu/knowledge-base"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
+  <a href="https://deepwiki.com/lyrumu/lyrumu-site"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </p>
 
 ---
