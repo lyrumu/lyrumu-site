@@ -3,5 +3,9 @@
   {{/* 在 body 解析前启用首帧预布局，避免 defer 轮播脚本接管时重排封面。 */}}
   <script>document.documentElement.classList.add("has-cover-carousel-js");</script>
   {{ $carousel := resources.Get "js/cover-carousel.js" | resources.Minify | resources.Fingerprint "sha512" }}
-  <script src="{{ $carousel.RelPermalink }}" integrity="{{ $carousel.Data.Integrity }}" defer></script>
+  <script
+    src="{{ $carousel.RelPermalink }}"
+    integrity="{{ $carousel.Data.Integrity }}"
+    defer
+    onerror="document.documentElement.classList.remove('has-cover-carousel-js')"></script>
 {{ end }}

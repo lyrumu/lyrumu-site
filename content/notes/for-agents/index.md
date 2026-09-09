@@ -32,6 +32,9 @@ sharingLinks: []
 ## Skills && Plugins
 
 ### Skills管理工具
+- [Claudecode plugin system](安装claudecode CLI，使用其插件系统):
+  `brew install claude-code` && `/plugin marketplace add XXX` && `/plugin install XXX`
+
 - [Vercel官网提供的skill管理工具npx skills](https://www.skills.sh/)
 - [SkillHub](https://www.skillhub.cn/)
 
@@ -39,7 +42,7 @@ sharingLinks: []
 - [Anthropic-official-plugins](https://github.com/anthropics/claude-plugins-official) - Claude code官方插件市场
 - [mattpocock-skills](https://github.com/mattpocock/skills) - 适合工程性仓库的skills
 - [Ponytail(Plugin)](https://github.com/DietrichGebert/ponytail) - 节省你的tokens
-
+- [Andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) - 高星插件、skill
 
 
 ***

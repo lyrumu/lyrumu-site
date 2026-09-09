@@ -35,24 +35,23 @@ showTableOfContents: true
 {{< section-rule >}}
 
 ## Technical stack
-<!-- 基础类 .about-tag 默认蓝色（开发工具）；
-     --purple / --green 两个修饰类按类别切换配色（语言框架 / AI & 前沿）。 -->
+<!-- 按熟练程度分类：蓝 = 熟练 / 紫 = 了解 / 绿 = 学习中 -->
 <div class="about-tags">
   <span class="about-tag">{{< icon "git" >}} Git</span>
   <span class="about-tag">{{< icon "linux" >}} Linux</span>
   <span class="about-tag">{{< icon "markdown" >}} Markdown</span>
-  <span class="about-tag">{{< icon "python" >}} Python</span>
+  <span class="about-tag about-tag--purple">{{< icon "python" >}} Python</span>
   <span class="about-tag about-tag--purple">{{< icon "hugo" >}} Hugo</span>
   <span class="about-tag about-tag--purple">{{< icon "cplusplus" >}} C++</span>
   <span class="about-tag about-tag--green">AI Agent</span>
   <span class="about-tag about-tag--green">{{< icon "flutter" >}} Flutter</span>
 </div>
 
-<!-- 三色分类图例：蓝 = 开发工具 / 紫 = 语言与框架 / 绿 = AI & 前沿 -->
-<div class="about-tags-legend" aria-label="Tag color legend">
-  <span class="about-tags-legend-item"><i class="about-tags-legend-dot about-tags-legend-dot--blue" aria-hidden="true"></i>Dev tools</span>
-  <span class="about-tags-legend-item"><i class="about-tags-legend-dot about-tags-legend-dot--purple" aria-hidden="true"></i>Languages &amp; frameworks</span>
-  <span class="about-tags-legend-item"><i class="about-tags-legend-dot about-tags-legend-dot--green" aria-hidden="true"></i>AI &amp; frontier</span>
+<!-- 熟练程度图例：蓝 = 熟练 / 紫 = 了解 / 绿 = 学习中 -->
+<div class="about-tags-legend" aria-label="Proficiency legend">
+  <span class="about-tags-legend-item"><i class="about-tags-legend-dot about-tags-legend-dot--blue" aria-hidden="true"></i>熟练</span>
+  <span class="about-tags-legend-item"><i class="about-tags-legend-dot about-tags-legend-dot--purple" aria-hidden="true"></i>了解</span>
+  <span class="about-tags-legend-item"><i class="about-tags-legend-dot about-tags-legend-dot--green" aria-hidden="true"></i>学习中</span>
 </div>
 
 {{< section-rule >}}

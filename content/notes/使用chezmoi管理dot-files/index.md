@@ -29,13 +29,15 @@ showComments: false
 sharingLinks: []
 ---
 
-> agent时代 用户目录下会产生很多以点开头的配置文件(下文统一称为dot-files)
+> 使用agents时 用户目录下会产生很多以点开头的配置文件(下文统一称为dot-files)
 > 
 > 这些文件常常有重要价值 例如你的agents.md 以及各种记忆 skill/mcp配置
-> 同时难以管理 因此用chezmoi这个工具进行备份 同时能够在不同设备间快速同步
+> 同时难以管理 因此可以用chezmoi这个工具进行备份 同时能够在不同设备间快速同步
 
 - [**chezmoi官方docs**](https://www.chezmoi.io/) - 查看官方使用教程
 (还在学习使用中 keep updated)
+
+- [**我的个人管理示例**](https://github.com/lyrumu/dot-files)
 
 - **注意 如果你没有使用过git 建议先熟悉git的使用再学习chezmoi**
 
@@ -61,9 +63,11 @@ chezmoi init
 
 > chezmoi不仅能管理dot-files 普通文件也是可以管理的 但是建议只管理家目录下文件
 
-> chezmoi管理本机实际配置文件和chezmoi源仓库文件的关系 
+> **chezmoi管理本机实际配置文件和chezmoi源仓库文件的关系**
 > 
-> git管理chezmoi源本地仓库和github repo的关系
+> **git管理chezmoi源本地仓库和github repo的关系**
+
+### 基础使用
 
 首先 判断家目录下哪些文件需要使用chezmoi管理
 比如.agents .codex .claude等(注意 密钥不要通过chezmoi管理 除非使用加密)
@@ -82,6 +86,13 @@ chezmoi add ~/.codex/AGENTS.md
 ```zsh
 chezmoi status #会显示本机实际配置文件和chezmoi本地源的差异
 chezmoi diff #显示详细差异
+
 chezmoi re-add #直接同步所有差异(更新chezmoi本地源)
 chezmoi re-add ~/.zshrc #只更新某一个文件
+
+chezmoi cd #快捷进入本地chezmoi工作区
+git status
+git add .
+git commit -m "updates"
+git push
 ```

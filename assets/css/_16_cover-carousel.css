@@ -1024,6 +1024,18 @@ a.cover-carousel-card-surface:focus-visible .cover-carousel-cta span {
 
 }
 
+/* 外部 defer 脚本到达前先锁定桌面首帧；加载失败时模板会移除此标记并恢复静态回退。 */
+@media (min-width: 721px) and (prefers-reduced-motion: no-preference) {
+  html.has-cover-carousel-js body.is-cover-page {
+    overflow-y: hidden;
+    overscroll-behavior-y: none;
+  }
+
+  html.has-cover-carousel-js body.is-cover-page #site-footer {
+    display: none;
+  }
+}
+
 /* Tablet：继续横排，但进一步收紧文字和卡片高度。 */
 @media (min-width: 721px) and (max-width: 980px) {
   .cover-header-rail {

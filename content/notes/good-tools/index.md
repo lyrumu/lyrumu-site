@@ -34,6 +34,7 @@ showLikes: true
 
 ## All OS
 
+- [CC-switch](https://www.ccswitch.io/zh/) - 编程工具(尤其是claude-code)统一管理系统
 - [Localsend](https://localsend.org) — 跨win，mac设备文件传输工具
 - [sdkman](https://sdkman.io/) - 可以用来管理java等各种版本的工具
 - [chezmoi](https://www.chezmoi.io/) - 管理你家目录下的dot-files
@@ -47,6 +48,7 @@ showLikes: true
 - [Homebrew](https://brew.sh) — macOS包管理器 除了统一下载管理开发工具 还可一行命令下载管理GUI App
 - [Vorssaint](https://vorssaint.com/zh-hans/) - macOS顶部实用工具栏集合(包括实时显示RAM,CPU占用,以及提供各种mac优化)
 - [iTerm2](https://iterm2.com) — macOS更好的终端
+- [Ghostty](https://ghostty.org/) - macOS开箱即用的轻便终端
 - [AppCleaner](https://freemacsoft.net/appcleaner/) - macOS轻便的软件卸载工具
 - [duti](https://github.com/moretension/duti) - 批量管理macOS上文件的默认打开方式
 
