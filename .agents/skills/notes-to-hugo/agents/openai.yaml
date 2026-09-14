@@ -1,0 +1,4 @@
+interface:
+  display_name: "Notes to Hugo"
+  short_description: "忠实保留内容，完成 Hugo 文章的网站化编排与统一配图"
+  default_prompt: "使用 $notes-to-hugo 将我指定的 /Users/lyrumu/project/Notes 笔记迁移到本站 content/notes；保留原意和信息，通过标题层级、表格或列表、步骤、代码与提示词块、图片图注和阅读节奏完成网站化编排，并生成统一风格的卡片配图；保持源文件只读且不要发布 Git。"

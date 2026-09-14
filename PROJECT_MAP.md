@@ -1,6 +1,6 @@
 # 项目地图 — 个人网站 `f:\Notes\`
 
-> 最后更新：2026-08-09 · 首页数据驱动全屏封面 + Vertical 三卡顺序显现 · Hugo v0.163.2 · Blowfish v2
+> 最后更新：2026-09-14 · 技术变更记录范围 · Hugo v0.163.2 · Blowfish v2
 
 ---
 
@@ -51,6 +51,7 @@
 | 以后要启用 Blowfish 原生阅读数 / 点赞 | [`hugo.toml`](file:///f:/Notes/hugo.toml) 的 `showViews / showLikes` + `[firebase]`（原生方案推荐 Firebase） |
 | 看 Firebase 安全规则怎么配 | [`FIREBASE_SECURITY.md`](file:///f:/Notes/FIREBASE_SECURITY.md) |
 | 加一篇新文章 | 见下方 §4 |
+| 从独立 Obsidian Notes 整理文章 | 调用 `$notes-to-hugo` 并指定 `/Users/lyrumu/project/Notes` 下的源文件；Skill 位于 [`.agents/skills/notes-to-hugo/SKILL.md`](.agents/skills/notes-to-hugo/SKILL.md) |
 | 写 CSS（字体 / 颜色 / 间距） | 见下方 §3 · 选对模块文件 |
 | 改文章内容样式 | [`assets/css/_03_prose.css`](file:///F:/Notes/assets/css/_03_prose.css) |
 | 改"亮色" / "暗色" 主题的 CSS | [`assets/css/_01_tokens.css`](file:///F:/Notes/assets/css/_01_tokens.css) 顶部 `:root`（亮）和 `html.dark`（暗）— **v3 后是唯一调色数据源**，改一处全局生效（封面 + 卡片 + blowfish utility 全部跟着变） |
@@ -64,6 +65,9 @@
 
 ```
 f:\Notes\
+├── .agents/skills/notes-to-hugo/  # ★ 只读 Notes → content/notes 的项目级整理工作流
+│   ├── SKILL.md                   # 工作流、内容边界、风格学习与验证规则
+│   └── agents/openai.yaml         # Codex UI 名称与默认调用提示
 ├── hugo.toml                       # 全局 Hugo 配置
 ├── DEPLOY.md                       # 部署与维护指南
 ├── BLOWFISH_FEATURE_AUDIT.md       # Blowfish / Hugo 原生能力审计与 taxonomy 维护约定
@@ -103,7 +107,7 @@ f:\Notes\
 │                                   #   ↳ music-player.html 里 Concat 成 1 个 bundle 引用
 │
 ├── archetypes/
-│   └── default.md                  # `hugo new` 模板
+│   └── notes.md                    # `hugo new ... --kind notes` 的文章模板
 │
 ├── content/                        # ★ 所有页面内容
 │   ├（待整理）
@@ -199,7 +203,8 @@ f:\Notes\
 │                                # 收紧为：首页 + notes 区 + term 页；2026-07-22）
 │                                # 升级主题时 diff 主题版，保留末尾 Firebase 段的 $firebaseNeeded 条件
 │
-├── DONE.md                         # 开发日志
+├── DONE.md                         # 当前技术变更与接手记录（结果/关键位置/验证边界）
+├── DONE_ARCHIVE.md                 # 2026-09-14 改版前完整历史日志，只读备份
 └── .trae/rules/个人网站开发规则.md   # 项目宪法
 ```
 
@@ -502,13 +507,16 @@ html.dark { --bg-base: #141413 }  ──→  卡片边框 border: 1px solid var(
 
 ```bash
 # 推荐：直接用 notes archetype 起稿
-hugo new content/notes/<slug>/index.md
+hugo new content notes/<slug>/index.md --kind notes
 # 然后编辑生成的 index.md
 # hugo server 验证，/notes/ 入口自动渲染（受 cardColumns 控制）
 ```
 
 - 当前已提供 [`archetypes/notes.md`](file:///f:/Notes/archetypes/notes.md)
 - 若该文章的图片/附件只服务它自己，后续可优先和 `index.md` 放在同目录，而不是继续堆进 `static/`
+- 从 `/Users/lyrumu/project/Notes` 迁移并整理现有笔记时，优先调用 `$notes-to-hugo`；保留原意和信息，并通过标题层级、表格或列表、步骤、代码与提示词块、图片图注和阅读节奏完成网站化编排，同时配齐统一风格的卡片图。源文件只读，不提交或推送 Git。文章、排版、配图及其数据映射变更不写入 `DONE.md`，验证结果和待确认项只在本次交付中说明。
+- `DONE.md` 仅记录网站架构、部署、前端、后端或服务集成变更，按日期倒序。常规条目保留 2–4 条：结果与动机、关键文件/模块、验证或限制；重大架构调整最多 6 条。不记录文章内容、操作过程、提示词、长篇报告或规则/Skill 维护。
+- `DONE_ARCHIVE.md` 原样保存 2026-09-14 改版前的完整日志，仅供追溯，不再追加或整理；当前维护信息以 `DONE.md` 为准。
 
 ### 加 life 子模块（如「图片」）
 

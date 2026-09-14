@@ -84,3 +84,13 @@ items:
     image: "image/notes/python-package.webp"
     icon: package
     fallback_tag: python
+
+  - slug: Mac的一些系统配置
+    image: "image/notes/Mac的一些系统配置.png"
+    icon: wrench
+    fallback_tag: os
+
+  - slug: 影视飓风AI课程总结
+    image: "image/notes/影视飓风AI课程总结.png"
+    icon: brain
+    fallback_tag: ai

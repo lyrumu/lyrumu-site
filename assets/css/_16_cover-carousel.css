@@ -7,8 +7,11 @@
 
 .cover-carousel-scene {
   --cover-header-offset: 0rem;
-  --cover-card-width: clamp(16.5rem, 27.5vw, 26rem);
-  --cover-card-height: clamp(23.5rem, 48vh, 29.5rem);
+  /* 1440×800 为 100%；宽度或高度受限时，三卡几何使用同一比例收缩。 */
+  --cover-card-width: clamp(10.5rem, min(20vw, 36svh), 18rem);
+  --cover-card-height: clamp(14.2917rem, min(27.2222vw, 49svh), 24.5rem);
+  --cover-card-offset-x: clamp(14.7rem, min(28vw, 50.4svh), 25.2rem);
+  --cover-card-offset-y: clamp(4.0833rem, min(7.7778vw, 14svh), 7rem);
   --cover-carousel-ease: cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   width: 100%;
@@ -946,8 +949,8 @@ a.cover-carousel-card-surface:focus-visible .cover-carousel-cta span {
     position: absolute;
     left: 50%;
     top: 43.75%;
-    width: clamp(13.5rem, 20vw, 18rem);
-    height: clamp(18.5rem, 28.5vw, 24.5rem);
+    width: var(--cover-card-width);
+    height: var(--cover-card-height);
     z-index: 1;
     opacity: 0;
     transform:
@@ -975,8 +978,8 @@ a.cover-carousel-card-surface:focus-visible .cover-carousel-cta span {
     opacity: 1;
     transform:
       translate3d(
-        calc(-50% - clamp(15rem, 28vw, 28rem)),
-        calc(-50% + clamp(5rem, 14vh, 8rem)),
+        calc(-50% - var(--cover-card-offset-x)),
+        calc(-50% + var(--cover-card-offset-y)),
         0
       )
       rotate(-12deg)
@@ -988,8 +991,8 @@ a.cover-carousel-card-surface:focus-visible .cover-carousel-cta span {
     opacity: 1;
     transform:
       translate3d(
-        calc(-50% + clamp(15rem, 28vw, 28rem)),
-        calc(-50% + clamp(5rem, 14vh, 8rem)),
+        calc(-50% + var(--cover-card-offset-x)),
+        calc(-50% + var(--cover-card-offset-y)),
         0
       )
       rotate(12deg)
@@ -1051,11 +1054,6 @@ a.cover-carousel-card-surface:focus-visible .cover-carousel-cta span {
   .cover-stats .site-stats {
     justify-content: flex-start;
     text-align: left;
-  }
-
-  .cover-carousel-scene.is-enhanced .cover-carousel-card {
-    width: clamp(10.5rem, 18vw, 12rem);
-    height: clamp(14.5rem, 25vw, 17rem);
   }
 
   .cover-carousel-scene.is-enhanced .cover-home-intro {

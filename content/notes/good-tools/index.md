@@ -40,6 +40,7 @@ showLikes: true
 - [chezmoi](https://www.chezmoi.io/) - 管理你家目录下的dot-files
 - [Watt Toolkit](https://steampp.net) — github，steam社区加速工具
 - [UU游戏加速器](https://uu.163.com/download/)  — steam加速器
+- [Deskflow](https://github.com/deskflow/deskflow) - 同一套键鼠，局域网下控制多台设备（可跨端），开销远小于远程桌面。不过win连接mac时，流畅度和键盘映射还有一定问题
 
 ***
 

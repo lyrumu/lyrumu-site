@@ -212,14 +212,17 @@
 }
 
 /* ----- 表格 ----- */
-.prose table {
+.prose table:not(.lntable) {
+  display: table;
+  width: 100%;
+  max-width: 100%;
   border: 1px solid var(--line);
   border-radius: 0.5rem;
   overflow: hidden;
   border-collapse: separate;
   border-spacing: 0;
 }
-.prose table th {
+.prose table:not(.lntable) th {
   background: color-mix(in srgb, var(--line) 40%, transparent);
   font-family: var(--font-serif-display);
   font-weight: 500;
@@ -229,7 +232,7 @@
   padding: 0.65rem 0.85rem;
   border-bottom: 1px solid var(--line);
 }
-.prose table td {
+.prose table:not(.lntable) td {
   padding: 0.65rem 0.85rem;
   border-top: 1px solid color-mix(in srgb, var(--line) 50%, transparent);
   font-family: var(--font-serif-body);
