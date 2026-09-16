@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://lyrumu.top"><img src="https://img.shields.io/badge/Website-lyrumu.top-ff69b4?style=flat-square" alt="Website" /></a>
-  <a href="https://knowledge-base-85b.pages.dev"><img src="https://img.shields.io/badge/Mirror-knowledge--base--85b.pages.dev-blue?style=flat-square" alt="Mirror" /></a>
+  <a href="https://lyrumu-site.pages.dev"><img src="https://img.shields.io/badge/Cloudflare%20Pages-lyrumu--site.pages.dev-blue?style=flat-square" alt="Cloudflare Pages" /></a>
 </p>
 
 <p align="center">
@@ -20,7 +20,7 @@
 This repository powers my personal website built with **[Hugo](https://gohugo.io/)** + the **[Blowfish](https://blowfish.page/)** theme, deployed on **Cloudflare Pages**.
 
 **Live site:** [https://lyrumu.top](https://lyrumu.top)  
-Mirror (backup): [https://knowledge-base-85b.pages.dev](https://knowledge-base-85b.pages.dev)
+**Cloudflare Pages:** [https://lyrumu-site.pages.dev](https://lyrumu-site.pages.dev)
 
 ---
 
