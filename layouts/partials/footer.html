@@ -100,7 +100,36 @@
         （若去掉 head 里的 defer，此包裹也可去掉恢复同步调用）
       */
       document.addEventListener("DOMContentLoaded", function () {
-        mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+        var zoomImages = document.querySelectorAll("img:not(.nozoom)");
+
+        zoomImages.forEach(function (image) {
+          image.addEventListener("click", function (event) {
+            if (!image.complete || !image.naturalWidth) event.stopPropagation();
+          });
+
+          image.addEventListener("medium-zoom:open", function () {
+            var loadedSrc = image.currentSrc || image.src;
+            if (!loadedSrc) return;
+
+            var attributes = ["src", "srcset", "sizes", "data-zoom-src"].map(function (name) {
+              return [name, image.getAttribute(name)];
+            });
+
+            image.removeAttribute("srcset");
+            image.removeAttribute("sizes");
+            image.removeAttribute("data-zoom-src");
+            image.src = loadedSrc;
+
+            setTimeout(function () {
+              attributes.forEach(function (attribute) {
+                if (attribute[1] === null) image.removeAttribute(attribute[0]);
+                else image.setAttribute(attribute[0], attribute[1]);
+              });
+            }, 0);
+          });
+        });
+
+        mediumZoom(zoomImages, {
           margin: 24,
           background: "rgba(0,0,0,0.5)",
           scrollOffset: 0,

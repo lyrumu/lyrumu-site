@@ -4,6 +4,18 @@
 >
 > 2026-09-14 改版前的完整过程日志原样保存在 [`DONE_ARCHIVE.md`](DONE_ARCHIVE.md)，仅供追溯，不再追加。当前实现以代码、`PROJECT_MAP.md` 和本文件为准。
 
+## 2026-09-15 · 文章图片放大不再等待原图
+
+- 修复慢网下点击文章图片后，`medium-zoom` 先覆盖页面、再无限等待原图而阻塞其他操作的问题；放大层现在直接使用浏览器已加载的响应式图片立即打开。
+- 修复位于共享入口 `layouts/partials/footer.html`：未加载完成的图片忽略点击，已加载图片在 zoom 创建副本时临时隐藏高清源属性，随后恢复页面图片属性。
+- Hugo 构建、生成脚本结构和 Git 空白检查通过；未启动本地服务，实际点击手感留待手动确认。
+
+## 2026-09-15 · DOCS 文章 Markdown 一键复制
+
+- 每篇 `/notes/` 文章页新增 `Copy Markdown`，复制正文时将文章包内的 `image/` 相对路径改为本站完整 URL，粘贴到其他 Markdown 平台后仍可加载图片。
+- `layouts/partials/article-copy-markdown.html` 在构建期准备原始正文，`assets/js/article-markdown-copy.js` 使用 Clipboard API 并提供旧浏览器回退；不包含 YAML front matter，也不修改文章内容。
+- Hugo 构建、脚本语法、生成页面结构和复制文本解析检查通过；图片仍依赖 `lyrumu.top` 托管。
+
 ## 2026-09-14 · 首页展开三卡等比响应
 
 - 桌面展开态以约 `1440×800` 内容区为视觉基准，卡片宽高、左右间距和侧卡下沉距离改为由视口宽高共同约束的同一比例，消除宽屏、矮窗口之间的构图变形。

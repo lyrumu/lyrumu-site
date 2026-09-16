@@ -54,6 +54,8 @@
 | 从独立 Obsidian Notes 整理文章 | 调用 `$notes-to-hugo` 并指定 `/Users/lyrumu/project/Notes` 下的源文件；Skill 位于 [`.agents/skills/notes-to-hugo/SKILL.md`](.agents/skills/notes-to-hugo/SKILL.md) |
 | 写 CSS（字体 / 颜色 / 间距） | 见下方 §3 · 选对模块文件 |
 | 改文章内容样式 | [`assets/css/_03_prose.css`](file:///F:/Notes/assets/css/_03_prose.css) |
+| 改 DOCS 文章的 Markdown 复制功能 | [`layouts/partials/article-copy-markdown.html`](layouts/partials/article-copy-markdown.html) + [`assets/js/article-markdown-copy.js`](assets/js/article-markdown-copy.js) + [`assets/css/_17_article-copy.css`](assets/css/_17_article-copy.css) |
+| 改文章图片点击放大行为 | [`layouts/partials/footer.html`](layouts/partials/footer.html) 的 `mediumZoom` 初始化 |
 | 改"亮色" / "暗色" 主题的 CSS | [`assets/css/_01_tokens.css`](file:///F:/Notes/assets/css/_01_tokens.css) 顶部 `:root`（亮）和 `html.dark`（暗）— **v3 后是唯一调色数据源**，改一处全局生效（封面 + 卡片 + blowfish utility 全部跟着变） |
 | 部署 / 更新站点 | 见 [`DEPLOY.md`](file:///f:/Notes/DEPLOY.md) |
 
@@ -94,7 +96,8 @@ f:\Notes\
 │   │   ├── _12_custom-cursor.css   # ★ 自定义光标（细环 + 延迟跟随）
 │   │   ├── _13_notes-card.css      # ★ /notes/ 影像阴影式封面卡（全背景图 + 底部面板）+ blur-up 模糊占位
 │   │   ├── _15_blur-image.css      # ★ 通用 LQIP blur-up 图片状态
-│   │   └── _16_cover-carousel.css  # ★ 首页整体 sticky + Vertical 三卡顺序显现 + mobile native rail
+│   │   ├── _16_cover-carousel.css  # ★ 首页整体 sticky + Vertical 三卡顺序显现 + mobile native rail
+│   │   └── _17_article-copy.css     # ★ DOCS 文章 Markdown 复制按钮
 │   ├── icons/                      # Simple Icons 品牌色 SVG（github/gmail/qq 等联系方式图标）
 │   ├── image/notes/                # ★ /notes/ 卡片封面图（assets 目录 → Hugo 可缩放/转 WebP/生成 LQIP）
 │   └── js/                         # ★ 项目级 JS（2026-07-22 从 static/js 迁入，走 Pipes Minify+Fingerprint）

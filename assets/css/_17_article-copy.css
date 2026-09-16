@@ -1,0 +1,36 @@
+/* DOCS article Markdown copy action. */
+.article-copy-markdown {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.article-copy-markdown__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--fg-mute);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  line-height: 1.2;
+  transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+}
+
+.article-copy-markdown__button:hover,
+.article-copy-markdown__button:focus-visible,
+.article-copy-markdown__button.is-copied {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.article-copy-markdown__button.is-error {
+  color: #b42318;
+  border-color: #b42318;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .article-copy-markdown__button { transition: none; }
+}

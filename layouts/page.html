@@ -34,6 +34,9 @@
       {{ if not (.Params.showAuthorBottom | default (site.Params.article.showAuthorBottom | default false)) }}
         {{ template "SingleAuthor" . }}
       {{ end }}
+      {{ if eq .Section "notes" }}
+        {{ partial "article-copy-markdown.html" . }}
+      {{ end }}
     </header>
 
     {{/* Body */}}
