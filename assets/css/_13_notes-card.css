@@ -280,6 +280,14 @@ html.dark .cover-card__icon-fallback {
   background: rgba(250, 249, 245, 0.76) !important;
 }
 
+/* 加载时只占约两个数字的宽度，避免 "loading" 撑大 meta 条。 */
+.cover-card__meta-item span[id^="views_"].animate-pulse,
+.cover-card__meta-item span[id^="likes_"].animate-pulse {
+  width: 2ch;
+  overflow: hidden;
+  color: transparent !important;
+}
+
 /* tags 行（顶部 meta 下方） — 重新启用点击 */
 .cover-card__tags {
   display: flex;
