@@ -94,3 +94,8 @@ items:
     image: "image/notes/影视飓风AI课程总结.png"
     icon: brain
     fallback_tag: ai
+
+  - slug: Flutter项目部署至ios
+    image: "image/notes/Flutter项目部署至ios.png"
+    icon: smartphone
+    fallback_tag: development

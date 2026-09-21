@@ -63,7 +63,8 @@ description: 将指定 Obsidian 笔记迁移为适合本站阅读的 Hugo 文章
 - 不使用 `--force`。更新既有文章时先读完现有页面，保留站点侧的人工修改并做合并，不整篇覆盖。
 - `slug` 默认留空；`weight` 默认 `0`，除非用户明确要求置顶。
 - 新文章 `date` 使用整理当天日期；更新已有文章保留原 `date`，有实质更新时启用 `showDateUpdated` 并填写当天日期。
-- `title`、`description`、tags 和 categories 必须来自文章真实内容，并优先复用站内已有 taxonomy。description 用文章主要语言写成一条具体摘要，不写空泛宣传语。
+- `title` 和 `description` 必须来自文章真实内容；description 用文章主要语言写成一条具体摘要，不写空泛宣传语。
+- tags 和 categories 默认只复用站内已有 taxonomy，并保持最少且准确；不要仅因文章出现新的技术名或主题就创建新词。只有文章确实属于现有 taxonomy 无法表达的新文章类型时，才新增 tag 或 category；无法确定时保留空数组并询问用户。
 
 ### 正文
 
