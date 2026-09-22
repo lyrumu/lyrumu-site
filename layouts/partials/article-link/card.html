@@ -222,13 +222,13 @@
     {{/* 整卡可点击层（stretch link）：覆盖整张卡片，点任意处进文章 */}}
     <a
       {{ with $page.Params.externalUrl }}
-        href="{{ . }}" target="_blank" rel="external"
+        href="{{ . }}" target="_blank" rel="external noopener noreferrer"
       {{ else }}
         href="{{ $page.RelPermalink }}"
       {{ end }}
       class="cover-card__clickable"
       aria-label="{{ .Title }}"
-      tabindex="0"></a>
+      tabindex="0"><span class="sr-only">{{ .Title }}</span></a>
   </div>
 </article>
 
@@ -250,7 +250,7 @@
         <header>
           <a
             {{ with $page.Params.externalUrl }}
-              href="{{ . }}" target="_blank" rel="external"
+              href="{{ . }}" target="_blank" rel="external noopener noreferrer"
             {{ else }}
               href="{{ $page.RelPermalink }}"
             {{ end }}

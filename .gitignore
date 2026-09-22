@@ -65,6 +65,7 @@ copilot/
 Raw information/
 OPTIMIZE.md
 WEBSITE_CHECKLIST.md
+SEO_REPORT.md
 HUGO_BLOWFISH_GUIDE.md
 BLOWFISH_FEATURE_AUDIT.md
 ROADMAP.md
@@ -72,7 +73,8 @@ DeepWiki_Hugo_主题切换动画提示词.txt
 user-tmp/
 docs/
 prototypes/
-tests/
+tests/*
+!tests/seo_check.py
 COVER_CAROUSEL_PLAN.md
 deploy-logs/
 # -----------------------------------------------------------------------------

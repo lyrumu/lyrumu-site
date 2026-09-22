@@ -1,0 +1,22 @@
+{{ with .Params.sharingLinks | default (.Site.Params.article.sharingLinks | default false) }}
+  {{ $links := hugo.Data.sharing }}
+  <section class="flex flex-row flex-wrap justify-center pt-4 text-xl">
+    {{ range . }}
+      {{ with index $links . }}
+        {{/* Email sharing has no private recipient; keep Cloudflare from replacing mailto with a crawlable 404. */}}
+        {{ if eq .icon "email" }}{{ "<!--email_off-->" | safeHTML }}{{ end }}
+        <a
+          class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="{{ printf .url ($.Permalink | urlquery) ($.Title | urlquery) | safeURL }}"
+          title="{{ i18n .title }}"
+          aria-label="{{ i18n .title }}">
+          {{ partial "icon.html" .icon }}
+          <span class="sr-only">{{ i18n .title }}</span>
+        </a>
+        {{ if eq .icon "email" }}{{ "<!--/email_off-->" | safeHTML }}{{ end }}
+      {{ end }}
+    {{ end }}
+  </section>
+{{ end }}

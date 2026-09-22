@@ -104,14 +104,22 @@
               {{ if (eq $taxonomy "categories") }}
                 <a class="relative mt-[0.5rem] me-2" href="{{ .RelPermalink }}">
                   {{ $useSecondaryColor := .Params.showCategoriesInSecondaryColor | default (.Site.Params.article.showCategoriesInSecondaryColor | default false) }}
-                  {{ partial "badge.html" (dict "linkTitle" .LinkTitle "useSecondaryColor" $useSecondaryColor) }}
+                  {{ $label := .LinkTitle }}
+                  {{ if gt (len (where ($context.GetTerms "tags") "LinkTitle" .LinkTitle)) 0 }}
+                    {{ $label = printf "%s Category" .LinkTitle }}
+                  {{ end }}
+                  {{ partial "badge.html" (dict "linkTitle" $label "useSecondaryColor" $useSecondaryColor) }}
                 </a>
               {{ end }}
             {{ end }}
             {{ if .Params.showTags | default (.Site.Params.article.showTags | default true) }}
               {{ if (eq $taxonomy "tags") }}
                 <a class="relative mt-[0.5rem] me-2" href="{{ .RelPermalink }}">
-                  {{ partial "badge.html" .LinkTitle }}
+                  {{ $label := .LinkTitle }}
+                  {{ if gt (len (where ($context.GetTerms "categories") "LinkTitle" .LinkTitle)) 0 }}
+                    {{ $label = printf "%s Tag" .LinkTitle }}
+                  {{ end }}
+                  {{ partial "badge.html" $label }}
                 </a>
               {{ end }}
             {{ end }}

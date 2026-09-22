@@ -17,12 +17,16 @@
   <meta name="theme-color">
 
   {{/* Title */}}
+  {{ $pageTitle := .Params.seoTitle | default .Title }}
+  {{ if eq .Kind "term" }}
+    {{ $pageTitle = printf "%s %s" .Title (.Data.Singular | title) }}
+  {{ end }}
   {{ if .IsHome }}
     <title>{{ .Site.Title | emojify }}</title>
     <meta name="title" content="{{ .Site.Title | emojify }}">
   {{ else }}
-    <title>{{ .Title | plainify | emojify }} &middot; {{ .Site.Title | emojify }}</title>
-    <meta name="title" content="{{ .Title | plainify | emojify }} &middot; {{ .Site.Title | emojify }}">
+    <title>{{ $pageTitle | plainify | emojify }} &middot; {{ .Site.Title | emojify }}</title>
+    <meta name="title" content="{{ $pageTitle | plainify | emojify }} &middot; {{ .Site.Title | emojify }}">
   {{ end }}
 
   {{/* Metadata */}}
@@ -35,6 +39,13 @@
   {{ $metaDescription := "" }}
   {{ range $metaDescriptionOrder }}
     {{ $metaDescription = $metaDescription | default (index $metaDescriptionSources (lower .)) }}
+  {{ end }}
+  {{ if not (or .Params.Summary .Params.Description) }}
+    {{ if eq .Kind "term" }}
+      {{ $metaDescription = printf "Browse notes filed under the %s %s on lyrumu's page. Read the full articles and explore related learning notes and technical records." .Title .Data.Singular }}
+    {{ else if eq .Kind "taxonomy" }}
+      {{ $metaDescription = printf "Browse all %s on lyrumu's page to find learning notes and technical records by subject, then follow each collection to its articles." (.Title | lower) }}
+    {{ end }}
   {{ end }}
   {{ with $metaDescription }}
     <meta name="description" content="{{ . | plainify }}">

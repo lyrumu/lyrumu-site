@@ -5,7 +5,7 @@
 title: "make a python package"
 date: 2026-06-20
 draft: false
-description: "Set up a Python development environment in VSCode: install the Python extension, manage multiple Python versions with py, create virtual environments, and package a project with pyproject.toml."
+description: "Set up Python in VSCode, manage versions and virtual environments, configure pyproject.toml, and build and publish a package to PyPI."
 
 # =============================================================================
 # URL 与权重（slug 留空 = 使用文件夹名）

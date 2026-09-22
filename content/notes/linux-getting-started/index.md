@@ -3,6 +3,7 @@
 # 基础信息（必填）
 # =============================================================================
 title: "Linux Basics: WSL2 Installation to OpenCode / Hermes Agent Deployment"
+seoTitle: "WSL2 Linux: OpenCode & Hermes Guide"
 date: 2026-06-23
 draft: false
 description: "WSL2 Ubuntu Installation → Linux Basic Commands → OpenCode Agent → Hermes Agent Deployment, and collect WSL2 Common Issues Fix Records"

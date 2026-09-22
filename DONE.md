@@ -4,6 +4,24 @@
 >
 > 2026-09-14 改版前的完整过程日志原样保存在 [`DONE_ARCHIVE.md`](DONE_ARCHIVE.md)，仅供追溯，不再追加。当前实现以代码、`PROJECT_MAP.md` 和本文件为准。
 
+## 2026-09-22 · 区分文章页同名分类与标签
+
+- 文章同时属于同名分类和标签时，共享元信息徽章显示 `Ai Category`、`Ai Tag`，避免两枚相同的 `Ai`；链接继续分别指向分类页和标签页，其余徽章名称不变。
+- 修复位于 `themes/blowfish/layouts/partials/article-meta/basic.html`，由文章页和列表卡片共用；`tests/seo_check.py` 检查同一页面的分类、标签徽章不再重名。
+- 生产压缩构建、42 页 SEO 回归和实际文章输出检查通过；未启动本地服务，最终视觉留待手动查看。
+
+## 2026-09-21 · Google Analytics 接入
+
+- 在 `hugo.toml` 根级配置 GA4 衡量 ID `G-5ZD6M1S9NG`，复用 Blowfish 原生 Analytics partial，不重复维护手写脚本。
+- 统计代码仅在生产环境构建时注入；56 页生产构建通过且首页仅生成一份 gtag 脚本。未发布，实时数据需部署后在 Google Analytics 中确认。
+
+## 2026-09-21 · SEO 抓取问题修复
+
+- 分类与标签页按分面生成独立标题、H1 和描述；共享卡片补齐锚文本，分享链接补齐安全关系和查询参数编码。关键入口为 `layouts/partials/head.html`、`layouts/_default/term.html`、`layouts/partials/article-link/card.html` 和 `layouts/partials/sharing-links.html`。
+- 邮箱分享添加 Cloudflare `email_off` 排除标记，并在 `hugo.toml` 保留压缩后的 HTML 注释，防止邮件分享被改写成可抓取的 404；`static/_headers` 增加 HSTS、框架限制、Referrer-Policy 和不限制现有脚本/连接的基础 CSP。
+- Markdown 图片使用 Hugo 原生 WebP 变体并修正小图 srcset 宽度；35 张默认展示图从 7,055,121 降至 1,197,100 字节，原图保留。高分辨率候选仍有 7 张超过 100 kB，不以压低扫描阈值牺牲清晰度。
+- 生产压缩构建、42 页 SEO 回归与 `git diff --check` 通过；测试入口 `tests/seo_check.py`，28 类报告及处理边界见 `SEO_REPORT.md`。未启动服务、未发布；Cloudflare 实际响应头和邮箱改写需部署后复查，基础 CSP 不等同于完整 XSS 防护。
+
 ## 2026-09-16 · Notes 卡片计数骨架宽度修复
 
 - Firebase 计数加载时的脉冲占位固定为约两个数字宽，避免慢网下 `loading` 文案撑大卡片 meta 条；数据返回后仍按真实数字自然伸缩。

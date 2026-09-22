@@ -20,16 +20,13 @@
   {{- $alt := .alt -}}
   {{- $originalWidth := $imgObj.Width -}}
 
-  {{- $img800 := $imgObj -}}
-  {{- $img1280 := $imgObj -}}
-  {{- if gt $originalWidth 800 -}}
-    {{- $img800 = $imgObj.Resize "800x" -}}
-  {{- end -}}
-  {{- if gt $originalWidth 1280 -}}
-    {{- $img1280 = $imgObj.Resize "1280x" -}}
-  {{- end -}}
+  {{- $img800 := $imgObj.Resize (printf "%dx webp q85" (math.Min $originalWidth 800 | int)) -}}
+  {{- $img1280 := $imgObj.Resize (printf "%dx webp q85" (math.Min $originalWidth 1280 | int)) -}}
 
-  {{- $srcset := printf "%s 800w, %s 1280w" $img800.RelPermalink $img1280.RelPermalink -}}
+  {{- $srcset := printf "%s %dw" $img800.RelPermalink $img800.Width -}}
+  {{- if ne $img800.RelPermalink $img1280.RelPermalink -}}
+    {{- $srcset = printf "%s, %s %dw" $srcset $img1280.RelPermalink $img1280.Width -}}
+  {{- end -}}
   {{- $tinyWidth := 24 -}}
   {{- if lt $originalWidth $tinyWidth }}{{ $tinyWidth = $originalWidth }}{{ end -}}
   {{- $tiny := $imgObj.Resize (printf "%dx webp" $tinyWidth) -}}
@@ -49,7 +46,7 @@
       src="{{ $img800.RelPermalink }}"
       data-full-src="{{ $img800.RelPermalink }}"
       data-lqip="1"
-      srcset="{{ $srcset }}"
+      srcset="{{ $srcset | safeHTMLAttr }}"
       sizes="(min-width: 768px) 50vw, 65vw"
       data-zoom-src="{{ $imgObj.RelPermalink }}">
   </div>
@@ -83,7 +80,7 @@
     {{- template "RenderImageSimple" (dict "imgObj" "" "src" $urlStr "alt" $altText) -}}
   {{- else if $resource -}}
     {{- $isSVG := eq $resource.MediaType.SubType "svg" -}}
-    {{- $shouldOptimize := and (not $disableImageOptimizationMD) (not $isSVG) -}}
+    {{- $shouldOptimize := and (not $disableImageOptimizationMD) (not $isSVG) (ne $resource.MediaType.SubType "gif") -}}
     {{- if $shouldOptimize -}}
       {{- template "RenderImageResponsive" (dict "imgObj" $resource "alt" $altText) -}}
     {{- else -}}

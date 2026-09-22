@@ -15,6 +15,7 @@ title = "lyrumu's page"
 # 2026-08-29 修复：原先写在中部，被归入 [languages.en.params.author] 表，
 # 根级 theme 实际为空，裸 `hugo` 构建时主题不加载，全靠命令行 --theme 兜底。
 theme = 'blowfish'
+googleAnalytics = 'G-5ZD6M1S9NG'
 
 # =============================================================================
 # 多语言
@@ -272,3 +273,7 @@ enableEmoji = true
 # 抑制已知无害的日志
 # - warning-goldmark-raw-html：blowfish 主题原 html 写法触发，金标 markdown 的已知噪音
 ignoreLogs = ["warning-goldmark-raw-html"]
+
+# Cloudflare email_off markers must survive the production --minify build.
+[minify.tdewolff.html]
+  keepComments = true

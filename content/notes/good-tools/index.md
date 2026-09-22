@@ -59,7 +59,7 @@ showLikes: true
 
 - [Typedown](https://github.com/byxiaozhi/Typedown) — Markdown编辑器(微软商店搜索即可 功能简单 非常轻便)
 - [Geek Uninstaller](https://geekuninstaller.com) — 软件彻底卸载工具
-- [Potplayer](https://potplayer.daum.net) — 适应各种格式的视频播放器
+- [Potplayer](https://potplayer.tv/) — 适应各种格式的视频播放器
 - [Minecraft PCL Launcher](https://afdian.com/p/0164034c016c11ebafcb52540025c377) — 爱发电官网搜索“龙腾猫跃” Minecraft Java版的优秀启动器之一，提供多线程下载功能(粘贴链接即可)
 
 ***
