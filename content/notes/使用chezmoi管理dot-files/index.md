@@ -96,3 +96,15 @@ git add .
 git commit -m "updates"
 git push
 ```
+
+注意，当`chezmoi status`的结果中出现`.DA`时 代表你本机实际的一些配置文件已经被删除了 
+因此 此时若想要chezmoi同步本机状态 不能使用`re-add`或者`add`
+而是要使用`forget`命令 注意一定要传目标路径(家目录下的完整路径) 否则会报错`not managed`
+
+`example`:
+```zsh
+# 单个文件：完整目标路径
+chezmoi forget --force ~/.cc-switch/skills/hypit/references/playbooks/craft/compositing.md # --force按需求添加
+```
+
+如果是误删了本机实际配置文件 想要恢复 则可使用`chezmoi apply <目标路径>`来消除DA的diff差异

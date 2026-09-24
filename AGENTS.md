@@ -1,65 +1,74 @@
----
-alwaysApply: false
-description: 
----
-# 项目定位
-基于 `/Vault` 构建个人网站，核心目标是稳定、清晰地展示自己，同时保留后续扩展空间。网站定位不等于技术文档站，后续可扩展个人介绍、作品集、博客、资源页等内容。
-Hugo.toml已设置默认语言为英文(en) 后续内容尽量保持英文 网站的文章等具体内容除外！
+# 项目现状与目标
 
+这是已上线的 Hugo + Blowfish 个人网站，公开地址为 `https://lyrumu.top/`，部署在 Cloudflare Pages。站点框架、导航、内容读取、主要页面、资源管线和基础 SEO 已完成；当前默认方向是持续改善可抓取性、页面身份、内容质量、内部发现、性能和上线后的可观测性，而不是继续按“首版搭建”思路扩张结构。
 
-# Agent 执行规则
-- 禁止长时间思考说废话 请快速反馈
-- 非必要禁止启动或关闭服务测试 完成后告知我 我会手动启动hugo服务测试
-- 若需求不明确且会影响网站结构、页面布局、模块划分、内容组织或技术选型，必须先询问，不能自行猜测
-- 若需求不明确但不影响整体结构，默认采用更简单、更保守的实现
-- 首页定位、模块划分、导航栏目、分类规则、下载方式，如用户未明确，必须先确认
-- 修改文件前先 Read — 不要凭印象改文件
-- 用户手改过的坐标/参数：不要再次修改
-- `DONE.md` 只记录网站架构、部署、前端功能/样式、后端或服务集成等技术变更，按日期倒序。常规条目用 2–4 条说明结果与动机、关键文件/模块、验证结果或已知限制；重大架构调整最多 6 条。内容要足以定位实现和帮助接手，但不记录操作流水。文章新增/迁移、正文排版与内容修改、单篇配图及对应数据映射不记录；规则/Skill 文档维护也不单独记入。
-# 内容边界
-- `/Vault` 为只读内容源，禁止修改
-- 网站结构保持可扩展，不绑定为单一文档站
+- `baseURL` 与规范域名保持为 `https://lyrumu.top/`；未经确认不要改域名、路径或 URL 大小写策略。
+- 默认语言为英文 `en`，但文章可按原内容使用中文；不要为了语言配置机械翻译正文或 URL。
+- `SEO_REPORT.md` 是 2026-09-21 抓取审计的处理记录，不是永远有效的当前结论；每次仍以现有代码、生成结果和可获得的线上证据为准。
 
-# 开发原则
-- 先做可运行的大框架，再做细节；每个阶段必须形成完整流程，避免半成品页面
-- 优先复用第三方库、成熟组件和现成能力，不重复造轮子
-- 默认优先简单、稳定、易维护的方案
-- 所有新增功能应便于后续扩展、替换和维护
+# 执行边界
 
-# 技术栈
-- 首版优先使用 `Hugo`（Blowfish 主题），内容接入使用 `Markdown + frontmatter`
-- 通过Cloudflare部署 已购买域名https://lyrumu.top
-- 若未来需要更复杂交互或动态能力，再考虑迁移到 `Next.js`
-- Hugo 版本为 v0.163.2，已知问题：主题的 shortcode 不被自动加载，需在 `layouts/shortcodes/` 下创建项目级 shortcode 副本
+- 修改前先读实际文件，并检查 `git status`、相关 diff、调用链和生成链路；保护用户已有 WIP，不覆盖无关改动。
+- 需求若会改变站点结构、导航、栏目、路由、taxonomy、内容组织、下载方式、技术选型或外部服务，必须先询问；局部且可逆的实现默认选择更简单、保守的方案。
+- 非必要不启动或关闭 Hugo 服务；优先用临时目录生产构建验证，最终浏览器体验由用户手动检查。
+- 未经明确授权，不 commit、push、部署，也不修改 Cloudflare、Google Search Console、Google Analytics、Firebase 或其他线上设置。
+- SEO 修改不得减少现有页面功能，不得破坏 Firebase、Giscus、搜索、分享、音乐播放器、图片放大、复制功能或 Cloudflare Pages 行为。
+- 不把 Hugo 或 Blowfish 升级夹带进 SEO 修改。先运行 `hugo version` 并报告兼容警告；主题既有项目级覆写，也有少量直接修改，升级必须单独审计。
+- 用户手改过的坐标、视觉参数和内容措辞不要顺手调整。SEO 任务默认保持现有暖白衬线视觉、响应式规则和页面布局不变。
 
-# UI 规则（已定稿 — Claude code风）(后期可能想结合ios，月之暗面AI的风格)
-- 风格基调：暖白衬线 + 极简 + 古典分隔符 + 缓慢淡入
-- 配色：light bg `#FAF9F5` / text `#1F1E1D` / accent `#D97757`；dark bg `#141413` / text `#FAF9F5` / accent `#E08769`
-- 字体：衬线显示=Fraunces / 衬线正文=Newsreader / 无衬线=Inter
-- 排版：大字号衬线标题、衬线斜体题词、罗马数字时间戳、装饰符号 `✦` `·` `──`
-- 禁止：霓虹极光、玻璃拟态过浓、土味文案、过强阴影
-- 所有页面（封面/模块卡/Vault 卡/文章 prose）必须保持统一风格
-- 字体文件必须本地化到 `static/fonts/`，禁止依赖 Google Fonts CDN
-- 第三方 CDN 优先 jsDelivr，避免 unpkg（常被 Chrome ORB 拦截）
-- 封面装饰元素直接用 `static/image/` 下的 png，不要从 0 生成 SVG
-- 各模块可以有视觉差异，但导航位置、内容宽度、间距、排版逻辑必须一致
-- 基础响应式适配为默认要求，移动端断点 `max-width: 720px` 切换简化版
+# SEO 决策原则
 
+- 先区分四层证据：源文件、Hugo 生成物、已部署页面、搜索引擎或第三方爬虫数据。只能声称实际验证过的层级，不能用本地构建代替线上生效或收录证明。
+- 优先修复真实的抓取、索引、页面身份、链接和性能问题；第三方工具的字符数、像素宽度、H2 数量、正文长度或图片阈值只是线索，不是必须清零的指标。
+- 不做关键词堆砌，不虚构正文或标题层级，不为“内容新鲜”伪造日期，不承诺排名、收录时间或站点链接展示。
+- 优先复用 Hugo、Blowfish 和现有共享模板；不要重复输出 canonical、meta、Open Graph、Twitter Card、RSS、sitemap 或 JSON-LD。
+- SEO 修复尽量落在所有相关页面共用的根因位置，并留下最小可运行回归检查；不要逐页复制同一补丁。
 
-# 图标系统
-- 来源：Simple Icons（`https://cdn.simpleicons.org/ICONNAME`）
-- 存储：`assets/icons/*.svg`
-- 渲染：`{{< icon "name" >}}` shortcode（项目级 `layouts/shortcodes/icon.html`，不是主题的）
-- 填充：保留品牌色（`fill="#XXXXXX"`），不改为 `currentColor`
+# 页面与内容规则
 
-# 文档索引
-- `DONE.md` — 当前技术变更与接手记录，保留结果、关键位置和验证边界；`DONE_ARCHIVE.md` — 2026-09-14 改版前的完整历史日志备份，只读留档
-- `PROJECT_MAP.md` — 项目结构地图，记录目录结构、配置、路由、自定义资源
+- 每个可索引正式页面应有且仅有一个清晰 H1、一个非空且与页面一致的 description、一个自引用 canonical，以及能区分页面用途的 title。显示标题不应改动时，可使用现有 `seoTitle`。
+- 首页保留单一 `WebSite` 结构化数据；普通内容页才输出 `Article`；非首页可保留 `BreadcrumbList`。任何模板修改都必须检查最终 JSON-LD 能解析，且 `mainEntityOfPage` 指向规范 URL。
+- 不因栏目页或 taxonomy 页正文较短就自动 `noindex`、隐藏或填充空洞内容。是否停止渲染、停止列出或移出 sitemap 属于信息架构决策，必须先确认。
+- 保留已有中文路径；若确需改 URL，先给出重定向、canonical、内部链接、sitemap 和历史收录迁移方案，得到确认后再实施。
+- taxonomy 以少而准确为原则，优先复用现有 tags/categories；除非确实出现新的文章类型或分类需求，不新增同义、过细或仅为关键词覆盖的分面。
+- 内链必须有可理解的锚文本；新窗口链接保留安全的 `rel`。不要为了扫描分数批量添加 `nofollow`，也不要把 Cloudflare 注入的隐藏链接直接归因于源码。
+- 图片继续走现有 Hugo Resources/WebP/srcset/LQIP 管线。内容图使用有意义的 alt，纯装饰图使用 `alt=""`；不要为过任意体积阈值而明显牺牲可读性或删除原图。
+- 个人身份、联系方式、作者资料、`sameAs` 或其他无法从项目确认的事实不得猜测，先询问用户。
 
-# 默认开发优先级
-1. 网站可运行
-2. 页面结构完整
-3. 内容可读取和展示
-4. 分类、索引、下载可用
-5. 风格统一与体验优化
-6. 扩展预留
+# 关键实现位置
+
+- 全局配置与站点身份：`hugo.toml`
+- title、description、canonical 与社交元数据：`layouts/partials/head.html`
+- JSON-LD：`layouts/partials/schema.html`
+- taxonomy 页面身份：`layouts/_default/term.html`
+- Markdown 图片输出：`layouts/_default/_markup/render-image.html`
+- 分享链接：`layouts/partials/sharing-links.html`
+- 抓取与 Pages 响应头：`static/robots.txt`、`static/_headers`
+- 生产生成物回归：`tests/seo_check.py`
+- 历史审计解释与保留项：`SEO_REPORT.md`
+
+# 验证与交付
+
+SEO 或全局模板改动至少执行以下检查，不启动服务：
+
+```sh
+# 构建与 Cloudflare Pages 接近的生产压缩结果到临时目录。
+hugo --minify --themesDir themes --theme blowfish --config hugo.toml --destination /tmp/lyrumu-seo-check --cacheDir /tmp/lyrumu-seo-cache --cleanDestinationDir
+
+# 检查真实生成页面的 metadata、canonical、JSON-LD、链接和图片候选。
+python3 -B tests/seo_check.py /tmp/lyrumu-seo-check
+
+# 检查补丁格式；若失败来自既有 WIP，必须明确指出文件与归属，不能顺手修改。
+git diff --check
+```
+
+- 改路由、taxonomy、渲染或索引控制时，额外比较修改前后的正式 URL 集合、sitemap 和内部链接；不能只看模板语法。
+- 改 `_headers`、Cloudflare 相关链接处理或线上元数据时，本地构建只证明源端输出；部署后的响应头、Cloudflare 转换和实际 HTML 必须另行验证。
+- 改内容或 front matter 时，核对 title、description、日期、aliases、tags/categories 与正文真实一致，不以通过测试为由改写原意。
+- 交付时分别说明：本地通过项、未验证的浏览器行为、待部署验证项和需要用户在 GSC/GA/Cloudflare 确认的外部状态。
+
+# 文档维护
+
+- `PROJECT_MAP.md` 记录当前结构与关键入口；结构或关键文件职责变化时同步更新。
+- `DONE.md` 只记录网站架构、部署、前端功能/样式、后端或服务集成等技术变更，按日期倒序。常规条目用 2–4 条说明结果、关键位置、验证与限制；重大调整最多 6 条。
+- 文章新增/迁移、正文排版与内容修改、单篇配图及数据映射不写入 `DONE.md`；规则或 Skill 文档维护也不单独记录。

@@ -273,7 +273,3 @@ enableEmoji = true
 # 抑制已知无害的日志
 # - warning-goldmark-raw-html：blowfish 主题原 html 写法触发，金标 markdown 的已知噪音
 ignoreLogs = ["warning-goldmark-raw-html"]
-
-# Cloudflare email_off markers must survive the production --minify build.
-[minify.tdewolff.html]
-  keepComments = true

@@ -2,7 +2,7 @@
 title: "Good Tools(资源&工具分享)"
 date: 2026-07-26
 draft: false
-description: "日常使用的软件、插件和网站推荐"
+description: "宝藏站点,宝藏资源.程序员、软件工程学生日常使用的软件、插件和网站推荐"
 slug: ""
 weight: -1
 tags: [tools, website, os]
@@ -83,7 +83,7 @@ showLikes: true
 ### Resources
 
 - [Sweeezy Cursors](https://sweezy-cursors.com/) - 提供丰富鼠标指针样式资源
-- [Openflac](https://www.openflac.com/) - 音频资源
+- [OpenFLAC](https://www.openflac.com/) — 可搜索和下载 FLAC 无损音乐及 MP3 的网站
 - [OpenClipart](https://openclipart.org/) - 丰富优质的svg图像资源
 
 ### Tools

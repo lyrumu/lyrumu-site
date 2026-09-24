@@ -1,7 +1,7 @@
 {{/*
   head.html — 覆盖 blowfish 主题版本（[lyrumu 改造]）
   --------------------------------------------------------------------------
-  改动只在 CSS 加载段（line ~117-129）：
+  项目级改动包括 notes 分页页的独立 metadata，以及 CSS 加载段：
     原版：resources.Get "css/custom.css" 直接 append → @import 不展开 → 404
     新版：resources.Match "css/_*.css" 自动发现 + Concat → 无 @import 依赖
 
@@ -16,10 +16,19 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="theme-color">
 
+  {{/* Match the notes list paginator before rendering its page metadata. */}}
+  {{ $notesPageNumber := 1 }}
+  {{ if and (eq .Kind "section") (eq .Section "notes") }}
+    {{ $notesPageNumber = (.Paginate (.Pages.ByWeight)).PageNumber }}
+  {{ end }}
+
   {{/* Title */}}
   {{ $pageTitle := .Params.seoTitle | default .Title }}
   {{ if eq .Kind "term" }}
     {{ $pageTitle = printf "%s %s" .Title (.Data.Singular | title) }}
+  {{ end }}
+  {{ if gt $notesPageNumber 1 }}
+    {{ $pageTitle = printf "%s · Page %d" $pageTitle $notesPageNumber }}
   {{ end }}
   {{ if .IsHome }}
     <title>{{ .Site.Title | emojify }}</title>
@@ -47,6 +56,9 @@
       {{ $metaDescription = printf "Browse all %s on lyrumu's page to find learning notes and technical records by subject, then follow each collection to its articles." (.Title | lower) }}
     {{ end }}
   {{ end }}
+  {{ if gt $notesPageNumber 1 }}
+    {{ $metaDescription = printf "%s Page %d." (strings.TrimSuffix "." $metaDescription) $notesPageNumber }}
+  {{ end }}
   {{ with $metaDescription }}
     <meta name="description" content="{{ . | plainify }}">
   {{ end }}
@@ -59,7 +71,9 @@
   {{ with .Params.robots }}
     <meta name="robots" content="{{ . }}">
   {{ end }}
-  <link rel="canonical" href="{{ .Permalink }}">
+  {{ $canonical := .Permalink }}
+  {{ if gt $notesPageNumber 1 }}{{ $canonical = .Paginator.URL | absURL }}{{ end }}
+  <link rel="canonical" href="{{ $canonical }}">
   {{ if .IsTranslated }}
     {{ range .AllTranslations }}
       {{ $hreflang := .Language.Locale | default .Language.Lang }}

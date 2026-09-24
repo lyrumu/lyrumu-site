@@ -2,6 +2,7 @@
 
 import json
 import sys
+from base64 import b64decode
 from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
@@ -72,6 +73,10 @@ def check(root):
         expected = "https://lyrumu.top/" + file.parent.relative_to(root).as_posix().strip(".")
         assert len(page.canonical) == 1 and unquote(page.canonical[0]) == expected.rstrip("/") + "/", file
         assert page.schemas, file
+        for group in page.schemas:
+            for item in group if isinstance(group, list) else [group]:
+                if item.get("@type") == "Article":
+                    assert item.get("mainEntityOfPage") == page.canonical[0], file
         assert "/cdn-cgi/l/email-protection" not in text, file
         taxonomy_badges = []
         for attrs, label in page.links:
@@ -82,11 +87,13 @@ def check(root):
                 assert {"noopener", "noreferrer"} & set(attrs.get("rel", "").split()), (file, attrs)
             if not url.scheme and not url.netloc and url.path:
                 assert label.strip(), (file, attrs)
-            if url.scheme == "mailto" and "subject=" in url.query:
-                query = parse_qs(url.query)
+            if "share-email" in attrs.get("class", "").split():
+                assert attrs["href"] == "#", (file, attrs)
+                mailto = urlparse(b64decode(attrs["data-email"]).decode("ascii"))
+                assert mailto.scheme == "mailto", (file, mailto)
+                query = parse_qs(mailto.query)
                 assert query["body"] == page.canonical, (file, query)
                 assert query["subject"] == page.headings, (file, query)
-                assert "<!--email_off-->" in text and "<!--/email_off-->" in text, file
         assert len(taxonomy_badges) == len(set(taxonomy_badges)), (file, taxonomy_badges)
         for attrs in page.images:
             assert "alt" in attrs, (file, attrs)

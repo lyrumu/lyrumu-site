@@ -50,7 +50,7 @@
     {{ else }}
     {{ with .Params.tags }}"keywords": {{ . }},{{ end }}
     {{ end }}
-    "mainEntityOfPage": "true",
+    "mainEntityOfPage": {{ .Permalink }},
     "wordCount": "{{ .WordCount }}"
     }{{ if $showStructuredBreadcrumbs }},{{ end }}
     {{ end }}

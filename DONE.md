@@ -4,6 +4,21 @@
 >
 > 2026-09-14 改版前的完整过程日志原样保存在 [`DONE_ARCHIVE.md`](DONE_ARCHIVE.md)，仅供追溯，不再追加。当前实现以代码、`PROJECT_MAP.md` 和本文件为准。
 
+## 2026-09-24 · DOCS 分页页独立页面身份
+
+- 新增笔记后 `/notes/` 出现第 2 页；`layouts/partials/head.html` 按原有卡片顺序初始化分页，为后续页输出独立 title、description 和自引用 canonical；`layouts/_default/list.html` 同步显示页码 H1。
+- 生产压缩构建与 44 页 SEO 回归通过；新 URL 仅增加文章与 `/notes/page/2/`，原有 URL 保留。线上页面与浏览器效果待部署后检查。
+
+## 2026-09-23 · 邮件分享链接避开 Cloudflare 改写
+
+- `layouts/partials/sharing-links.html` 不再把邮件分享的 `mailto:` 放进源 HTML，改用站内现有 `email.js` 从 `data-email` 还原链接；其他分享链接和页面内容保持原样。
+- 移除仅为旧 `email_off` 方案保留注释的压缩配置，并更新 `tests/seo_check.py` 校验邮件正文与标题。42 页生产压缩构建、SEO 回归、邮件脚本行为和 `git diff --check` 通过；线上修复仍需部署后复查，本机代理不可用。
+
+## 2026-09-23 · 修正文章结构化数据的页面地址
+
+- `layouts/partials/schema.html` 将 `Article.mainEntityOfPage` 从字符串 `"true"` 修为文章的规范 URL，符合 Schema.org 的 URL 类型；页面和后端逻辑不受影响。
+- `tests/seo_check.py` 增加对应回归断言；生产压缩构建、42 页 SEO 检查与 `git diff --check` 通过。未启动本地服务，也未验证发布后的 Google 重新抓取结果。
+
 ## 2026-09-22 · 区分文章页同名分类与标签
 
 - 文章同时属于同名分类和标签时，共享元信息徽章显示 `Ai Category`、`Ai Tag`，避免两枚相同的 `Ai`；链接继续分别指向分类页和标签页，其余徽章名称不变。

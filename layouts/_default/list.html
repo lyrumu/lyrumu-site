@@ -18,6 +18,10 @@
   {{ $heroClass := "" }}
   {{ if eq .Section "about" }}{{ $heroClass = "page-hero--no-deco" }}{{ end }}
   {{ $sectionName := .Section }}
+  {{ $heroTitle := .Title }}
+  {{ if and (eq $sectionName "notes") (gt .Paginator.PageNumber 1) }}
+    {{ $heroTitle = printf "%s · Page %d" $heroTitle .Paginator.PageNumber }}
+  {{ end }}
 
   {{/* notes 区：hero + content 左右并排 */}}
   {{ if eq $sectionName "notes" }}<div class="notes-hero-row">{{ end }}
@@ -27,7 +31,7 @@
     "kicker"   .Params.kicker
     "subtitle" .Params.subtitle
     "eyebrow"  .Params.eyebrow
-    "title"    .Title
+    "title"    $heroTitle
     "extraClass" $heroClass
   ) }}
 

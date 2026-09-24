@@ -1,5 +1,6 @@
 ---
 title: "Codex Plus订阅指南(ios)"
+seoTitle: "ChatGPT Plus iOS 订阅：美区 Apple ID、礼品卡与 Codex 登录"
 date: 2026-08-03
 draft: false
 description: "国内订阅 ChatGPT Plus 官方套餐（20 美元）流程：美区 Apple ID、美区礼品卡兑换、iOS 内购升级、Codex 登录"
@@ -56,8 +57,8 @@ sharingLinks: []
 
 ### Step1: 注册美区 Apple ID
 
-参考教学视频：[B 站教学视频](https://www.bilibili.com/video/BV1zHtmzDEVY/)
-![教程截取](image/b站教程.png)
+参考教学视频：[Youtube教学视频](https://www.youtube.com/watch?v=pNQJ3owgigM)
+![美区 Apple ID 注册教程视频列出的邮箱、手机号和 iPhone 准备事项](image/b站教程.png)
 
 ***
 
@@ -72,13 +73,13 @@ sharingLinks: []
 ### Step3: 购买美区苹果礼品卡
 
 比如微信小程序搜索 pockytshop。注意一定要买和你新注册 Apple ID 地区一致的礼品卡，否则无法使用（本文均选择美区）。
-![pockytshop](image/wechat-pockyt.png)
+![PockytShop 的美区 Apple Gift Card 商品列表](image/wechat-pockyt.png)
 
 获得礼品卡兑换码后，打开 App Store：
 1. 登陆你的美区 Apple ID；
 2. 输入兑换码兑换礼品卡额度；
 3. 就可以直接通过苹果账号额度充值了。
-![gitfcard](image/appstore-giftcard.png)
+![App Store 账户页面中的“兑换充值卡”入口](image/appstore-giftcard.png)
 
 ***
 
@@ -94,9 +95,10 @@ sharingLinks: []
 
 安装好后直接用充值过 Plus 的账号登录即可；具备科学上网的前提下，这就不是问题了。
 
+登录后可以继续阅读[Codex 初始配置与常见问题](/notes/codex-setup/)：了解我遇到的代理重连、VS Code 扩展和日志写盘问题。
+
 ***
 
 ## 其他相关资源
 - [Codex++](https://github.com/BigPizzaV3/CodexPlusPlus) - 帮助接入其他api
 - [Codex auth Plugin](https://github.com/zhishile/codex-auth-helper) - 安全的登陆token获取插件(Free套餐无法使用work)
-

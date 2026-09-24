@@ -276,6 +276,7 @@ f:\Notes\
 |------|--------|------|
 | notes 入口页正文 | [`content/notes/_index.md`](file:///f:/Notes/content/notes/_index.md) | [`layouts/_default/list.html`](file:///f:/Notes/layouts/_default/list.html) |
 | 文章卡列表 | `content/notes/**` 下的文章 | [`layouts/_default/list.html`](file:///f:/Notes/layouts/_default/list.html) + `article-link/card.html` |
+| notes 分页页的独立标题、描述、H1 与 canonical | `content/notes/_index.md` 的文章集合 | `layouts/partials/head.html` 先按权重初始化分页；`layouts/_default/list.html` 显示页码标题 |
 | 文章封面卡（影像阴影式：全背景图+底部面板） | `data/notes.yaml` `items[].image` → frontmatter `featureimage` → 页面资源 → 站点默认图；无图降级 Lucide 图标 | [`layouts/partials/article-link/card.html`](file:///f:/Notes/layouts/partials/article-link/card.html) + [`assets/css/_13_notes-card.css`](file:///f:/Notes/assets/css/_13_notes-card.css) |
 | 列数控制 | `content/notes/_index.md` frontmatter `cardColumns` | [`layouts/_default/list.html`](file:///f:/Notes/layouts/_default/list.html) |
 | hero + 描述左右并排布局 | — | [`assets/css/_05_cards.css`](file:///F:/Notes/assets/css/_05_cards.css) 的 `.notes-hero-row`（flex 行：左 hero / 右描述文字，640px 以下纵向堆叠） |

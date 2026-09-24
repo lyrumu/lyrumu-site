@@ -55,6 +55,11 @@ items:
     icon: brain
     fallback_tag: ai
 
+  - slug: codex-setup
+    image: "image/notes/codex-setup-paper.png"
+    icon: brain
+    fallback_tag: codex
+
   - slug: for-agents
     image: "image/notes/for-agent.webp"
     icon: brain

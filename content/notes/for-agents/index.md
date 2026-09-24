@@ -1,5 +1,5 @@
 ---
-title: "更好地使用Agents"
+title: "Agent配置"
 date: 2026-07-29
 draft: false
 description: "我常用的 AI Agent 工具配置分享 —— OpenCode、AGENTS.md、MCP、Skill 等"
@@ -239,5 +239,12 @@ mkdir -p ~/.config/opencode && cp opencode.jsonc ~/.config/opencode/
 - 在项目具体子模块中建立agent工作区
 - 不要被你的agent激怒
 - 注意会话上下文
+
+***
+
+## 配置备份
+
+参考站内文章:
+- [使用Chezmoi管理dot-files](https://lyrumu.top/notes/%E4%BD%BF%E7%94%A8chezmoi%E7%AE%A1%E7%90%86dot-files/)
 
 
