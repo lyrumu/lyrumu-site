@@ -16,7 +16,7 @@
 | 我想…… | 改这个文件 |
 |---------|-----------|
 | 改首页首帧主标题 / 站点说明 / 滚动提示，或 `PRO TEMPLUM` / 题词 / 统计开关 / 全站导航头像 / 顶栏 GitHub 链接 | [`data/cover.yaml`](file:///f:/Notes/data/cover.yaml) |
-| 改首页三入口内容 | [`data/home_highlights.yaml`](file:///f:/Notes/data/home_highlights.yaml)（固定按 DOCS / WORKS / DAILY 三组维护 `sections`） |
+| 改首页三入口内容 | [`data/home_highlights.yaml`](file:///f:/Notes/data/home_highlights.yaml)（固定按 DOCS / WORKS / DAILY 三组维护说明、入口和视觉数据） |
 | 改封面的颜色 | [`assets/css/_01_tokens.css`](file:///F:/Notes/assets/css/_01_tokens.css) 顶部 `:root` / `html.dark` 的 `--bg-base / --line / --accent`（首页颜色已不再单独存进 `cover.yaml`） |
 | 改封面的字距 / 大小 / 音乐底片位置 | [`assets/css/_08_cover.css`](file:///F:/Notes/assets/css/_08_cover.css) |
 | 改内页"小封面"的文案 | 对应 `content/xxx/_index.md` 的 frontmatter `kicker / subtitle` |
@@ -128,7 +128,7 @@ f:\Notes\
 │
 ├── data/                           # ★ 数据驱动（改这里就能改 UI）
 │   ├── cover.yaml                  # 首页首帧文案 / masthead 信息 / show_stats + 全站导航 avatar / 顶栏 GitHub repo_url
-│   ├── home_highlights.yaml        # 首页固定三入口的文案、路由、meta 与 visual 数据契约
+│   ├── home_highlights.yaml        # 首页固定三入口的简短说明、路由与 visual 数据契约
 │   ├── about_timeline.yaml         # ABOUT ME 的 Path so far 里程碑（文字 / 顺序 / 可选图片）
 │   ├── vault.yaml                  # 旧版 /notes/ 分类卡数据（当前前台未使用，保留作历史参考）
 │   ├── life.yaml                   # /life/ 子模块清单（music / 图片 / 读书…）
@@ -223,33 +223,30 @@ f:\Notes\
 | 首帧主标题 / 站点说明 / 双尖头提示 | [`data/cover.yaml`](file:///f:/Notes/data/cover.yaml) 的 `headline / description / explore_label` | [`home/cover-carousel.html`](layouts/partials/home/cover-carousel.html) + [`_16_cover-carousel.css`](assets/css/_16_cover-carousel.css) + [`cover-carousel.js`](assets/js/cover-carousel.js) |
 | 全站导航品牌头像 | [`data/cover.yaml`](file:///f:/Notes/data/cover.yaml) 的 `avatar` | [`layouts/partials/header/basic.html`](layouts/partials/header/basic.html) + [`assets/css/_02_chrome.css`](assets/css/_02_chrome.css) |
 | 封面壳层 CSS（全屏画布 / masthead / 音乐唱片底片） | — | [`assets/css/_08_cover.css`](file:///F:/Notes/assets/css/_08_cover.css) |
+| 页面底色（封面与内页一致） | 主题 `--color-neutral` / 暗色 `--color-neutral-800` | `layouts/_default/baseof.html` 的 body 背景类；封面画布透明，无独立渐变或纸纹 |
 | 三入口 Vertical 顺序显现 / mobile rail | [`data/home_highlights.yaml`](data/home_highlights.yaml) 的 `sections[].visual` | [`home/cover-carousel.html`](layouts/partials/home/cover-carousel.html) + [`home/carousel-image.html`](layouts/partials/home/carousel-image.html) + [`_16_cover-carousel.css`](assets/css/_16_cover-carousel.css) + [`cover-carousel.js`](assets/js/cover-carousel.js) |
 | 封面主题切换 | — | 直接复用主题原生顶栏按钮；首页不再保留封面专属切换器 |
 | 首页首屏关键图 / 字体预加载 | — | [`layouts/partials/head.html`](file:///f:/Notes/layouts/partials/head.html) |
 | 封面装饰元素（唱片小提琴蚀刻纹） | — | 使用 `assets/image/cover/cover-violin-engraving.svg`，由 `custom.html` 经 Hugo 压缩、指纹化后输出；旧 WebP、上下花纹和黑花素材已删除 |
 | 封面调色（明 / 暗） | [`assets/css/_01_tokens.css`](file:///f:/Notes/assets/css/_01_tokens.css) 的全局变量 | [`custom.html`](file:///f:/Notes/layouts/partials/home/custom.html) 的 `<style>` 块只负责把全局变量派生到封面局部变量 |
-| 首页 `DOCS / WORKS / DAILY` 入口 | [`data/home_highlights.yaml`](file:///f:/Notes/data/home_highlights.yaml) | 由 [`layouts/partials/home/cover-carousel.html`](layouts/partials/home/cover-carousel.html) 按数据顺序同时渲染首帧索引与三张入口卡；桌面依次显现后保持三卡横排 |
+| 首页 `DOCS / WORKS / DAILY` 入口 | [`data/home_highlights.yaml`](file:///f:/Notes/data/home_highlights.yaml) | 由 [`layouts/partials/home/cover-carousel.html`](layouts/partials/home/cover-carousel.html) 按数据顺序渲染首帧索引与入口卡；桌面卡片围绕唱片排列，手机采用原生横向滚动 |
 
 **以后如何更新首页 Highlights：**
 
-1. **改分组文案**
-   - 直接改 [`data/home_highlights.yaml`](file:///f:/Notes/data/home_highlights.yaml) 各组里的 `kicker / desc / cta_label / cta_path`
+1. **改分组说明与入口动作**
+   - 直接改 [`data/home_highlights.yaml`](file:///f:/Notes/data/home_highlights.yaml) 各组里的 `desc / cta_label / cta_path`
 
-2. **改卡片 meta**
-   - 直接维护 `sections[].meta` 字符串列表；它只显示一行简短标签，不承载跳转
-   - 每张卡的真实入口只由组级 `cta_path` 决定，模板会在构建期验证站内路由或完整外链
-
-3. **保持三入口契约**
+2. **保持三入口契约**
    - `sections` 必须正好是三组且 `id` 唯一，顺序就是首帧索引与显现顺序
    - 不再维护旧 `title / items[].title / items[].desc / items[].path / link_text` 字段
    - 数量、重复 id、无效路由、未知视觉类型或错误图片数量都会令 Hugo 构建失败
 
-4. **更换卡片视觉**
+3. **更换卡片视觉**
    - 改对应 `sections[].visual.assets`；路径必须指向 `assets/` 下可被 Hugo Pipes 处理的图片
    - `visual.kind` 与图片数量固定为 `docs-stack=3`、`project-stage=1`、`music-fan=3`
    - DOCS 的第一张图是唯一 eager/high priority 图片，其余图片保持 lazy
 
-5. **模板职责**
+4. **模板职责**
    - [`layouts/partials/home/custom.html`](file:///f:/Notes/layouts/partials/home/custom.html) 负责封面壳层和 carousel partial 调用
    - [`layouts/partials/home/cover-carousel.html`](layouts/partials/home/cover-carousel.html) 负责数据驱动首帧、栏目索引、语义卡片、路由解析与无 JS 基线
    - [`assets/js/cover-carousel.js`](assets/js/cover-carousel.js) 只负责首帧 / 栏目标识交接、滚动进度与三卡显现量，CSS 负责定位和外观
@@ -460,6 +457,7 @@ f:\Notes\
    - `--accent`（强调色 / 链接 / 按钮）
 2. 暗色：改同一文件 `html.dark` 块的同名变量（暗色值）
 3. 封面不再维护独立 `palette` 字段；明暗颜色全部由上述全局变量自动派生
+4. 页面底色沿用 `baseof.html` 的 `bg-neutral / dark:bg-neutral-800`；封面画布透明，不叠加渐变或纸纹，与内页保持一致
 
 **派生链路**（自动生效，不用动）：
 

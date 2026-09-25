@@ -1,17 +1,11 @@
 # 首页固定三入口数据契约，顺序即首帧索引和卡片显现顺序。
 # - sections 必须正好为 3 组；id 必须唯一。
-# - meta 只承载卡片上的简短标签，不再伪装成可点击的精选条目。
 # - visual.kind 与图片数量：docs-stack=3、project-stage=1、music-fan=3。
 sections:
   - id: "docs"
-    kicker: "Reading & Notes"
-    desc: "Some of my study records"
-    cta_label: "Open Docs"
+    desc: "Notes on coding, tools, and ideas worth keeping."
+    cta_label: "Read notes"
     cta_path: "/notes/"
-    meta:
-      - "ChatGPT"
-      - "Agent Config"
-      - "Git Basics"
     visual:
       kind: "docs-stack"
       alt: "Selected covers from the documentation archive"
@@ -21,12 +15,9 @@ sections:
         - "image/notes/git.webp"
 
   - id: "works"
-    kicker: "Built & Shared"
-    desc: "Projects and things made to be opened, tested, or downloaded rather than only read about."
-    cta_label: "Open Works"
+    desc: "Small personal projects and demos to explore."
+    cta_label: "View projects"
     cta_path: "/works/projects/"
-    meta:
-      - "Projects"
     visual:
       kind: "project-stage"
       alt: "Geometric artwork from the linear algebra project"
@@ -34,12 +25,9 @@ sections:
         - "image/projects/linear-algebra-cover.webp"
 
   - id: "daily"
-    kicker: "Slow & Small"
-    desc: "Collect some high-quality items"
-    cta_label: "Open Daily"
+    desc: "Japanese anime songs and Jay Chou in one playlist."
+    cta_label: "Browse music"
     cta_path: "/life/music/"
-    meta:
-      - "Listening"
     visual:
       kind: "music-fan"
       alt: "A selection of album covers from the current playlist"

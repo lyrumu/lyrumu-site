@@ -120,7 +120,6 @@
           {{- if not (in $supportedKinds $kind) -}}
             {{- $kind = "fallback" -}}
           {{- end -}}
-          {{- $meta := $section.meta | default (slice) -}}
           <article
             class="cover-carousel-card cover-carousel-card--{{ $kind }}"
             data-cover-carousel-slide
@@ -152,10 +151,8 @@
               </div>
 
               <div class="cover-carousel-copy">
-                <p class="cover-carousel-kicker"><span>{{ printf "%02d" (add $index 1) }}</span> {{ $section.kicker }}</p>
                 <h2>{{ upper $id }}</h2>
                 {{- with $section.desc }}<p class="cover-carousel-description">{{ . }}</p>{{ end -}}
-                {{- with $meta }}<p class="cover-carousel-meta">{{ delimit . " · " }}</p>{{ end -}}
                 {{- if $link.linked -}}
                   <span class="cover-carousel-cta">
                     {{ $section.cta_label | default (printf "Open %s" (upper $id)) }}

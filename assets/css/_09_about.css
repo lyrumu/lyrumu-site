@@ -141,6 +141,12 @@
   box-shadow: 0 12px 30px color-mix(in srgb, var(--fg-base) 5%, transparent);
   overflow: hidden;
 }
+
+.about-focus-item,
+.prose details.about-timeline-group {
+  background: var(--bg-base);
+}
+
 .about-timeline-group summary {
   list-style: none;
 }
