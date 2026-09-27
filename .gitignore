@@ -82,6 +82,7 @@ tests/*
 !tests/seo_check.py
 COVER_CAROUSEL_PLAN.md
 deploy-logs/
+Vault/
 
 # -----------------------------------------------------------------------------
 # 日志
