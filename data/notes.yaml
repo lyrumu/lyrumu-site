@@ -50,6 +50,10 @@ tag_icons:
 
 # 每篇文章的独立配置
 items:
+  - slug: 注册美区Apple-ID指南
+    image: "image/notes/注册美区Apple-ID指南.png"
+    icon: smartphone
+
   - slug: Codex-Plus
     image: "image/notes/Codex-Plus.webp"
     icon: brain

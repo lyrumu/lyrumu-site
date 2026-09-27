@@ -8,7 +8,7 @@ slug: ""
 aliases: []
 weight: -1
 tags: [chatgpt, agent, subscription]
-categories: [tools, ai]
+categories: [tutorials]
 topics: []
 series: []
 showDateUpdated: false
@@ -59,7 +59,8 @@ sharingLinks: []
 
 参考教学视频：[Youtube教学视频](https://www.youtube.com/watch?v=pNQJ3owgigM)
 ![美区 Apple ID 注册教程视频列出的邮箱、手机号和 iPhone 准备事项](image/b站教程.png)
-
+或者直接看我的文字教程记录:
+- [注册美区Apple ID指南](/notes/注册美区apple-id指南/)
 ***
 
 ### Step2: 在 App Store 登陆你的美区 ID

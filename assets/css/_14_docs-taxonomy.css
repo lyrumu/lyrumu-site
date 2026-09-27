@@ -1,5 +1,5 @@
 /* =============================================================================
-   _14_docs-taxonomy.css — DOCS 页 taxonomy 聚合入口（Tags / Categories chip）
+   _14_docs-taxonomy.css — DOCS 顶部的固定分类与 Tags 入口
    ----------------------------------------------------------------------------
    位置：layouts/_default/list.html 的 notes 区段 hero 下方
    形态：复用 _13_notes-card.css 的 .cover-card__tag 圆角胶囊气质，
@@ -30,7 +30,7 @@
   transition: border-color 0.25s, background 0.25s, color 0.25s;
 }
 
-.docs-taxonomy-chip:hover {
+a.docs-taxonomy-chip:hover {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--selection-bg);

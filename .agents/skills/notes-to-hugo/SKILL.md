@@ -35,7 +35,9 @@ description: 将指定 Obsidian 笔记迁移或整理为 Hugo 文章；保留原
 
 - 用户指定目录名就照做；否则用源文件名去 `.md`，仅把连续空格改为 `-`，保留 Unicode，不擅改 URL。新文章用 `hugo new content "notes/<name>/index.md" --kind notes` 创建，不用 `--force`。
 - 新文章 `date` 为整理当天；更新文章保留原日期，有实质更新才启用 `showDateUpdated` 并填写当天日期。`slug` 留空、`weight: 0`，除非用户明确要求置顶。
-- `title` 和 `description` 取自真实内容；摘要用正文主要语言写得具体。tags/categories 少而准确，优先复用现有词；只有确属新文章类型才新增，不确定就保留空数组并询问。
+- `title` 和 `description` 取自真实内容；摘要用正文主要语言写得具体。
+- `categories` 由作者决定，每篇选一项：`tutorials`（Tutorials）、`share-resources`（Share & Resources）、`engineering-practice`（Engineering Practice）。只维护文章 front matter，分类展示在 DOCS 顶部，不为预置分类创建独立栏目或空分类页。作者未指定时，新文章留空并在交付中提示待分类；已有文章保留作者的选择，不自行分配或迁移。不能仅因内容按步骤编写就判为 Tutorials；Git 使用、Python 打包、Flutter 部署也可由作者归入 Engineering Practice。
+- `tags` 用于串联具体主题，可留空，通常 0–2 个；保留作者指定的标签，不把空数组视为缺漏，不为每个技术名创建标签。作者未指定时不自动补写；需要新增或合并标签时先确认。`topics`、`series` 仅在作者明确需要时填写。
 
 ### 正文与读者视角
 

@@ -53,16 +53,30 @@
 
   {{ if eq $sectionName "notes" }}</div>{{ end }} {{/* /.notes-hero-row */}}
 
-  {{/* notes 区：taxonomy 聚合入口（Hugo 自动生成的全站 tags / categories 聚合页） */}}
+  {{/* notes 区：固定分类入口，文章归属由作者在 front matter 中选择。 */}}
   {{ if eq $sectionName "notes" }}
-  <nav class="docs-taxonomy not-prose" aria-label="Filter by taxonomy">
+  <nav class="docs-taxonomy not-prose" aria-label="Browse notes by category">
+    {{ range slice
+      (dict "slug" "tutorials" "label" "Tutorials")
+      (dict "slug" "share-resources" "label" "Share & Resources")
+      (dict "slug" "engineering-practice" "label" "Engineering Practice")
+    }}
+      {{ $label := .label }}
+      {{ with site.GetPage (printf "/categories/%s" .slug) }}
+        <a class="docs-taxonomy-chip" href="{{ .RelPermalink }}">
+          <span class="docs-taxonomy-chip__label">{{ $label }}</span>
+          <span class="docs-taxonomy-chip__count">{{ len .Pages }}</span>
+        </a>
+      {{ else }}
+        <span class="docs-taxonomy-chip" aria-disabled="true">
+          <span class="docs-taxonomy-chip__label">{{ $label }}</span>
+          <span class="docs-taxonomy-chip__count">0</span>
+        </span>
+      {{ end }}
+    {{ end }}
     <a class="docs-taxonomy-chip" href="{{ "tags/" | relLangURL }}">
       <span class="docs-taxonomy-chip__label">Tags</span>
       <span class="docs-taxonomy-chip__count">{{ len .Site.Taxonomies.tags }}</span>
-    </a>
-    <a class="docs-taxonomy-chip" href="{{ "categories/" | relLangURL }}">
-      <span class="docs-taxonomy-chip__label">Categories</span>
-      <span class="docs-taxonomy-chip__count">{{ len .Site.Taxonomies.categories }}</span>
     </a>
   </nav>
   {{ end }}

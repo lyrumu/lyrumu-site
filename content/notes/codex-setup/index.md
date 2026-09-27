@@ -7,7 +7,7 @@ slug: ""
 aliases: []
 weight: 0
 tags: [agent, chatgpt]
-categories: [tools, ai]
+categories: [tutorials]
 topics: []
 series: []
 showDateUpdated: false

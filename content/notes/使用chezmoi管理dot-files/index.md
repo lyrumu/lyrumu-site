@@ -1,13 +1,13 @@
 ---
-title: "使用chezmoi管理dot-files"
+title: "使用chezmoi管理skills等配置"
 date: 2026-08-11
 draft: false
-description: "使用 chezmoi 备份和同步 dotfiles：安装初始化、添加 Agent 配置、检查差异，并通过 Git 管理配置仓库。"
+description: "使用 chezmoi 备份和同步 skills等agent配置：安装初始化、添加 Agent 配置、检查差异，并通过 Git 管理配置仓库。"
 slug: ""
 aliases: []
 weight: 0
 tags: [tools, agent, os]
-categories: [tools]
+categories: [engineering-practice]
 topics: []
 series: []
 showDateUpdated: false

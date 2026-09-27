@@ -17,7 +17,7 @@ weight: 0
 # 分类与标签
 # =============================================================================
 tags: [python, pypi]
-categories: [development]
+categories: [engineering-practice]
 topics: []
 series: []
 

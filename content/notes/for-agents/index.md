@@ -7,7 +7,7 @@ slug: ""
 aliases: []
 weight: -1
 tags: [agent, skills, mcp, opencode]
-categories: [tools]
+categories: [share-resources]
 topics: []
 series: []
 showDateUpdated: true

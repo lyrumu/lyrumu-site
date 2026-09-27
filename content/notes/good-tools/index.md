@@ -6,7 +6,7 @@ description: "宝藏站点,宝藏资源.程序员、软件工程学生日常使�
 slug: ""
 weight: -1
 tags: [tools, website, os]
-categories: [tools]
+categories: [share-resources]
 topics: []
 series: []
 
@@ -84,7 +84,10 @@ showLikes: true
 
 - [Sweeezy Cursors](https://sweezy-cursors.com/) - 提供丰富鼠标指针样式资源
 - [OpenFLAC](https://www.openflac.com/) — 可搜索和下载 FLAC 无损音乐及 MP3 的网站
+
+(需要使用到Quark浏览器)
 - [OpenClipart](https://openclipart.org/) - 丰富优质的svg图像资源
+- [机场测评](https://gate-rank.com/rankings/all) - 也许能找到好用的机场...
 
 ### Tools
 

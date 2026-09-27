@@ -7,7 +7,7 @@ slug: ""
 aliases: []
 weight: 0 #如果文章需要置顶 把weight改成负数即可
 tags: [tools, os]
-categories: [tools]
+categories: [tutorials]
 topics: []
 series: []
 showDateUpdated: true

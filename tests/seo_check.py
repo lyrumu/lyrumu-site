@@ -13,7 +13,7 @@ class Page(HTMLParser):
     def __init__(self, text):
         super().__init__()
         self.title, self.description, self.headings = "", [], []
-        self.canonical, self.images, self.links, self.schemas = [], [], [], []
+        self.canonical, self.icons, self.images, self.links, self.schemas = [], [], [], [], []
         self.capture, self.anchor, self.alias = None, None, False
         self.in_head = False
         self.feed(text)
@@ -29,6 +29,8 @@ class Page(HTMLParser):
                 self.alias = True
         if tag == "link" and attrs.get("rel") == "canonical":
             self.canonical.append(attrs["href"])
+        if tag == "link" and attrs.get("rel") == "icon":
+            self.icons.append(attrs.get("href", ""))
         if (tag == "title" and self.in_head) or tag == "h1" or (tag == "script" and attrs.get("type") == "application/ld+json"):
             self.capture = [tag, ""]
         if tag == "a":
@@ -72,6 +74,7 @@ def check(root):
         assert len(page.description) == 1 and page.description[0], file
         expected = "https://lyrumu.top/" + file.parent.relative_to(root).as_posix().strip(".")
         assert len(page.canonical) == 1 and unquote(page.canonical[0]) == expected.rstrip("/") + "/", file
+        assert set(page.icons) == {"/favicon.ico", "/favicon-32x32.png", "/favicon-16x16.png", "/favicon.svg"}, file
         assert page.schemas, file
         for group in page.schemas:
             for item in group if isinstance(group, list) else [group]:
@@ -87,6 +90,8 @@ def check(root):
                 assert {"noopener", "noreferrer"} & set(attrs.get("rel", "").split()), (file, attrs)
             if not url.scheme and not url.netloc and url.path:
                 assert label.strip(), (file, attrs)
+            if "docs-taxonomy-chip" in attrs.get("class", "").split():
+                assert (root / unquote(url.path).strip("/") / "index.html").is_file(), (file, attrs)
             if "share-email" in attrs.get("class", "").split():
                 assert attrs["href"] == "#", (file, attrs)
                 mailto = urlparse(b64decode(attrs["data-email"]).decode("ascii"))
@@ -111,6 +116,9 @@ def check(root):
             image_sizes[attrs["src"]] = image.stat().st_size
         pages.append(page)
     assert pages, "No content pages found"
+    for icon in ("favicon.ico", "favicon-32x32.png", "favicon-16x16.png", "favicon.svg", "apple-touch-icon.png",
+                 "android-chrome-192x192.png", "android-chrome-512x512.png"):
+        assert (root / icon).is_file(), icon
     for values in ([p.title for p in pages], [p.description[0] for p in pages], [p.headings[0] for p in pages]):
         assert not [v for v, n in Counter(values).items() if n > 1], "Duplicate metadata or H1"
     headers = (root / "_headers").read_text()

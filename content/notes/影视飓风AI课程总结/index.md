@@ -7,7 +7,7 @@ slug: ""
 aliases: []
 weight: 0 #如果文章需要置顶 把weight改成负数即可
 tags: [ai, skills, agent]
-categories: [ai]
+categories: [share-resources]
 topics: []
 series: []
 showDateUpdated: true
@@ -29,9 +29,9 @@ showComments: false
 sharingLinks: []
 ---
 
-> 该价位下 此教程的质量还是非常高的呀 还赠送练习时的AI生成额度 
+> 综合看来此教程的质量还是非常高的 还赠送练习时的AI生成额度(TapNow)
 > 
-> 对这方面感兴趣的 非常推荐购买
+> 因此 对这方面感兴趣的 非常推荐购买
 
 **课程链接**：[飓风课堂](https://course.ysjf.com/#/)
 

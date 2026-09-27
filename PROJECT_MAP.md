@@ -15,6 +15,7 @@
 
 | 我想…… | 改这个文件 |
 |---------|-----------|
+| 改网站 favicon / 主屏图标 | `static/favicon.svg` 是玫瑰图标源文件；同目录 ICO、PNG 是同图各尺寸，`layouts/partials/favicons.html` 管理页面声明；Safari 单色图标另见 `static/safari-pinned-tab.svg` |
 | 改首页首帧主标题 / 站点说明 / 滚动提示，或 `PRO TEMPLUM` / 题词 / 统计开关 / 全站导航头像 / 顶栏 GitHub 链接 | [`data/cover.yaml`](file:///f:/Notes/data/cover.yaml) |
 | 改首页三入口内容 | [`data/home_highlights.yaml`](file:///f:/Notes/data/home_highlights.yaml)（固定按 DOCS / WORKS / DAILY 三组维护说明、入口和视觉数据） |
 | 改封面的颜色 | [`assets/css/_01_tokens.css`](file:///F:/Notes/assets/css/_01_tokens.css) 顶部 `:root` / `html.dark` 的 `--bg-base / --line / --accent`（首页颜色已不再单独存进 `cover.yaml`） |
@@ -273,6 +274,7 @@ f:\Notes\
 |------|--------|------|
 | notes 入口页正文 | [`content/notes/_index.md`](file:///f:/Notes/content/notes/_index.md) | [`layouts/_default/list.html`](file:///f:/Notes/layouts/_default/list.html) |
 | 文章卡列表 | `content/notes/**` 下的文章 | [`layouts/_default/list.html`](file:///f:/Notes/layouts/_default/list.html) + `article-link/card.html` |
+| DOCS 顶部的固定分类入口 | 文章 front matter 的 `categories`；英文名称与三个选项定义在 DOCS 列表模板中 | `layouts/_default/list.html`；样式在 `assets/css/_14_docs-taxonomy.css`；有文章时链接到 Hugo 原生 taxonomy 列表，空分类仅显示名称与 0 |
 | notes 分页页的独立标题、描述、H1 与 canonical | `content/notes/_index.md` 的文章集合 | `layouts/partials/head.html` 先按权重初始化分页；`layouts/_default/list.html` 显示页码标题 |
 | 文章封面卡（影像阴影式：全背景图+底部面板） | `data/notes.yaml` `items[].image` → frontmatter `featureimage` → 页面资源 → 站点默认图；无图降级 Lucide 图标 | [`layouts/partials/article-link/card.html`](file:///f:/Notes/layouts/partials/article-link/card.html) + [`assets/css/_13_notes-card.css`](file:///f:/Notes/assets/css/_13_notes-card.css) |
 | 列数控制 | `content/notes/_index.md` frontmatter `cardColumns` | [`layouts/_default/list.html`](file:///f:/Notes/layouts/_default/list.html) |
@@ -284,7 +286,9 @@ f:\Notes\
 - 当前前台的 `/notes/` 已不再使用 `data/vault.yaml + vault-sections.html` 这条旧链路
 - `vault.yaml` / `vault-sections.html` 目前保留在仓库里，主要用于历史参考；若以后确认不再回退，可再统一清理
 - `notes` 的 taxonomy / Edit Link / 上一篇下一篇不靠全局配置硬开，而是通过 `content/notes/_index.md` 的 `cascade` 只作用到 `notes` 后代文章
-- 后续维护 tags / categories / series 的约定见 [`BLOWFISH_FEATURE_AUDIT.md`](file:///f:/Notes/BLOWFISH_FEATURE_AUDIT.md) 末尾 `Taxonomies 后续维护约定`
+- 分类由作者逐篇决定：`categories: [tutorials]`、`categories: [share-resources]` 或 `categories: [engineering-practice]`，每篇选一项；对应 Tutorials、Share & Resources、Engineering Practice。未决定时可留空。
+- 现有文章已分配到这三类；DOCS 顶部只列出这三类。分类通过文章字段维护，不新增 `content/categories` 栏目或空分类页；Hugo 继续根据实际文章生成原生 taxonomy 聚合页。
+- tags 用于具体主题，可留空、通常 0–2 个；不自动补写或批量收敛。topics / series 按作者明确需求填写。新文章模板与 `.agents/skills/notes-to-hugo/SKILL.md` 遵守同一规则。
 
 ### /life/ 子模块网格
 

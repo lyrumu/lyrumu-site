@@ -17,7 +17,7 @@ weight: 0
 # 分类与标签
 # =============================================================================
 tags: [git, project]
-categories: [development, devops]
+categories: [engineering-practice]
 topics: []
 series: []
 

@@ -18,7 +18,7 @@ weight: 0
 # 分类与标签
 # =============================================================================
 tags: [linux, wsl2, agent, opencode]
-categories: [development, devops]
+categories: [engineering-practice]
 topics: []
 series: [wsl2]
 

@@ -4,6 +4,17 @@
 >
 > 2026-09-14 改版前的完整过程日志原样保存在 [`DONE_ARCHIVE.md`](DONE_ARCHIVE.md)，仅供追溯，不再追加。当前实现以代码、`PROJECT_MAP.md` 和本文件为准。
 
+## 2026-09-27 · 固定 DOCS 分类入口
+
+- DOCS 顶部显示 Tutorials、Share & Resources、Engineering Practice 三个分类名称与文章数，沿用现有胶囊样式；有文章时链接到 Hugo 原生分类列表，空分类显示为非链接文本。
+- 分类只通过文章 `categories` 字段维护，取值为 `tutorials` / `share-resources` / `engineering-practice`；作者已分配现有文章。不新增内容栏目或空分类页。
+- 生产构建及 SEO 回归通过；分类路径更新为 `/categories/share-resources/`，文章路径与 sitemap 集合未变。浏览器表现与上线结果待用户验收；Hugo 既有主题兼容警告仍在。
+
+## 2026-09-26 · 统一网站图标
+
+- 从现有玫瑰 SVG 生成 ICO、16/32px favicon、Apple 主屏图标及 Android 图标，覆盖 Blowfish 自带的默认资源；`favicons.html` 同时声明兼容格式，保留 SVG 与 Safari 单色图标。
+- Hugo 生产压缩构建（57 页）、44 页 SEO 回归、输出资源一致性及 `git diff --check` 通过；Hugo 仍提示主题支持版本不含当前 v0.164.0。线上图标与 Bing 搜索展示待部署及重新抓取后验证。
+
 ## 2026-09-25 · About 学习历程卡片采用暖白底色
 
 - `Current focus` 与 `Path so far` 容器统一使用 `--bg-base`，在白色页面上呈现一致的浅暖黄色卡片底色，暗色模式继续跟随主题。

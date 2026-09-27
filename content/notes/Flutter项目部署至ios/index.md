@@ -7,7 +7,7 @@ slug: ""
 aliases: []
 weight: 0 #如果文章需要置顶 把weight改成负数即可
 tags: [os]
-categories: [development]
+categories: [engineering-practice]
 topics: []
 series: []
 showDateUpdated: false
