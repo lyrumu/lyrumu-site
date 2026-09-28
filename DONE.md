@@ -4,6 +4,12 @@
 >
 > 2026-09-14 改版前的完整过程日志原样保存在 [`DONE_ARCHIVE.md`](DONE_ARCHIVE.md)，仅供追溯，不再追加。当前实现以代码、`PROJECT_MAP.md` 和本文件为准。
 
+## 2026-09-28 · 清理分类收敛后的抓取死链
+
+- Cloudflare Pages 将已弃用的 `ai` / `development` / `devops` / `tools` 分类 URL 统一 301 到 `/categories/`，不恢复旧分类页或改动当前三类结构。
+- Git 指南中的 GitHub 隐私邮箱示例改用 `[at]` 表达，避免 Cloudflare Email Address Obfuscation 把示例文本改写成 `/cdn-cgi/l/email-protection` 404；邮箱分享功能不变。
+- SEO 回归同时检查该邮箱字面量和 4 条重定向；本地构建只能确认生成物，真实 301 响应与 Cloudflare 不再改写需部署后复查。
+
 ## 2026-09-27 · 固定 DOCS 分类入口
 
 - DOCS 顶部显示 Tutorials、Share & Resources、Engineering Practice 三个分类名称与文章数，沿用现有胶囊样式；有文章时链接到 Hugo 原生分类列表，空分类显示为非链接文本。

@@ -181,6 +181,8 @@ f:\Notes\
 │   └── vault-to-hugo.ps1           # Vault → Hugo 同步（日常使用）
 │
 ├── static/                         # 静态资源
+│   ├── _headers                    # Cloudflare Pages 静态响应安全头
+│   ├── _redirects                  # Cloudflare Pages 旧 URL 301 重定向
 │   ├── fonts/                      # 字体文件（本地化）
 │   ├── js/                         # ★ 仅第三方 JS（版本固定，无需指纹）
 │   │   ├── splitting.min.js        # Splitting.js 字符分割
@@ -436,7 +438,7 @@ f:\Notes\
 | 生产构建 | `hugo --minify --themesDir themes --theme blowfish --config hugo.toml` |
 | SEO 回归 | 构建至临时目录后运行 `python3 tests/seo_check.py <输出目录>`；优先级、扫描噪音与部署后检查见 `SEO_REPORT.md` |
 | SEO 模板 | `layouts/partials/head.html` 生成分面元数据并支持文章 `seoTitle`；`layouts/_default/term.html` 区分 Tag / Category / Series 的 H1；分享覆写位于 `layouts/partials/sharing-links.html` |
-| Cloudflare 响应头与邮箱分享 | `static/_headers` 添加基础安全头；`hugo.toml` 的 `minify.tdewolff.html.keepComments` 必须保留，否则生产压缩会删除分享链接的 `email_off` 标记 |
+| Cloudflare 响应头、重定向与邮箱分享 | `static/_headers` 添加基础安全头；`static/_redirects` 管理旧 URL；邮箱分享由 `sharing-links.html` 输出 Base64 `data-email`，再由 `email.js` 在客户端还原，不依赖 HTML 注释 |
 | vault 同步 | `powershell -File scripts/vault-to-hugo.ps1` 或加 `-Watch` 持续监听 |
 | 部署到 Cloudflare Pages | 详见 [DEPLOY.md](file:///f:/Notes/DEPLOY.md) |
 | 已知警告（Hugo + Blowfish 不兼容） | 正常，可忽略；详见 `.trae/rules/个人网站开发规则.md` |

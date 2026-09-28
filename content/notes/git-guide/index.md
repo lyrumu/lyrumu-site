@@ -99,7 +99,7 @@ git config user.email "YOUR EMAIL" # 建议使用 GitHub 提供的隐私邮箱�
 git remote add origin https://github.com/YOUR_NAME/YOUR_REPO_NAME.git
 ```
 
-> 注意：GitHub 提供隐私邮箱格式 `ID+username@users.noreply.github.com`，可有效避免垃圾邮件。
+> 注意：GitHub 提供隐私邮箱格式 `ID+username [at] users.noreply.github.com`（将 `[at]` 替换为 `@`），可有效避免垃圾邮件。
 
 ---
 

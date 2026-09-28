@@ -81,6 +81,7 @@ def check(root):
                 if item.get("@type") == "Article":
                     assert item.get("mainEntityOfPage") == page.canonical[0], file
         assert "/cdn-cgi/l/email-protection" not in text, file
+        assert "@users.noreply.github.com" not in text, file
         taxonomy_badges = []
         for attrs, label in page.links:
             url = urlparse(attrs.get("href", ""))
@@ -124,6 +125,13 @@ def check(root):
     headers = (root / "_headers").read_text()
     for header in ("Strict-Transport-Security", "X-Frame-Options", "Content-Security-Policy", "Referrer-Policy"):
         assert header + ":" in headers, header
+    redirects = set((root / "_redirects").read_text().splitlines())
+    assert {
+        "/categories/ai/ /categories/ 301",
+        "/categories/development/ /categories/ 301",
+        "/categories/devops/ /categories/ 301",
+        "/categories/tools/ /categories/ 301",
+    } <= redirects
     print(f"PASS: {len(pages)} pages; unique titles/descriptions/H1; valid JSON-LD, links and image candidates.")
     print(f"Article default images: {len(image_sizes)} files, {sum(image_sizes.values()):,} bytes; "
           f"{sum(size > 100_000 for size in image_sizes.values())} over 100 kB.")
