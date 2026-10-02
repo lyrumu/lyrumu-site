@@ -8,6 +8,7 @@ cascade:
   # 仅对 notes 下的文章生效：显示 taxonomy、编辑入口、上一篇/下一篇、views / likes。
   # Edit Link 只是跳到 GitHub 编辑页，真正能否修改仍由仓库权限控制。
   - showTaxonomies: true
+    showAuthorBottom: true
     showEdit: true
     showPagination: true
     showViews: true

@@ -52,6 +52,7 @@ showLikes: true
 - [Ghostty](https://ghostty.org/) - macOS开箱即用的轻便终端
 - [AppCleaner](https://freemacsoft.net/appcleaner/) - macOS轻便的软件卸载工具
 - [duti](https://github.com/moretension/duti) - 批量管理macOS上文件的默认打开方式
+- [Downie4](https://lizhi.shop/products?word=downie) - macos较好的视频下载工具 国内可99元买断([官网](https://software.charliemonroe.net/downie/))
 
 ***
 

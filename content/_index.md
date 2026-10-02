@@ -1,6 +1,6 @@
 ---
 title: "lyrumu's page"
-description: "lyrumu's personal page — Student · Developer in Hangzhou, China"
+description: "lyrumu 的个人网站，分享编程与工具实践，整理学习笔记、个人项目与日常记录。"
 ---
 
 <!--

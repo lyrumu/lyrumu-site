@@ -80,6 +80,7 @@ docs/
 prototypes/
 tests/*
 !tests/seo_check.py
+!tests/cover-carousel.test.cjs
 COVER_CAROUSEL_PLAN.md
 deploy-logs/
 Vault/

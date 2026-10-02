@@ -172,9 +172,20 @@ header#single_header .mt-1,
 header#single_header .text-base {
   font-family: var(--font-serif-display);
   font-size: 0.72rem;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--fg-soft) !important;
+}
+
+header#single_header .mt-1 { margin-bottom: 1rem; }
+.article-author-bottom { margin-block: 1.5rem 2rem; }
+
+/* Shared by page-hero; keep these available without the homepage stylesheet. */
+.splitting .word,
+.splitting .char { display: inline-block; }
+@keyframes cover-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* =============================================================================

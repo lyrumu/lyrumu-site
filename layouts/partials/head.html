@@ -183,7 +183,18 @@
       → 全部 404 → 自定义样式全没。
       resources.Match + Concat 是 Hugo Pipes 原生支持的合并方式，零依赖、零网络请求。
   */}}
-  {{ $customCSS := resources.Match "css/_*.css" }}
+  {{/* Keep shared components cached across pages; cover/music skins load only where used. */}}
+  {{ $customCSS := slice }}
+  {{ $pageCSS := slice }}
+  {{ range resources.Match "css/_*.css" }}
+    {{ if in (slice "/css/_08_cover.css" "/css/_16_cover-carousel.css") .Name }}
+      {{ if $.IsHome }}{{ $pageCSS = $pageCSS | append . }}{{ end }}
+    {{ else if eq .Name "/css/_10_music-darkside.css" }}
+      {{ if $.HasShortcode "music-list" }}{{ $pageCSS = $pageCSS | append . }}{{ end }}
+    {{ else }}
+      {{ $customCSS = $customCSS | append . }}
+    {{ end }}
+  {{ end }}
   {{ with $customCSS }}
     {{ $css := . | resources.Concat "css/custom.css" }}
     {{ $cssResources = $cssResources | append $css }}
@@ -201,6 +212,10 @@
     rel="stylesheet"
     href="{{ $bundleCSS.RelPermalink }}"
     integrity="{{ $bundleCSS.Data.Integrity }}">
+  {{ with $pageCSS }}
+    {{ $pageBundle := . | resources.Concat (cond $.IsHome "css/cover.bundle.css" "css/music.bundle.css") | resources.Minify | resources.Fingerprint $alg }}
+    <link rel="stylesheet" href="{{ $pageBundle.RelPermalink }}" integrity="{{ $pageBundle.Data.Integrity }}">
+  {{ end }}
 
   {{/* JS loaded immediately */}}
   {{ $jsAppearance := resources.Get "js/appearance.js" | resources.ExecuteAsTemplate "js/appearance.js" . | resources.Minify | resources.Fingerprint $alg }}

@@ -38,7 +38,7 @@
     {{ end }}
   {{ end }}
 
-  <div class="flex items-center justify-between">
+  <div class="site-footer-row">
     {{/* Copyright */}}
     {{ if .Site.Params.footer.showCopyright | default true }}
       <p class="text-sm text-neutral-500 dark:text-neutral-400">
@@ -57,7 +57,7 @@
     {{/* RSS feed 入口（2026-07-04）——only one change vs theme */}}
     <a
       href="/index.xml"
-      class="text-sm text-neutral-500 dark:text-neutral-400 hover:text-primary-500 dark:hover:text-primary-400 inline-flex items-center gap-1.5"
+      class="site-footer-rss"
       title="Subscribe via RSS"
       aria-label="Subscribe via RSS">
       <svg
@@ -68,7 +68,8 @@
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="h-3.5 w-3.5"
+        width="14"
+        height="14"
         aria-hidden="true">
         <path d="M4 11a9 9 0 0 1 9 9"></path>
         <path d="M4 4a16 16 0 0 1 16 16"></path>

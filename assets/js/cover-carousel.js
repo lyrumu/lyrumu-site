@@ -334,7 +334,7 @@
   }
 
   function onWheel(event) {
-    if (compact()) return;
+    if (compact() || event.defaultPrevented || event.ctrlKey) return;
     event.preventDefault();
 
     const direction = Math.sign(event.deltaY);
@@ -383,9 +383,10 @@
     if (event.target === musicCamera && event.propertyName === "transform") markSettled();
   }
 
-  window.addEventListener("wheel", onWheel, { passive: false });
-  window.addEventListener("touchstart", onTouchStart, { passive: true });
-  window.addEventListener("touchend", onTouchEnd, { passive: true });
+  // Search and other overlays are outside the cover; keep their native scrolling.
+  scrollScene.addEventListener("wheel", onWheel, { passive: false });
+  scrollScene.addEventListener("touchstart", onTouchStart, { passive: true });
+  scrollScene.addEventListener("touchend", onTouchEnd, { passive: true });
   window.addEventListener("resize", scheduleRefresh, { passive: true });
   window.addEventListener("orientationchange", scheduleRefresh);
   window.addEventListener("load", scheduleRefresh, { once: true });

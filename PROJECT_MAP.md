@@ -1,6 +1,6 @@
 # 项目地图 — 个人网站 `f:\Notes\`
 
-> 最后更新：2026-09-14 · 技术变更记录范围 · Hugo v0.163.2 · Blowfish v2
+> 最后更新：2026-10-01 · 前端资源边界与主题维护 · 本地验证 Hugo v0.164.0 · Blowfish v2.103.0
 
 ---
 
@@ -55,6 +55,8 @@
 | 从独立 Obsidian Notes 整理文章 | 调用 `$notes-to-hugo` 并指定 `/Users/lyrumu/project/Notes` 下的源文件；Skill 位于 [`.agents/skills/notes-to-hugo/SKILL.md`](.agents/skills/notes-to-hugo/SKILL.md) |
 | 写 CSS（字体 / 颜色 / 间距） | 见下方 §3 · 选对模块文件 |
 | 改文章内容样式 | [`assets/css/_03_prose.css`](file:///F:/Notes/assets/css/_03_prose.css) |
+| 改文章作者位置 / 首屏信息间距 | `content/notes/_index.md` 的 `showAuthorBottom` cascade；实际文章模板为 `layouts/page.html`，排版在 `assets/css/_04_hero.css` |
+| 改页面 CSS / 动效库加载范围 | `layouts/partials/head.html` 分组 CSS；`layouts/partials/extend-head-uncached.html` 按当前 Page 加载 Splitting、VanillaTilt、首页轮播 |
 | 改 DOCS 文章的 Markdown 复制功能 | [`layouts/partials/article-copy-markdown.html`](layouts/partials/article-copy-markdown.html) + [`assets/js/article-markdown-copy.js`](assets/js/article-markdown-copy.js) + [`assets/css/_17_article-copy.css`](assets/css/_17_article-copy.css) |
 | 改文章图片点击放大行为 | [`layouts/partials/footer.html`](layouts/partials/footer.html) 的 `mediumZoom` 初始化 |
 | 改"亮色" / "暗色" 主题的 CSS | [`assets/css/_01_tokens.css`](file:///F:/Notes/assets/css/_01_tokens.css) 顶部 `:root`（亮）和 `html.dark`（暗）— **v3 后是唯一调色数据源**，改一处全局生效（封面 + 卡片 + blowfish utility 全部跟着变） |
@@ -160,8 +162,8 @@ f:\Notes\
 │   │   ├── header/components/
 │   │   │   ├── desktop-menu.html   # 加 GitHub 按钮
 │   │   │   └── mobile-menu.html    # 加 GitHub 按钮
-│   │   ├── extend-head.html        # 第三方库（Splitting.js + VanillaTilt.js）+ IO reveal（AOS 已删）
-│   │   ├── extend-head-uncached.html # 按当前 Page 只给首页注入 carousel controller
+│   │   ├── extend-head.html        # 全站共享脚本与 IO reveal（按 Site 缓存）
+│   │   ├── extend-head-uncached.html # 按 Page 加载 Splitting、VanillaTilt 与首页 carousel
 │   │   ├── extend-footer.html      # Giscus 评论系统（assets/js/giscus-loader.js 指纹化 + 路径白名单 + 主题自动适配）
 │   │   ├── music-player.html       # 粘性音乐播放器（被 music-list 自动注入）
 │   │   └── about-contact.html      # /about/ 联系方式图标卡 partial（被 about-contact shortcode 调）
@@ -707,3 +709,25 @@ cp assets/css/custom.css.bak.v2 assets/css/_99_all.css   # 复制原文件作为
 ```
 
 回滚后即可定位是新文件的问题还是拆分本身的问题。
+
+## 6. 前端资源与主题维护边界（2026-10-01）
+
+- `head.html` 的 `main.bundle` 保留共享样式；`_08_cover.css`、`_16_cover-carousel.css` 合为仅首页加载的 `cover.bundle`，`_10_music-darkside.css` 仅在使用 `music-list` 的页面加载。顺序为共享样式后加载页面样式；新共享规则不要写入这三个页面文件。
+- `_09_about.css` 仍包含首页也使用的 `site-stats` 和共享联系组件，不按文件名直接从其他页面移除；Splitting 基础和 `cover-fade` 关键帧放在共享 `_04_hero.css`。
+- `extend-head.html` 按 Site 缓存，只承载共享逻辑；页面级库放在 `extend-head-uncached.html`：Splitting 给栏目头部 / `page-hero`，VanillaTilt 给 `projects-list`，轮播只给首页。减少动态效果时不初始化倾斜。
+- 首页手势只监听 `.cover-page`，搜索浮层保留原生滚动；根元素锁定桌面滚动，封面自身约束超出的装饰，卡片轨道仍可横向滚动。不要在限宽 `body` 上设置 overflow 裁剪，否则宽屏全屏封面会被截断。About 在 480px 以下纵排，页脚 RSS 使用明确的 SVG 尺寸，不依赖主题未编译的工具类。
+
+### 版本与升级核对
+
+当前本地验证版本：Hugo **0.164.0 extended**；主题 `package.json` 为 **2.103.0**，`config.toml` 声明 Hugo **0.158.0–0.161.1 extended**。构建可通过但兼容警告仍存在；这不等于主题官方支持 0.164.0。本次未升级、降级或修改 Pages 环境。部署版本需在 Cloudflare 控制台另行核实。
+
+主题是随仓库跟踪的普通目录，不是 Git submodule。以仓库首版 `4d9b3a6` 为对照，之后的直接定制有两处（不是对官方发行包的完整差异审计）：
+
+| 主题内文件 | 定制 / 升级注意点 |
+|---|---|
+| `themes/blowfish/layouts/_default/baseof.html` | 首页 class、版心、光标；当前由项目 `layouts/_default/baseof.html` 覆写，维护以后者为准 |
+| `themes/blowfish/layouts/partials/article-meta/basic.html` | 同名 category/tag 的可理解标签；仍实际使用，升级必须保留或迁到同路径项目 partial |
+
+升级时另行比对项目 `layouts/` 的覆写，优先检查 `head`、`vendor`、`schema`、`baseof`、`page.html`、列表/卡片、图片、分享和 header/footer。不要用主题文件覆盖项目定制，也不要为新工具类全量重编译主题依赖。
+
+验证入口：`node --test tests/cover-carousel.test.cjs`、生产构建、`python3 -B tests/seo_check.py <生成目录>`、`git diff --check`。轮播测试现已从忽略规则中单独放行，随源码保留；浏览器仍需检查搜索滚动、四档窄屏、深色与减少动态效果，线上服务和部署验证单独进行。

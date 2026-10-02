@@ -7,7 +7,7 @@
    原加载入口：themes/blowfish/layouts/partials/head.html
      resources.Get "css/custom.css"  → append to cssResources
    改用：layouts/partials/head.html（覆盖版）
-     resources.Match "css/_*.css"   → Concat → 同一位置追加
+     resources.Match "css/_*.css" → 共享 main.bundle + 首页 cover.bundle / 歌单 music.bundle
 
    为什么改：
      resources.Get 只把文件原样 append，下游 resources.Concat 不会展开 CSS @import。
@@ -50,6 +50,6 @@
 
     添加新文件：
      1. 在 assets/css/ 下创建 _NN_xxx.css（NN = 下一个序号）
-     2. head.html 的 resources.Match 会自动发现并按文件名字母序加载
+     2. head.html 默认按文件名字母序加入共享包；_08/_16 仅首页、_10 仅 music-list
      3. 本文件追加一行记录即可
    ============================================================================= */

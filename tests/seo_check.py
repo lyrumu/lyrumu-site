@@ -117,6 +117,18 @@ def check(root):
             image_sizes[attrs["src"]] = image.stat().st_size
         pages.append(page)
     assert pages, "No content pages found"
+    home = (root / "index.html").read_text()
+    notes = (root / "notes/index.html").read_text()
+    music = (root / "life/music/index.html").read_text()
+    projects = (root / "works/projects/index.html").read_text()
+    assert "/css/cover.bundle.min." in home and "/css/cover.bundle.min." not in notes
+    assert "/css/music.bundle.min." in music and "/css/music.bundle.min." not in home
+    assert "/js/vanilla-tilt.min.js" in projects and "/js/vanilla-tilt.min.js" not in home
+    for file in (root / "notes").rglob("index.html"):
+        text = file.read_text()
+        if 'id=single_header' in text or 'id="single_header"' in text:
+            assert text.index('class="article-content') < text.index('class="not-prose article-author-bottom"'), file
+            assert 'href="https://github.com/lyrumu"' in text or 'href=https://github.com/lyrumu ' in text, file
     for icon in ("favicon.ico", "favicon-32x32.png", "favicon-16x16.png", "favicon.svg", "apple-touch-icon.png",
                  "android-chrome-192x192.png", "android-chrome-512x512.png"):
         assert (root / icon).is_file(), icon

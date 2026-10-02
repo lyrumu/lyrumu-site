@@ -1,4 +1,10 @@
 {{/* 首页封面轮播按页面条件加载；此 hook 接收当前 Page，不能 partialCached。 */}}
+{{ if or (eq .Kind "section") (.HasShortcode "page-hero") }}
+  <script src="/js/splitting.min.js" defer></script>
+{{ end }}
+{{ if .HasShortcode "projects-list" }}
+  <script src="/js/vanilla-tilt.min.js" defer></script>
+{{ end }}
 {{ if .IsHome }}
   {{/* 在 body 解析前启用首帧预布局，避免 defer 轮播脚本接管时重排封面。 */}}
   <script>document.documentElement.classList.add("has-cover-carousel-js");</script>

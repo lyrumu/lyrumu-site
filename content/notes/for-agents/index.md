@@ -56,6 +56,12 @@ sharingLinks: []
 
 ***
 
+## 其他工具
+
+- [Ego-Lite](https://github.com/citrolabs/ego-lite) - 支持导入Chrome,Edge等浏览器数据.agent操控浏览器的同时不影响你的其他工作 个人认为在多数情况比playwright好用
+
+***
+
 ## Setup
 
 ### OpenCode

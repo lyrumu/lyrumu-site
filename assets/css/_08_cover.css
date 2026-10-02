@@ -8,7 +8,7 @@
     1.  首页沿用全站版心（保留主题原生 header）
     2.  全屏透明画布（底色沿用内页相同的 body 背景）
     3.  顶部信息带与音乐唱片底片
-    4.  共享的 Splitting 基础与 cover-fade 关键帧（供 page-hero 复用）
+    4.  共享的 Splitting 基础与 cover-fade 关键帧位于 _04_hero.css
    ============================================================================= */
 
 /* =============================================================================
@@ -18,8 +18,8 @@ body.is-cover-page main#main-content {
   padding-top: 0;
 }
 
-/* 音乐装饰可越过封面边缘，但不应让整页产生横向滚动条。 */
-body.is-cover-page {
+/* 只在视口裁剪；限宽 body 必须允许全屏封面越过版心。 */
+html.is-cover-page {
   overflow-x: clip;
 }
 
@@ -62,7 +62,7 @@ html:not(.dark) body.is-cover-page #site-footer {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  overflow: visible;
+  overflow-x: clip;
   isolation: isolate;
   border-radius: 0;
   min-height: 100svh;
@@ -421,22 +421,6 @@ html.dark .cover-music-field__engraving {
   opacity: 1;
 }
 
-/* =============================================================================
-   7. Splitting.js 注入的共享基础样式（page-hero 也会复用）
-   ============================================================================= */
-.splitting .word,
-.splitting .char {
-  display: inline-block;
-}
-
-/* =============================================================================
-   8. 通用淡入关键帧（当前由 page-hero 复用）
-   ============================================================================= */
-@keyframes cover-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
 @media (max-width: 720px) {
   body.is-cover-page .min-h-\[148px\] {
     min-height: 4.5rem;
@@ -546,7 +530,7 @@ html.dark .cover-music-field__engraving {
   min-width: 2.4ch;
   font-family: var(--font-serif-display);
   font-weight: 400;
-  font-style: italic;
+  font-style: normal;
   font-size: clamp(0.95rem, 1.5vw, 1.15rem);
   font-variation-settings: "opsz" 60, "SOFT" 50;
   font-feature-settings: "lnum", "tnum";

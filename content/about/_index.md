@@ -60,9 +60,15 @@ showTableOfContents: true
 
 <div class="about-focus-list">
   <section class="about-focus-item">
-    <h3>Maintain and update "lyrumu's page"</h3>
+    <h3>Maintain and update My Blog("lyrumu's page")</h3>
     <p>
-      I am continuously updating this website and further learning about Hugo.
+      I am continuously updating this website to improve its content and SEO.
+    </p>
+  </section>
+  <section class="about-focus-item">
+    <h3>Learn FastAPI and Frontend Foundation</h3>
+    <p>
+      Just Trying to master more basic knowledge 
     </p>
   </section>
   <!-- <section class="about-focus-item">

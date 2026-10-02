@@ -58,6 +58,11 @@
         <div class="article-content max-w-prose mb-20">
           {{ .Content }}
         </div>
+        {{ if (.Params.showAuthorBottom | default (site.Params.article.showAuthorBottom | default false)) }}
+          <div class="not-prose article-author-bottom">
+            {{ template "SingleAuthor" . }}
+          </div>
+        {{ end }}
         {{ partial "series/series-closed.html" . }}
         {{ partial "sharing-links.html" . }}
         {{ partial "related.html" . }}

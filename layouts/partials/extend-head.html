@@ -3,14 +3,11 @@
   --------------------------------------------------------------------------
   Blowfish 的官方扩展点：在 <head> 末尾插入内容。
   - 字体：本地化到 static/fonts/*（避免 Google Fonts CDN 不稳）
-  - Splitting.js / VanillaTilt.js：本地化到 static/（2026-06-25）
+  - Splitting.js / VanillaTilt.js：本地化到 static/，由 extend-head-uncached.html 按页面加载
     原 jsDelivr CDN + SRI 已弃用，避免 npm republish 时 hash 失效 → CDN 拒载
   - AOS.js + aos.css 已于 2026-07-25 删除，改用 IntersectionObserver 内联实现
   --------------------------------------------------------------------------
 */}}
-
-<script src="/js/splitting.min.js" defer></script>
-<script src="/js/vanilla-tilt.min.js" defer></script>
 
 {{/*
   主题切换斜向擦除动画（DeepWiki 风格，2026-07-12）
@@ -110,8 +107,9 @@ window.addEventListener("load", function () {
   }
 
   // ---------- VanillaTilt ----------
-  if (typeof VanillaTilt !== "undefined") {
-    var cards = document.querySelectorAll(".project-card[data-tilt]");
+  if (typeof VanillaTilt !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    // Avoid the library's automatic [data-tilt] initialization before this preference check.
+    var cards = document.querySelectorAll(".project-card[data-project-tilt]");
     if (cards.length) {
       if ("IntersectionObserver" in window) {
         var io = new IntersectionObserver(function (entries) {

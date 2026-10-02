@@ -175,7 +175,7 @@
 .cover-carousel-intro p {
   font-family: var(--font-serif-display);
   font-size: 0.78rem;
-  font-style: italic;
+  font-style: normal;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -494,9 +494,8 @@ a.cover-carousel-card-surface:focus-visible .cover-carousel-cta span {
 }
 
 /* Desktop progressive enhancement：一次镜头推进后停在可交互的音符盘舞台。 */
-@media (min-width: 721px) {
+@media (min-width: 721px) and (prefers-reduced-motion: no-preference) {
   body.is-cover-page.is-cover-gesture-mode {
-    overflow-y: hidden;
     overscroll-behavior-y: none;
   }
 
@@ -915,7 +914,7 @@ a.cover-carousel-card-surface:focus-visible .cover-carousel-cta span {
 
 /* 外部 defer 脚本到达前先锁定桌面首帧；加载失败时模板会移除此标记并恢复静态回退。 */
 @media (min-width: 721px) and (prefers-reduced-motion: no-preference) {
-  html.has-cover-carousel-js body.is-cover-page {
+  html.has-cover-carousel-js.is-cover-page {
     overflow-y: hidden;
     overscroll-behavior-y: none;
   }
