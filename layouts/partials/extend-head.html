@@ -34,6 +34,9 @@
 {{ $blurImage := resources.Get "js/blur-image.js" | resources.Minify | resources.Fingerprint "sha512" }}
 <script src="{{ $blurImage.RelPermalink }}" integrity="{{ $blurImage.Data.Integrity }}" defer></script>
 
+{{ $headerMenu := resources.Get "js/header-menu.js" | resources.Minify | resources.Fingerprint "sha512" }}
+<script src="{{ $headerMenu.RelPermalink }}" integrity="{{ $headerMenu.Data.Integrity }}" defer></script>
+
 {{/*
   统一管理动画库的初始化：
   - 全部包装在 window.load 里，确保所有 defer 脚本加载完成

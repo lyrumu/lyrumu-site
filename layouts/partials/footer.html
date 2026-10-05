@@ -139,8 +139,8 @@
     </script>
   {{ end }}
 
-  {{/* Extend footer - eg. for extra scripts, etc. */}}
+  {{/* 扩展内容依赖当前页面（如评论资格），不能使用无页面区分的缓存。 */}}
   {{ if templates.Exists "partials/extend-footer.html" }}
-    {{ partialCached "extend-footer.html" . }}
+    {{ partial "extend-footer.html" . }}
   {{ end }}
 </footer>

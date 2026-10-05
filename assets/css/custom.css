@@ -36,7 +36,7 @@
    └─├─ 页面专属
    │  _08_cover.css         — 封面页（首页全屏 + 装饰花边 + 字符入场）
    │  _09_about.css         — About 页（profile + 标签 + 液态玻璃联系方式）
-   │  _16_cover-carousel.css — 首页整体 sticky + Vertical 三卡顺序显现 + mobile rail
+   │  _16_cover-scroll.css — 首页音乐镜头与原生近期内容衔接
    │  _17_article-copy.css   — DOCS 文章 Markdown 复制按钮
 
     ├─ 交互增强

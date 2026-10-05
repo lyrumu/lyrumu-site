@@ -1,0 +1,203 @@
+/* 保留定制首屏；封面和 Blowfish 近期内容均使用正常文档流。 */
+.cover-page { --cover-carousel-ease: cubic-bezier(0.16, 1, 0.3, 1); }
+.cover-content { height: 100svh; overflow: clip; }
+.cover-music-camera { inset-block-start: var(--cover-header-height); }
+/* 首屏下沿的磨砂层不拦截交互，与整块内容的模糊一起过渡。 */
+.cover-content::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 1;
+  height: clamp(7rem, 18vh, 10rem);
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg-base) 55%, transparent));
+  -webkit-backdrop-filter: blur(14px) saturate(1.08);
+  backdrop-filter: blur(14px) saturate(1.08);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 35% 75%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 35% 75%, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+.cover-home-intro {
+  position: absolute;
+  left: clamp(0.5rem, 4vw, 4.75rem);
+  top: calc(var(--cover-header-height) + (100% - var(--cover-header-height)) * 0.47);
+  z-index: 2;
+  display: grid;
+  gap: clamp(0.9rem, 1.6vw, 1.25rem);
+  width: min(42rem, 49vw);
+  min-width: 0;
+  color: var(--pal-title, var(--fg-base));
+  transform: translate3d(0, -50%, 0);
+}
+.cover-home-intro h1, .cover-home-intro p { margin: 0; }
+.cover-home-intro h1 {
+  font-family: var(--font-serif-display);
+  font-size: clamp(3.3rem, 5.4vw, 5.25rem);
+  font-weight: 440;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+.cover-home-intro__description {
+  max-width: 36ch;
+  color: color-mix(in srgb, var(--pal-sub, var(--fg-mute)) 74%, var(--pal-title, var(--fg-base)) 26%);
+  font-family: var(--font-serif-body);
+  font-size: clamp(1rem, 1.25vw, 1.12rem);
+  line-height: 1.58;
+}
+.cover-explore-prompt {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(2.8rem, 4.5vh, 3.6rem);
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: 0.22rem;
+  min-height: 2.75rem;
+  color: var(--pal-sub, var(--fg-mute));
+  font-family: var(--font-sans);
+  text-decoration: none;
+  transform: translateX(-50%);
+}
+.cover-explore-prompt__label {
+  font-size: 0.68rem;
+  font-weight: 720;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.cover-explore-prompt:hover { color: var(--pal-accent, var(--accent)); }
+.cover-explore-prompt:focus-visible {
+  outline: 2px solid var(--pal-accent, var(--accent));
+  outline-offset: 0.45rem;
+}
+.cover-explore-prompt__arrows { display: grid; justify-items: center; }
+.cover-explore-prompt__arrow {
+  display: block;
+  width: 0.66rem;
+  height: 0.66rem;
+  border-right: 1px solid var(--pal-accent, var(--accent));
+  border-bottom: 1px solid var(--pal-accent, var(--accent));
+  transform: rotate(45deg);
+  animation: cover-explore-arrow 1.15s var(--cover-carousel-ease) infinite;
+}
+.cover-explore-prompt__arrow:nth-child(2) { margin-top: -0.2rem; animation-delay: 0.16s; }
+@keyframes cover-explore-arrow {
+  0% { opacity: 0.22; transform: translateY(-0.14rem) rotate(45deg); }
+  45%, 70% { opacity: 1; }
+  100% { opacity: 0.16; transform: translateY(0.34rem) rotate(45deg); }
+}
+@keyframes cover-orbit-travel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+@keyframes cover-note-rise {
+  0%, 14% { opacity: 0; transform: translate(-5px, 15px); }
+  30% { opacity: 0.42; }
+  58% { opacity: 0.15; }
+  72%, 100% { opacity: 0; transform: translate(12px, -32px); }
+}
+.home-recent {
+  --home-recent-inset: clamp(2rem, 4vw, 3.5rem);
+  position: relative;
+  padding-block: var(--home-recent-inset) clamp(3rem, 6vw, 5rem);
+  /* 锚点偏移包含内边距，避免标题上方多叠一段空白。 */
+  scroll-margin-top: max(1rem, calc(6rem - var(--home-recent-inset)));
+}
+.home-recent > h2 {
+  margin-block: 0 clamp(1.5rem, 3vw, 2.5rem);
+  font-family: var(--font-serif-display);
+  font-size: clamp(1.65rem, 3vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+.home-recent-grid { gap: 2rem 1.5rem; }
+.home-recent-grid .cover-card__pin { display: none; }
+.home-feed-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  min-height: 44px;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+.home-feed-toggle:not(:disabled) { cursor: pointer; }
+.home-feed-toggle:not(:disabled):hover { color: var(--accent); }
+.home-feed-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.home-feed-toggle [data-feed-icon] { font-family: var(--font-sans); font-size: 0.6em; opacity: 0.6; }
+.home-feed-status { margin-block: -0.75rem 1.5rem; color: var(--fg-mute); }
+@media (min-width: 721px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .cover-music-hover-area { pointer-events: auto; }
+}
+@media (min-width: 721px) and (prefers-reduced-motion: no-preference) {
+  .is-scroll-enhanced .cover-music-camera {
+    transform: translate3d(0, var(--cover-camera-y, 0px), 0);
+  }
+  /* 按方向只模糊退出的一侧，进入的一侧立即清晰。 */
+  .is-scroll-enhanced .cover-content {
+    --cover-glass-progress: var(--cover-scroll-progress, 0);
+    transition: filter 200ms ease-out, opacity 200ms ease-out;
+  }
+  .is-scroll-enhanced ~ .home-recent { --cover-glass-progress: 0; }
+  .is-scroll-enhanced.is-scrolling-up .cover-content { --cover-glass-progress: 0; transition: none; }
+  .is-scroll-enhanced.is-scrolling-up ~ .home-recent {
+    --cover-glass-progress: var(--cover-recent-progress, 0);
+    transition: filter 200ms ease-out, opacity 200ms ease-out;
+  }
+  .is-scroll-enhanced .cover-content,
+  .is-scroll-enhanced ~ .home-recent {
+    /* 模糊量跟随退出位置，CSS 缓和方向切换，无需额外动画循环。 */
+    --cover-glass-strength: calc(var(--cover-glass-progress) * var(--cover-glass-progress) * (3 - 2 * var(--cover-glass-progress)));
+    filter: blur(calc(var(--cover-glass-strength) * 12px));
+    opacity: calc(1 - var(--cover-glass-strength) * 0.12);
+  }
+  .is-scroll-enhanced .cover-content::after {
+    opacity: clamp(0, calc(var(--cover-scroll-progress, 0) * 2.4), 1);
+  }
+  .is-scroll-enhanced.is-scrolling-up .cover-content::after { opacity: 0; }
+  .cover-music-field__disc, .cover-music-field__orbits,
+  .cover-music-field__notes, .cover-music-field__staff {
+    transition: transform 700ms cubic-bezier(0.2, 0.65, 0.3, 1);
+  }
+  .is-scroll-enhanced .cover-music-field__traveller { animation: cover-orbit-travel 32s linear infinite paused; }
+  .is-scroll-enhanced .cover-music-field__traveller--two { animation-duration: 47s; animation-direction: reverse; animation-delay: -12s; }
+  .is-scroll-enhanced .cover-floating-note { animation: cover-note-rise 12s ease-in-out infinite paused; }
+  .is-scroll-enhanced .cover-floating-note--two { animation-delay: -3s; }
+  .is-scroll-enhanced .cover-floating-note--three { animation-delay: -6s; }
+  .is-scroll-enhanced .cover-floating-note--four { animation-delay: -9s; }
+  .is-scroll-enhanced.is-orbit-looping .cover-music-field__traveller,
+  .is-scroll-enhanced.is-orbit-looping .cover-floating-note { animation-play-state: running; }
+  .cover-header-rail { gap: 0.3rem clamp(0.6rem, 1vw, 0.85rem); }
+  .cover-masthead-meta .cover-views-meta { padding-left: 0.65rem; }
+  .cover-kicker { font-size: 0.66rem; letter-spacing: 0.34em; }
+  .cover-views-num { min-width: 2.1ch; font-size: 0.86rem; }
+  .cover-stats .site-stats { gap: 0.25rem clamp(0.4rem, 1vw, 0.72rem); font-size: clamp(0.66rem, 0.8vw, 0.76rem); }
+  .cover-divider { flex: 0 0 auto; margin: clamp(0.35rem, 0.65vh, 0.55rem) 0 clamp(0.2rem, 0.5vh, 0.4rem); }
+}
+@media (min-width: 721px) and (max-width: 980px) {
+  .cover-header-rail { width: 100%; }
+  .cover-stats { flex-basis: 100%; padding-left: 0; border-left: 0; }
+  .cover-stats .site-stats { justify-content: flex-start; text-align: left; }
+  .cover-home-intro { left: 0.5rem; width: min(44vw, 25rem); }
+  .cover-home-intro h1 { font-size: clamp(2.85rem, 5.8vw, 4rem); }
+  .cover-home-intro__description { font-size: 0.98rem; }
+}
+@media (max-width: 720px) {
+  .cover-content { height: auto; min-height: 100svh; padding-bottom: 7rem; }
+  .cover-home-intro {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    padding: 1.65rem 0 2.75rem;
+    transform: none;
+  }
+  .cover-home-intro h1 { font-size: clamp(2.3rem, 10.2vw, 3.35rem); }
+  .cover-home-intro__description { max-width: 38ch; font-size: 1rem; }
+  .cover-explore-prompt { bottom: 2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.is-cover-page { scroll-behavior: auto; }
+  .cover-explore-prompt__arrow { animation: none; }
+}

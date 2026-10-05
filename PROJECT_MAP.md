@@ -1,6 +1,6 @@
 # 项目地图 — 个人网站 `f:\Notes\`
 
-> 最后更新：2026-10-01 · 前端资源边界与主题维护 · 本地验证 Hugo v0.164.0 · Blowfish v2.103.0
+> 最后更新：2026-10-05 · taxonomy 描述统一、友链页面入口与评论加载边界 · 本地验证 Hugo v0.164.0 · Blowfish v2.103.0
 
 ---
 
@@ -17,9 +17,9 @@
 |---------|-----------|
 | 改网站 favicon / 主屏图标 | `static/favicon.svg` 是玫瑰图标源文件；同目录 ICO、PNG 是同图各尺寸，`layouts/partials/favicons.html` 管理页面声明；Safari 单色图标另见 `static/safari-pinned-tab.svg` |
 | 改首页首帧主标题 / 站点说明 / 滚动提示，或 `PRO TEMPLUM` / 题词 / 统计开关 / 全站导航头像 / 顶栏 GitHub 链接 | [`data/cover.yaml`](file:///f:/Notes/data/cover.yaml) |
-| 改首页三入口内容 | [`data/home_highlights.yaml`](file:///f:/Notes/data/home_highlights.yaml)（固定按 DOCS / WORKS / DAILY 三组维护说明、入口和视觉数据） |
+| 改首页 Recent / Popular | `hugo.toml` 的 `[params.homepage]`：`showRecent / showRecentItems`；项目 `recent-articles/main.html`、`cardview.html` 与 `assets/js/home-feed.js`，复用共享文章卡与 Firebase 计数 |
 | 改封面的颜色 | [`assets/css/_01_tokens.css`](file:///F:/Notes/assets/css/_01_tokens.css) 顶部 `:root` / `html.dark` 的 `--bg-base / --line / --accent`（首页颜色已不再单独存进 `cover.yaml`） |
-| 改封面的字距 / 大小 / 音乐底片位置 | [`assets/css/_08_cover.css`](file:///F:/Notes/assets/css/_08_cover.css) |
+| 改封面的字距 / 大小 / 音乐底片位置 / 盘面刻纹 | [`assets/css/_08_cover.css`](file:///F:/Notes/assets/css/_08_cover.css) 控制盘边与 `.cover-music-field__grooves` 的淡度；`layouts/partials/home/custom.html` 的 11 圈 SVG 刻纹控制间距、少量断口与固定手绘扰动 |
 | 改内页"小封面"的文案 | 对应 `content/xxx/_index.md` 的 frontmatter `kicker / subtitle` |
 | 改 /notes/ 入口展示方式（单列 / 3 列等）| `content/notes/_index.md` frontmatter `cardColumns`（1/2/3） |
 | 改 /notes/ 文章封面图或降级图标 | [`data/notes.yaml`](data/notes.yaml) 的 `items[]`（每篇 `image` / `icon` / `fallback_tag`）+ `tag_icons` 映射（**图片放 `assets/image/notes/`，写 `image/notes/xxx`，Hugo 才能缩放/转 WebP/生成占位**） |
@@ -40,15 +40,17 @@
 | 改 /works/projects/ 的 3D 倾斜角度 | [`assets/css/_06_works-cards.css`](file:///F:/Notes/assets/css/_06_works-cards.css) 的 `.project-card` 或 shortcode 里的 `data-tilt-*` |
 | 加一个 Lucide icon | [`layouts/partials/cover/icon.html`](file:///f:/Notes/layouts/partials/cover/icon.html) 加 `else if` 分支 |
 | 改 /about/ 个人内容块（Now / Focus / Path） | [`content/about/_index.md`](file:///f:/Notes/content/about/_index.md) |
+| 改 /friends/ 友链页与条目 | `content/friends/_index.md` 控制页面文案、卡片列数与元信息；入口为 ABOUT ME 子菜单。沿用定制 `list.html` 与 `article-link/card.html`，条目使用 Blowfish 原生 `externalUrl`，按 `weight` 排序；友链分支沿用原生卡片外观，展示圆形头像、名称与简介 |
 | 改 /about/ 联系方式图标 / 邮箱 | [`content/about/_index.md`](file:///f:/Notes/content/about/_index.md) + [`layouts/partials/about-contact.html`](file:///f:/Notes/layouts/partials/about-contact.html)（base64 邮箱解码 + Toast） |
 | 改全站分隔符规则 | [`assets/css/_03_prose.css`](file:///f:/Notes/assets/css/_03_prose.css) + [`assets/css/_05_cards.css`](file:///f:/Notes/assets/css/_05_cards.css) + [`assets/css/_04_hero.css`](file:///f:/Notes/assets/css/_04_hero.css) + [`assets/css/_08_cover.css`](file:///f:/Notes/assets/css/_08_cover.css) |
 | 改 /about/ 图标玻璃效果 | [`assets/css/_09_about.css`](file:///F:/Notes/assets/css/_09_about.css)（`.about-contact-glass` / `.about-contact-btn` / `.copy-toast`） |
 | 调主题切换动画节奏 / 斜线角度 / 时长 | [`assets/css/_11_theme-transition.css`](file:///f:/Notes
 | 改顶栏左侧品牌标识样式 | [`layouts/partials/header/basic.html`](file:///f:/Notes/layouts/partials/header/basic.html) + [`assets/css/_02_chrome.css`](file:///f:/Notes/assets/css/_02_chrome.css) 的 `.site-brand-badge` |
-| 改顶栏的菜单项 | [`hugo.toml`](file:///f:/Notes/hugo.toml) 的 `[[menu.main]]` 段 |
+| 改顶栏的菜单项 | `hugo.toml` 的 `[[menu.main]]`：ABOUT ME 用 `identifier = 'about'`，个人介绍 / 友情链接 / DAILY 用 `parent = 'about'`；DOCS / WORKS 保留直接入口 |
+| 改顶栏子菜单交互与样式 | `layouts/partials/header/components/menu-group.html` 供桌面、移动端复用原生 `details`，子项仅显示图标与标题；`assets/js/header-menu.js` 管理桌面 hover / 焦点 / Escape / 外部点击，移出延迟 150ms、过渡时长后关闭，由 `extend-head.html` 加载；`assets/css/_02_chrome.css` 的 `.site-menu-group` 定义 12rem、16px 圆角的半透明玻璃浮层，28px 背景模糊与细亮边；240ms 双向过渡从主项下方舒展 / 缩回，展开和收回使用不同缓动，减少动态效果时关闭位移、缩放和模糊动画。桌面 ABOUT 与 DOCS / WORKS 共用 hover 强调色，展开不另加下划线；鼠标移动到子菜单或连接空隙时，ABOUT 保持该颜色 |
 | 改 DOCS/WORKS/DAILY 首页标题样式 | [`assets/css/_04_hero.css`](file:///f:/Notes/assets/css/_04_hero.css) 的 `.page-hero` 系列规则（2026-07-03 重构：左对齐+缩小+消除顶部空白） |
 | 改 Umami 统计配置 | [`hugo.toml`](file:///f:/Notes/hugo.toml) 的 `[params.umamiAnalytics]` |
-| 配置 Giscus 评论（显示页面/主题/仓库） | [`layouts/partials/extend-footer.html`](file:///f:/Notes/layouts/partials/extend-footer.html) |
+| 配置 Giscus 评论（显示页面/主题/仓库） | `layouts/partials/extend-footer.html` 用 Hugo 页面类型限定 notes 普通文章及 About / Projects / Music；`assets/js/giscus-loader.js` 维护仓库、pathname 映射与主题切换；`layouts/partials/footer.html` 按当前页面调用，不能无区分缓存 |
 | 以后要启用 Blowfish 原生阅读数 / 点赞 | [`hugo.toml`](file:///f:/Notes/hugo.toml) 的 `showViews / showLikes` + `[firebase]`（原生方案推荐 Firebase） |
 | 看 Firebase 安全规则怎么配 | [`FIREBASE_SECURITY.md`](file:///f:/Notes/FIREBASE_SECURITY.md) |
 | 加一篇新文章 | 见下方 §4 |
@@ -56,7 +58,8 @@
 | 写 CSS（字体 / 颜色 / 间距） | 见下方 §3 · 选对模块文件 |
 | 改文章内容样式 | [`assets/css/_03_prose.css`](file:///F:/Notes/assets/css/_03_prose.css) |
 | 改文章作者位置 / 首屏信息间距 | `content/notes/_index.md` 的 `showAuthorBottom` cascade；实际文章模板为 `layouts/page.html`，排版在 `assets/css/_04_hero.css` |
-| 改页面 CSS / 动效库加载范围 | `layouts/partials/head.html` 分组 CSS；`layouts/partials/extend-head-uncached.html` 按当前 Page 加载 Splitting、VanillaTilt、首页轮播 |
+| 改页面 CSS / 动效库加载范围 | `layouts/partials/head.html` 分组 CSS；`layouts/partials/extend-head-uncached.html` 按当前 Page 加载 Splitting、VanillaTilt、首页镜头 |
+| 改分类 / 标签等 taxonomy 的页面与分享描述 | `layouts/partials/head.html` 统一解析 description，并替换 Hugo 原生 OG / Twitter 的描述字段；自定义 summary / description 优先于默认文案，其他分享字段保留；`tests/seo_check.py` 检查描述一致且不重复 |
 | 改 DOCS 文章的 Markdown 复制功能 | [`layouts/partials/article-copy-markdown.html`](layouts/partials/article-copy-markdown.html) + [`assets/js/article-markdown-copy.js`](assets/js/article-markdown-copy.js) + [`assets/css/_17_article-copy.css`](assets/css/_17_article-copy.css) |
 | 改文章图片点击放大行为 | [`layouts/partials/footer.html`](layouts/partials/footer.html) 的 `mediumZoom` 初始化 |
 | 改"亮色" / "暗色" 主题的 CSS | [`assets/css/_01_tokens.css`](file:///F:/Notes/assets/css/_01_tokens.css) 顶部 `:root`（亮）和 `html.dark`（暗）— **v3 后是唯一调色数据源**，改一处全局生效（封面 + 卡片 + blowfish utility 全部跟着变） |
@@ -99,14 +102,15 @@ f:\Notes\
 │   │   ├── _12_custom-cursor.css   # ★ 自定义光标（细环 + 延迟跟随）
 │   │   ├── _13_notes-card.css      # ★ /notes/ 影像阴影式封面卡（全背景图 + 底部面板）+ blur-up 模糊占位
 │   │   ├── _15_blur-image.css      # ★ 通用 LQIP blur-up 图片状态
-│   │   ├── _16_cover-carousel.css  # ★ 首页整体 sticky + Vertical 三卡顺序显现 + mobile native rail
+│   │   ├── _16_cover-scroll.css    # ★ 首页定制首屏、轻微视差与原生近期内容布局
 │   │   └── _17_article-copy.css     # ★ DOCS 文章 Markdown 复制按钮
 │   ├── icons/                      # Simple Icons 品牌色 SVG（github/gmail/qq 等联系方式图标）
 │   ├── image/notes/                # ★ /notes/ 卡片封面图（assets 目录 → Hugo 可缩放/转 WebP/生成 LQIP）
 │   └── js/                         # ★ 项目级 JS（2026-07-22 从 static/js 迁入，走 Pipes Minify+Fingerprint）
 │       ├── theme-transition.js     # 主题切换斜向擦除（extend-head.html 引用）
+│       ├── header-menu.js          # 顶栏原生折叠菜单的鼠标悬停与关闭交互（extend-head.html 引用）
 │       ├── blur-image.js            # 通用 LQIP 切换 + 失败降级（extend-head.html 引用）
-│       ├── cover-carousel.js        # 首页首帧交接、Vertical 显现进度与 mobile rail 状态控制器（仅首页注入）
+│       ├── cover-scroll.js          # 仅首页：滚动 / 鼠标轻微视差与离屏暂停，不接管滚轮或触屏
 │       ├── site-stats-days.js      # 站点在线天数前端校正（site-stats.html 引用）
 │       ├── music-player.js         # 播放器入口（装配依赖）
 │       └── music-player/           # 播放器模块（dom/storage/store/view/controller）
@@ -117,6 +121,7 @@ f:\Notes\
 │
 ├── content/                        # ★ 所有页面内容
 │   ├（待整理）
+│   ├── friends/_index.md           # /friends/ 友链列表；从 ABOUT ME 进入，复用原生外链字段与定制卡片
 │   ├── notes/                      # /notes/ 文章入口（layout:list + list.html 卡片列表）
 │   │   └── _index.md               # notes 入口页（正文 + 自动文章列表 + cascade 控制后代文章的 taxonomy/edit/pagination）
 │   ├── works/                      # /works/ 相关（当前发布 Projects）
@@ -131,7 +136,6 @@ f:\Notes\
 │
 ├── data/                           # ★ 数据驱动（改这里就能改 UI）
 │   ├── cover.yaml                  # 首页首帧文案 / masthead 信息 / show_stats + 全站导航 avatar / 顶栏 GitHub repo_url
-│   ├── home_highlights.yaml        # 首页固定三入口的简短说明、路由与 visual 数据契约
 │   ├── about_timeline.yaml         # ABOUT ME 的 Path so far 里程碑（文字 / 顺序 / 可选图片）
 │   ├── vault.yaml                  # 旧版 /notes/ 分类卡数据（当前前台未使用，保留作历史参考）
 │   ├── life.yaml                   # /life/ 子模块清单（music / 图片 / 读书…）
@@ -155,16 +159,16 @@ f:\Notes\
 │   │   ├── cover/icon.html         # Lucide SVG icon 字典
 │   │   ├── cover/page-hero.html    # 内页"小封面" partial
 │   │   ├── header/basic.html        # 全站顶部品牌徽章（导航头像 + 站点标题 + 桌面/移动菜单装配）
-│   │   ├── home/custom.html        # 全宽封面 orchestration（顶部信息带 / 音乐底片 / carousel call）
-│   │   ├── home/cover-carousel.html # 数据驱动首帧 + 三入口语义卡片、单次路由解析与构建期契约
-│   │   ├── home/carousel-image.html # 首页封面图 WebP/srcset/LQIP 管线；缺图直接令构建失败
+│   │   ├── home/custom.html        # 自定义首屏 + Blowfish 原生近期内容
+│   │   ├── home/cover-intro.html    # 首屏主标题、站点说明与近期内容锚点
 │   │   ├── site-stats.html         # 站点统计 partial（供 shortcode 与封面共用；当前显示 notes / projects / music / days online / last updated）
 │   │   ├── header/components/
 │   │   │   ├── desktop-menu.html   # 加 GitHub 按钮
+│   │   │   ├── menu-group.html     # 桌面 / 手机共享的原生 details 子菜单
 │   │   │   └── mobile-menu.html    # 加 GitHub 按钮
 │   │   ├── extend-head.html        # 全站共享脚本与 IO reveal（按 Site 缓存）
-│   │   ├── extend-head-uncached.html # 按 Page 加载 Splitting、VanillaTilt 与首页 carousel
-│   │   ├── extend-footer.html      # Giscus 评论系统（assets/js/giscus-loader.js 指纹化 + 路径白名单 + 主题自动适配）
+│   │   ├── extend-head-uncached.html # 按 Page 加载 Splitting、VanillaTilt 与首页镜头
+│   │   ├── extend-footer.html      # Giscus 按 Hugo 页面类型加载（notes 普通文章 + 独立页面白名单，列表/分页不加载）；JS 负责配置与主题适配
 │   │   ├── music-player.html       # 粘性音乐播放器（被 music-list 自动注入）
 │   │   └── about-contact.html      # /about/ 联系方式图标卡 partial（被 about-contact shortcode 调）
 │   └── shortcodes/
@@ -225,37 +229,26 @@ f:\Notes\
 | 元素 | 数据源 | 模板 |
 |------|--------|------|
 | 封面排版 / 音乐底片 / 上方 masthead | [`data/cover.yaml`](file:///f:/Notes/data/cover.yaml)（基础文案 / 统计开关 / repo_url） | [`layouts/partials/home/custom.html`](file:///f:/Notes/layouts/partials/home/custom.html) |
-| 首帧主标题 / 站点说明 / 双尖头提示 | [`data/cover.yaml`](file:///f:/Notes/data/cover.yaml) 的 `headline / description / explore_label` | [`home/cover-carousel.html`](layouts/partials/home/cover-carousel.html) + [`_16_cover-carousel.css`](assets/css/_16_cover-carousel.css) + [`cover-carousel.js`](assets/js/cover-carousel.js) |
+| 首帧主标题 / 站点说明 / 双尖头提示 | [`data/cover.yaml`](file:///f:/Notes/data/cover.yaml) 的 `headline / description / explore_label` | [`home/cover-intro.html`](layouts/partials/home/cover-intro.html) + [`_16_cover-scroll.css`](assets/css/_16_cover-scroll.css) + [`cover-scroll.js`](assets/js/cover-scroll.js) |
 | 全站导航品牌头像 | [`data/cover.yaml`](file:///f:/Notes/data/cover.yaml) 的 `avatar` | [`layouts/partials/header/basic.html`](layouts/partials/header/basic.html) + [`assets/css/_02_chrome.css`](assets/css/_02_chrome.css) |
 | 封面壳层 CSS（全屏画布 / masthead / 音乐唱片底片） | — | [`assets/css/_08_cover.css`](file:///F:/Notes/assets/css/_08_cover.css) |
 | 页面底色（封面与内页一致） | 主题 `--color-neutral` / 暗色 `--color-neutral-800` | `layouts/_default/baseof.html` 的 body 背景类；封面画布透明，无独立渐变或纸纹 |
-| 三入口 Vertical 顺序显现 / mobile rail | [`data/home_highlights.yaml`](data/home_highlights.yaml) 的 `sections[].visual` | [`home/cover-carousel.html`](layouts/partials/home/cover-carousel.html) + [`home/carousel-image.html`](layouts/partials/home/carousel-image.html) + [`_16_cover-carousel.css`](assets/css/_16_cover-carousel.css) + [`cover-carousel.js`](assets/js/cover-carousel.js) |
+| 镜头移动 / 音符游走 / 内容衔接 | — | `assets/js/cover-scroll.js` 以被动 scroll + rAF 更新最多 48px 的滚动视差和 ±12px 的鼠标视差；`assets/css/_08_cover.css` 定义盘面静态蓝橙渐变（浓度 38% / 32%，衰减至 64% / 66%）与轨道，细节透明度只用于谱线和音符，避免压淡盘面颜色；`_16_cover-scroll.css` 负责轨道音符、浮起消散及静态降级，无扫光层 |
 | 封面主题切换 | — | 直接复用主题原生顶栏按钮；首页不再保留封面专属切换器 |
 | 首页首屏关键图 / 字体预加载 | — | [`layouts/partials/head.html`](file:///f:/Notes/layouts/partials/head.html) |
 | 封面装饰元素（唱片小提琴蚀刻纹） | — | 使用 `assets/image/cover/cover-violin-engraving.svg`，由 `custom.html` 经 Hugo 压缩、指纹化后输出；旧 WebP、上下花纹和黑花素材已删除 |
 | 封面调色（明 / 暗） | [`assets/css/_01_tokens.css`](file:///f:/Notes/assets/css/_01_tokens.css) 的全局变量 | [`custom.html`](file:///f:/Notes/layouts/partials/home/custom.html) 的 `<style>` 块只负责把全局变量派生到封面局部变量 |
-| 首页 `DOCS / WORKS / DAILY` 入口 | [`data/home_highlights.yaml`](file:///f:/Notes/data/home_highlights.yaml) | 由 [`layouts/partials/home/cover-carousel.html`](layouts/partials/home/cover-carousel.html) 按数据顺序渲染首帧索引与入口卡；桌面卡片围绕唱片排列，手机采用原生横向滚动 |
+| 首页 Recent / Popular | `hugo.toml` 的 `[params.homepage]` | `custom.html` 调用项目 `recent-articles/main.html`，固定使用当前卡片网格，不维护主题全宽 / 列表 / Show More 分支；`cardview.html` 按发布日期生成候选卡片，`home-feed.js` 切换最近六篇与热度最高六篇，无首页分页 |
 
-**以后如何更新首页 Highlights：**
+**以后如何维护首页：**
 
-1. **改分组说明与入口动作**
-   - 直接改 [`data/home_highlights.yaml`](file:///f:/Notes/data/home_highlights.yaml) 各组里的 `desc / cta_label / cta_path`
-
-2. **保持三入口契约**
-   - `sections` 必须正好是三组且 `id` 唯一，顺序就是首帧索引与显现顺序
-   - 不再维护旧 `title / items[].title / items[].desc / items[].path / link_text` 字段
-   - 数量、重复 id、无效路由、未知视觉类型或错误图片数量都会令 Hugo 构建失败
-
-3. **更换卡片视觉**
-   - 改对应 `sections[].visual.assets`；路径必须指向 `assets/` 下可被 Hugo Pipes 处理的图片
-   - `visual.kind` 与图片数量固定为 `docs-stack=3`、`project-stage=1`、`music-fan=3`
-   - DOCS 的第一张图是唯一 eager/high priority 图片，其余图片保持 lazy
-
-4. **模板职责**
-   - [`layouts/partials/home/custom.html`](file:///f:/Notes/layouts/partials/home/custom.html) 负责封面壳层和 carousel partial 调用
-   - [`layouts/partials/home/cover-carousel.html`](layouts/partials/home/cover-carousel.html) 负责数据驱动首帧、栏目索引、语义卡片、路由解析与无 JS 基线
-   - [`assets/js/cover-carousel.js`](assets/js/cover-carousel.js) 只负责首帧 / 栏目标识交接、滚动进度与三卡显现量，CSS 负责定位和外观
-   - 日常改字、改链接，优先不要再直接改模板
+- 首屏文字、统计开关和导航头像仍维护在 `data/cover.yaml`；左侧不再重复输出作者链接或栏目索引。
+- Recent 在每次 Hugo 构建时通过 `RegularPages` 读取 `[params].mainSections`，只按发布日期倒序显示六篇（数量由 `showRecentItems` 控制），忽略 weight，首页隐藏置顶徽标；修改正文、lastmod 或 dateUpdated 不会自动提前。DOCS 列表的置顶规则保留。
+- 点击标题可切换 Popular，再点击回到 Recent；`assets/js/home-feed.js` 从全部候选卡片的原生 Firebase 计数计算 `views + likes × 10`，同分按发布日期排序，取六篇。复用既有统计监听，不另建数据库查询或写入；当前候选全部随首页生成，新增文章后自动纳入。更新计数时保留榜单内的键盘焦点，焦点文章退出榜单时将焦点交回切换按钮。计数未就绪时保留 Recent 并提示加载，15 秒仍不完整则提示不可用，支持重试；无 JS 保留最近六篇，切换按钮禁用。真实 Firebase 排名与完整页面体验需在部署后核对。
+- 桌面保留一屏左侧文字和音乐底片，封面随正常页面滚动离开；音乐层仅作最多 48px 的滚动视差。盘面静态彩色渐变与轨道保持方向，两个音符以 32 / 47 秒沿轨道游走，四个音符以 12 秒周期错峰浮起、消散；右侧 hover 提供最多 ±12px 分层视差，移出后平滑复位，离屏与后台暂停。没有扫光、sticky 停留、放大、负边距叠层、根元素滚动锁或输入拦截。
+- 手机、减少动态效果与无 JS 环境使用静态首屏和正常内容网格；近期内容锚点始终为 `#home-recent`。所有模式都不创建额外过渡高度。
+- 滚动提示沿用原生平滑锚点与焦点跳转；`_16_cover-scroll.css` 抵消 Recent 内边距和标题上边距的叠加，使标题落在顶栏下方。桌面滚动时，`cover-scroll.js` 复用 rAF，累积 1px 位移后判定方向，停止滚动时保留意图：向下进入 Recent 时只有封面（包括文字）按退出进度模糊；向上回封面时只有 Recent 整块卡片模糊，封面的磨砂层同步关闭。进入的一侧立即清晰，退出的一侧用 200ms CSS 过渡和最多 12px 模糊、轻微淡化；不再延迟到临近视口边缘才模糊。手机、减少动态效果及无 JS 保留静态衔接，不改变内容读取与链接。
+- `home/custom.html` 编排封面与近期内容；`home/cover-intro.html` 只渲染卷首语和滚动提示；镜头逻辑、专属 CSS 仍仅首页加载。
 
 ### 内页"小封面"（section 主页顶部）
 
@@ -448,6 +441,14 @@ f:\Notes\
 ---
 
 ## 6. 常见修改路径
+
+### 添加友情链接
+
+`/friends/` 复用当前定制列表和 Blowfish 原生 `externalUrl` 外链字段，从 ABOUT ME 顶栏子菜单进入。已录入 Wangtanzhi 的 blog；共享卡片的 friends 分支沿用 Blowfish 卡片外观与外链箭头，增加左侧圆形头像，字体与颜色继续使用站点主题。
+
+后续每个友链可放在 `content/friends/<slug>/index.md`，填写真实的 `title`、`description`、`externalUrl` 与排序用的 `weight`；头像放在同目录，使用 `avatar: "avatar.webp"` 指定（未指定时匹配 `avatar.*`）；Hugo 输出 64 / 128px WebP 与 1x / 2x 候选，页面显示为 64px 圆形头像。日期、阅读时长、点赞等文章元信息由父级 `cascade` 默认关闭。卡片简介使用 `summary` 并设置 `showSummary: true`；`description` 用于页面元数据，不会自动作为卡片简介。没有头像资源时仅展示名称与简介，不填充默认图标；优先保存对方公开使用的真实头像，不依赖远程热链。
+
+友链子条目仍遵循 Hugo 普通内容页的生成规则。当前搜索索引保留 `externalUrl`，搜索结果跳转外部站点；Blowfish sitemap 模板排除 HTTP(S) 外链条目。本地条目页面仍会生成，后续新增需核对这三类输出。
 
 ### 换字体
 
@@ -712,10 +713,10 @@ cp assets/css/custom.css.bak.v2 assets/css/_99_all.css   # 复制原文件作为
 
 ## 6. 前端资源与主题维护边界（2026-10-01）
 
-- `head.html` 的 `main.bundle` 保留共享样式；`_08_cover.css`、`_16_cover-carousel.css` 合为仅首页加载的 `cover.bundle`，`_10_music-darkside.css` 仅在使用 `music-list` 的页面加载。顺序为共享样式后加载页面样式；新共享规则不要写入这三个页面文件。
+- `head.html` 的 `main.bundle` 保留共享样式；`_08_cover.css`、`_16_cover-scroll.css` 合为仅首页加载的 `cover.bundle`，`_10_music-darkside.css` 仅在使用 `music-list` 的页面加载。顺序为共享样式后加载页面样式；新共享规则不要写入这三个页面文件。
 - `_09_about.css` 仍包含首页也使用的 `site-stats` 和共享联系组件，不按文件名直接从其他页面移除；Splitting 基础和 `cover-fade` 关键帧放在共享 `_04_hero.css`。
-- `extend-head.html` 按 Site 缓存，只承载共享逻辑；页面级库放在 `extend-head-uncached.html`：Splitting 给栏目头部 / `page-hero`，VanillaTilt 给 `projects-list`，轮播只给首页。减少动态效果时不初始化倾斜。
-- 首页手势只监听 `.cover-page`，搜索浮层保留原生滚动；根元素锁定桌面滚动，封面自身约束超出的装饰，卡片轨道仍可横向滚动。不要在限宽 `body` 上设置 overflow 裁剪，否则宽屏全屏封面会被截断。About 在 480px 以下纵排，页脚 RSS 使用明确的 SVG 尺寸，不依赖主题未编译的工具类。
+- `extend-head.html` 按 Site 缓存，只承载共享逻辑；页面级库放在 `extend-head-uncached.html`：Splitting 给栏目头部 / `page-hero`，VanillaTilt 给 `projects-list`，镜头只给首页。减少动态效果时不初始化倾斜。
+- 首页音乐层视差只读取原生滚动进度，搜索浮层保留原生滚动；不锁根元素滚动，不拦截滚轮或触屏。封面仅约束超出的装饰，近期内容与页脚保持文档流。不要在限宽 `body` 上设置 overflow 裁剪，否则宽屏全屏封面会被截断。About 在 480px 以下纵排，页脚 RSS 使用明确的 SVG 尺寸，不依赖主题未编译的工具类。
 
 ### 版本与升级核对
 
@@ -730,4 +731,4 @@ cp assets/css/custom.css.bak.v2 assets/css/_99_all.css   # 复制原文件作为
 
 升级时另行比对项目 `layouts/` 的覆写，优先检查 `head`、`vendor`、`schema`、`baseof`、`page.html`、列表/卡片、图片、分享和 header/footer。不要用主题文件覆盖项目定制，也不要为新工具类全量重编译主题依赖。
 
-验证入口：`node --test tests/cover-carousel.test.cjs`、生产构建、`python3 -B tests/seo_check.py <生成目录>`、`git diff --check`。轮播测试现已从忽略规则中单独放行，随源码保留；浏览器仍需检查搜索滚动、四档窄屏、深色与减少动态效果，线上服务和部署验证单独进行。
+验证入口：`node --test tests/cover-scroll.test.cjs`、生产构建、`python3 -B tests/seo_check.py <生成目录>`、`git diff --check`。镜头测试从忽略规则中单独放行，随源码保留；浏览器仍需检查搜索滚动、四档窄屏、深色与减少动态效果，线上服务和部署验证单独进行。

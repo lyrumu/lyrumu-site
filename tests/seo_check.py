@@ -14,6 +14,8 @@ class Page(HTMLParser):
         super().__init__()
         self.title, self.description, self.headings = "", [], []
         self.canonical, self.icons, self.images, self.links, self.schemas = [], [], [], [], []
+        self.scripts = []
+        self.social_descriptions = {"og:description": [], "twitter:description": []}
         self.capture, self.anchor, self.alias = None, None, False
         self.in_head = False
         self.feed(text)
@@ -22,7 +24,12 @@ class Page(HTMLParser):
         attrs = dict(attrs)
         if tag == "head":
             self.in_head = True
+        if tag == "script":
+            self.scripts.append(attrs)
         if tag == "meta":
+            key = attrs.get("property") or attrs.get("name")
+            if key in self.social_descriptions:
+                self.social_descriptions[key].append(attrs.get("content", ""))
             if attrs.get("name") == "description":
                 self.description.append(attrs.get("content", ""))
             if attrs.get("http-equiv", "").lower() == "refresh":
@@ -76,10 +83,26 @@ def check(root):
         assert len(page.canonical) == 1 and unquote(page.canonical[0]) == expected.rstrip("/") + "/", file
         assert set(page.icons) == {"/favicon.ico", "/favicon-32x32.png", "/favicon-16x16.png", "/favicon.svg"}, file
         assert page.schemas, file
+        is_article = False
         for group in page.schemas:
             for item in group if isinstance(group, list) else [group]:
                 if item.get("@type") == "Article":
+                    is_article = True
                     assert item.get("mainEntityOfPage") == page.canonical[0], file
+        # 评论只属于 notes 普通文章与既有独立页面；列表及其所有分页不能加载。
+        path = urlparse(page.canonical[0]).path
+        if path.startswith(("/categories/", "/tags/", "/topics/", "/series/")):
+            for key, descriptions in page.social_descriptions.items():
+                assert descriptions == page.description, (file, key, "Taxonomy description mismatch or duplicate")
+        comments_enabled = (is_article and path.startswith("/notes/")) or path in {
+            "/about/", "/works/projects/", "/life/music/",
+        }
+        giscus_loaders = [s for s in page.scripts if "/js/giscus-loader.min." in s.get("src", "")]
+        assert len(giscus_loaders) == int(comments_enabled), (file, "Giscus loading scope")
+        assert not any(s.get("src", "").startswith("https://giscus.app/") for s in page.scripts), file
+        for script in giscus_loaders:
+            assert "defer" in script and script.get("integrity"), (file, script)
+            assert (root / urlparse(script["src"]).path.lstrip("/")).is_file(), (file, script)
         assert "/cdn-cgi/l/email-protection" not in text, file
         assert "@users.noreply.github.com" not in text, file
         taxonomy_badges = []
@@ -138,6 +161,11 @@ def check(root):
     for header in ("Strict-Transport-Security", "X-Frame-Options", "Content-Security-Policy", "Referrer-Policy"):
         assert header + ":" in headers, header
     redirects = set((root / "_redirects").read_text().splitlines())
+    assert {
+        "/series/wsl2 /notes/linux-getting-started/ 301",
+        "/series/wsl2/ /notes/linux-getting-started/ 301",
+    } <= redirects
+    assert (root / "notes/linux-getting-started/index.html").is_file()
     assert {
         "/categories/ai/ /categories/ 301",
         "/categories/development/ /categories/ 301",

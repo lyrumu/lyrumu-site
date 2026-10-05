@@ -104,7 +104,10 @@ enableEmoji = true
   # =====================================================================
   [params.homepage]
     layout = 'custom'                  # background / hero / page / card / custom
-    showRecent = false
+    showRecent = true
+    showRecentItems = 6
+    cardView = true
+    cardViewScreenWidth = false
     showQuickLinks = false
     showSummary = false
     cardViewSimple = false
@@ -198,12 +201,36 @@ enableEmoji = true
 # 加模块 = 在这里加一项 + content/<slug>/_index.md
 # 顺序：按 weight 从小到大
 # =============================================================================
-# 主导航：ABOUT ME / DOCS / WORKS / DAILY 全部回归普通菜单项
+# 主导航：ABOUT ME 分组（个人 / 友链 / DAILY），DOCS 与 WORKS 直接跳转。
 [[menu.main]]
   name = 'ABOUT ME'
-  url = '/about/'
+  identifier = 'about'
   # weight 参数用于控制导航菜单的排序顺序，数值越小越靠前显示
   weight = 10
+
+[[menu.main]]
+  name = '关于我'
+  parent = 'about'
+  url = '/about/'
+  weight = 11
+  [menu.main.params]
+    icon = 'user-round'
+
+[[menu.main]]
+  name = '友链'
+  parent = 'about'
+  url = '/friends/'
+  weight = 12
+  [menu.main.params]
+    icon = 'link'
+
+[[menu.main]]
+  name = 'DAILY'
+  parent = 'about'
+  url = '/life/'
+  weight = 13
+  [menu.main.params]
+    icon = 'music'
 
 [[menu.main]]
   name = 'DOCS'
@@ -214,11 +241,6 @@ enableEmoji = true
   name = 'WORKS'
   url = '/works/'
   weight = 30
-
-[[menu.main]]
-  name = 'DAILY'
-  url = '/life/'
-  weight = 40
 
 # =============================================================================
 # 输出格式（2026-06-24 修正两个 WARN）

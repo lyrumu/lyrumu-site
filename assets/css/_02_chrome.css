@@ -143,8 +143,125 @@
   font-weight: 500;
 }
 .main-menu a:hover,
-.main-menu a.active {
+.main-menu a.active,
+.main-menu .site-menu-group--desktop:hover > .site-menu-group__trigger {
   color: var(--accent) !important;
+}
+
+/* Hallmark · component: navigation disclosure · theme: existing site
+   Pre-emit critique: P4 H4 E4 S4 R5 V3. 静态导航没有提交或异步反馈状态。 */
+.site-menu-group {
+  --menu-duration: 240ms;
+  --menu-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --menu-surface: color-mix(in srgb, var(--bg-base) 76%, transparent);
+  --menu-border: color-mix(in srgb, var(--fg-base) 10%, transparent);
+  --menu-highlight: rgb(255 255 255 / 0.75);
+  --menu-hover: color-mix(in srgb, var(--fg-base) 4%, transparent);
+  position: relative;
+}
+html.dark .site-menu-group {
+  --menu-surface: color-mix(in srgb, var(--bg-base) 82%, transparent);
+  --menu-highlight: rgb(255 255 255 / 0.12);
+}
+.site-menu-group__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  list-style: none;
+  cursor: pointer;
+  color: var(--fg-base);
+  white-space: nowrap;
+}
+.site-menu-group__trigger::-webkit-details-marker { display: none; }
+.site-menu-group__chevron {
+  display: inline-flex;
+  color: var(--fg-soft);
+  transition: transform var(--menu-duration) var(--menu-ease);
+}
+.site-menu-group[open] > summary .site-menu-group__chevron { transform: rotate(180deg); }
+.site-menu-group__trigger:focus-visible,
+.site-menu-group__items a:focus-visible {
+  outline: 2px solid var(--fg-base);
+  outline-offset: 3px;
+  border-radius: 0.35rem;
+}
+.site-menu-group__items {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem;
+  border: 1px solid var(--menu-border);
+  border-radius: 1rem;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--menu-highlight) 16%, transparent), transparent 45%), var(--menu-surface);
+  -webkit-backdrop-filter: blur(28px) saturate(1.3);
+  backdrop-filter: blur(28px) saturate(1.3);
+}
+.main-menu .site-menu-group__items a {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.65rem;
+  color: var(--fg-base);
+  text-decoration: none;
+  transition: background-color var(--menu-duration) var(--menu-ease);
+}
+.main-menu .site-menu-group__item-icon { display: inline-flex; flex: none; color: var(--fg-mute); }
+.main-menu .site-menu-group__item-title {
+  font-family: var(--font-serif-display);
+  font-size: 0.88rem;
+  font-weight: 550;
+  letter-spacing: 0.025em;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+/* 主题会给当前页链接内的 span 标记 active，子项仅以字重表示当前页。 */
+.site-menu-group__items .active { text-decoration: none; }
+.site-menu-group__item-title.active { font-weight: 650; }
+.main-menu .site-menu-group__items a:focus-visible { background: var(--menu-hover); color: var(--fg-base) !important; }
+@media (hover: hover) and (pointer: fine) {
+  .main-menu .site-menu-group__items a:hover { background: var(--menu-hover); color: var(--fg-base) !important; }
+}
+.site-menu-group__items a:active { background: var(--menu-hover); }
+.site-menu-group--desktop > .site-menu-group__panel {
+  position: absolute;
+  top: 100%;
+  inset-inline-start: -0.75rem;
+  z-index: 1000;
+  width: 12rem;
+  /* 浮层外观留白由容器内边距承担，整个路径仍属于 hover 区域。 */
+  padding-top: 0.6rem;
+  transform-origin: 3.5rem 0;
+}
+.site-menu-group--desktop .site-menu-group__items {
+  box-shadow: inset 0 1px 0 var(--menu-highlight), 0 12px 36px -12px rgb(0 0 0 / 0.2), 0 2px 8px -2px rgb(0 0 0 / 0.08);
+}
+.site-menu-group--desktop[data-enhanced] > .site-menu-group__panel {
+  opacity: 0;
+  /* 从主项下方舒展；收回使用同一组属性，反向时不会重启动画。 */
+  transform: translateY(-6px) scale(0.96, 0.92);
+  filter: blur(1.5px);
+  pointer-events: none;
+  transition: opacity var(--menu-duration), transform var(--menu-duration), filter var(--menu-duration);
+  transition-timing-function: cubic-bezier(0.4, 0, 0.7, 0.2);
+}
+.site-menu-group--desktop.is-expanded > .site-menu-group__panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: none;
+  pointer-events: auto;
+  transition-timing-function: var(--menu-ease);
+}
+.site-menu-group--desktop[data-enhanced]:not(.is-expanded) > summary .site-menu-group__chevron { transform: rotate(0deg); }
+.site-menu-group--mobile > summary { justify-content: space-between; }
+.site-menu-group--mobile > .site-menu-group__panel { padding-top: 0.4rem; }
+@media (prefers-reduced-motion: reduce) {
+  .site-menu-group { --menu-duration: 0ms; }
+  .site-menu-group__chevron,
+  .main-menu .site-menu-group__items a,
+  .site-menu-group--desktop[data-enhanced] > .site-menu-group__panel { transition: none; }
+  .site-menu-group--desktop[data-enhanced] > .site-menu-group__panel { transform: none; filter: none; }
 }
 
 /* =============================================================================

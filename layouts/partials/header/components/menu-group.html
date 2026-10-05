@@ -1,0 +1,24 @@
+{{/* Hugo 菜单分组：原生 details 提供点击与键盘展开；桌面额外支持 hover。 */}}
+<details class="site-menu-group site-menu-group--{{ .variant }}">
+  <summary class="site-menu-group__trigger">
+    <span>{{ .menu.Name | markdownify }}</span>
+    <span class="site-menu-group__chevron" aria-hidden="true">{{ partial "icon.html" "chevron-down" }}</span>
+  </summary>
+  <div class="site-menu-group__panel">
+    <ul class="site-menu-group__items">
+      {{ range .menu.Children }}
+        <li>
+          <a href="{{ .URL }}"
+            {{ if or (strings.HasPrefix .URL "http:") (strings.HasPrefix .URL "https:") }}
+              target="_blank" rel="noopener noreferrer"
+            {{ end }}>
+            {{ with .Params.icon }}
+              <span class="site-menu-group__item-icon" aria-hidden="true">{{ partial "cover/icon.html" (dict "name" . "size" 20) }}</span>
+            {{ end }}
+            <span class="site-menu-group__item-title">{{ .Name | markdownify }}</span>
+          </a>
+        </li>
+      {{ end }}
+    </ul>
+  </div>
+</details>

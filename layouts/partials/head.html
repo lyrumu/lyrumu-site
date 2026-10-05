@@ -51,9 +51,9 @@
   {{ end }}
   {{ if not (or .Params.Summary .Params.Description) }}
     {{ if eq .Kind "term" }}
-      {{ $metaDescription = printf "Browse notes filed under the %s %s on lyrumu's page. Read the full articles and explore related learning notes and technical records." .Title .Data.Singular }}
+      {{ $metaDescription = printf "Browse notes filed under the %s %s on lyrumu's page." .Title .Data.Singular }}
     {{ else if eq .Kind "taxonomy" }}
-      {{ $metaDescription = printf "Browse all %s on lyrumu's page to find learning notes and technical records by subject, then follow each collection to its articles." (.Title | lower) }}
+      {{ $metaDescription = printf "Browse all %s on lyrumu's page and find learning notes and technical records by subject." (.Title | lower) }}
     {{ end }}
   {{ end }}
   {{ if gt $notesPageNumber 1 }}
@@ -104,8 +104,22 @@
   {{ end }}
 
   {{/* Social */}}
-  {{ template "_internal/opengraph.html" . }}
-  {{ template "_internal/twitter_cards.html" . }}
+  {{ if in (slice "term" "taxonomy") .Kind }}
+    {{/* Keep native social fields; replace only their descriptions with the resolved taxonomy description. */}}
+    {{ $openGraph := partial "opengraph.html" . }}
+    {{ $twitterCards := partial "twitter_cards.html" . }}
+    {{ with $openGraph }}
+      {{ . | replaceRE `<meta\s+property="og:description"\s+content="[^"]*"\s*/?>` "" | safeHTML }}
+      <meta property="og:description" content="{{ $metaDescription | plainify }}">
+    {{ end }}
+    {{ with $twitterCards }}
+      {{ . | replaceRE `<meta\s+name="twitter:description"\s+content="[^"]*"\s*/?>` "" | safeHTML }}
+      <meta name="twitter:description" content="{{ $metaDescription | plainify }}">
+    {{ end }}
+  {{ else }}
+    {{ template "_internal/opengraph.html" . }}
+    {{ template "_internal/twitter_cards.html" . }}
+  {{ end }}
   {{/* Use defaultSocialImage if feature image does not exist */}}
   {{ $featureImage := "" }}
   {{ $pageImages := .Resources.ByType "image" }}
@@ -187,7 +201,7 @@
   {{ $customCSS := slice }}
   {{ $pageCSS := slice }}
   {{ range resources.Match "css/_*.css" }}
-    {{ if in (slice "/css/_08_cover.css" "/css/_16_cover-carousel.css") .Name }}
+    {{ if in (slice "/css/_08_cover.css" "/css/_16_cover-scroll.css") .Name }}
       {{ if $.IsHome }}{{ $pageCSS = $pageCSS | append . }}{{ end }}
     {{ else if eq .Name "/css/_10_music-darkside.css" }}
       {{ if $.HasShortcode "music-list" }}{{ $pageCSS = $pageCSS | append . }}{{ end }}

@@ -1,8 +1,12 @@
 {{/*
   Giscus 评论加载器（2026-07-25 从 inline 外置到 assets/js）
-  - 路径白名单 + notes 文章页自动识别 + 深浅主题切换：与原 inline 逻辑一致
-  - defer 执行时 DOM 已解析，document.querySelector('article') 安全
-  - 指纹化后每页 HTML 变薄，脚本可跨页缓存
+  - Hugo 页面类型决定加载范围：notes 普通文章 + 既有独立页面白名单
+  - 不从 URL 层级或列表卡片的 article 标签推断文章页，避免分页误判
+  - 指纹脚本可跨页缓存；调用本 partial 时必须保留当前页面上下文
 */}}
-{{ $giscusLoader := resources.Get "js/giscus-loader.js" | resources.Minify | resources.Fingerprint "sha512" }}
-<script defer src="{{ $giscusLoader.RelPermalink }}" integrity="{{ $giscusLoader.Data.Integrity }}"></script>
+{{ $isNotesArticle := and .IsPage (eq .Section "notes") }}
+{{ $isAllowedPage := in (slice "/about/" "/works/projects/" "/life/music/") .RelPermalink }}
+{{ if or $isNotesArticle $isAllowedPage }}
+  {{ $giscusLoader := resources.Get "js/giscus-loader.js" | resources.Minify | resources.Fingerprint "sha512" }}
+  <script defer src="{{ $giscusLoader.RelPermalink }}" integrity="{{ $giscusLoader.Data.Integrity }}"></script>
+{{ end }}

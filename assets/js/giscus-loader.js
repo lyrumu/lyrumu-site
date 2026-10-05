@@ -2,25 +2,10 @@
   giscus-loader.js — 评论区按需加载
   --------------------------------------------------------------------------
   原 inline 脚本从 layouts/partials/extend-footer.html 外置到这里（2026-07-25），
-  行为完全一致：路径白名单 + notes 文章页自动识别 + 深浅主题切换。
-  改为外部指纹文件后，每页 HTML 变薄，且可跨页缓存。
+  加载范围由 extend-footer.html 根据 Hugo 页面类型决定；本脚本负责
+  Giscus 配置与深浅主题切换，作为外部指纹文件跨页缓存。
 */
 (function () {
-  const path = window.location.pathname.replace(/\/+$/, "") || "/";
-  const pathParts = path.split("/").filter(Boolean);
-
-  // 首页是聚焦式入口，不在轮播结束后追加第二个评论目的地。
-  const allowedPaths = ["/about", "/works/projects", "/life/music"];
-  const articleSections = ["notes"];
-
-  const isAllowedPath = allowedPaths.includes(path);
-  const isArticlePage =
-    pathParts.length >= 2 &&
-    articleSections.includes(pathParts[0]) &&
-    !!document.querySelector("article");
-
-  if (!isArticlePage && !isAllowedPath) return;
-
   function getGiscusTheme() {
     return document.documentElement.classList.contains("dark") ? "dark" : "light";
   }

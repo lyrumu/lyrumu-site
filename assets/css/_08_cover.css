@@ -111,7 +111,7 @@ html.dark .cover-page {
   width: min(82vw, 66rem);
   aspect-ratio: 1.55;
   pointer-events: none;
-  opacity: 0.62;
+  --cover-music-detail-opacity: 0.62;
   transform: translate(-50%, -50%);
   /* 右缘渐隐：field 超出视口的部分淡出，避免装饰线被视口硬切。
      唱片右缘最远到 field 的 ~66%，从 72% 起衰减不伤唱片。 */
@@ -120,12 +120,12 @@ html.dark .cover-page {
 }
 
 html.dark .cover-music-field {
-  opacity: 0.62;
+  --cover-music-detail-opacity: 0.62;
 }
 
-/* 浅色底色会削弱音乐装饰的对比度，只提高该整组装饰层。 */
+/* 只淡化谱线与音符，盘面保留 demo 的彩色渐变，避免父子透明度叠乘。 */
 html:not(.dark) .cover-music-field {
-  opacity: 0.76;
+  --cover-music-detail-opacity: 0.76;
 }
 
 .cover-content > :not(.cover-music-camera) {
@@ -141,38 +141,53 @@ html:not(.dark) .cover-music-field {
   overflow: hidden;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 50%, var(--pal-bg-from, var(--bg-base)) 0 8%, transparent 8.5%),
-    repeating-radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--pal-title, var(--fg-base)) 16%, transparent) 0 1px, transparent 1px 9px),
-    radial-gradient(circle at 44% 38%, color-mix(in srgb, var(--cover-music-blue) 34%, transparent), transparent 34%),
-    radial-gradient(circle at 58% 60%, color-mix(in srgb, var(--pal-accent, var(--accent)) 32%, transparent), transparent 48%),
-    color-mix(in srgb, var(--pal-bg-from, var(--bg-base)) 82%, transparent);
+    radial-gradient(circle at 38% 32%, color-mix(in srgb, var(--cover-music-blue) 38%, transparent), transparent 64%),
+    radial-gradient(circle at 66% 64%, color-mix(in srgb, var(--pal-accent, var(--accent)) 32%, transparent), transparent 66%);
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--pal-line, var(--line)) 86%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--pal-line, var(--line)) 50%, transparent),
     0 1.5rem 5rem -2.2rem color-mix(in srgb, var(--fg-base) 22%, transparent),
     0 0 5rem color-mix(in srgb, var(--cover-music-blue) 28%, transparent);
-  opacity: 0.78;
+  opacity: 0.76;
+  transform: translate(-50%, -50%) translate3d(var(--cover-pointer-x, 0px), var(--cover-pointer-y, 0px), 0);
+}
+
+/* 盘心保持固定，盘面仅保留静态彩色渐变。 */
+.cover-music-field__disc::before {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 7%; aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--pal-bg-from, var(--bg-base));
+  opacity: 0.35;
   transform: translate(-50%, -50%);
 }
 
-/* 偏心沟槽绕唱片圆心缓慢摆动，让露出的上半圆始终能读出旋转。 */
-.cover-music-field__disc::before {
+/* 宽间距唱片刻纹，固定 SVG 扰动保留轻微手绘起伏。 */
+.cover-music-field__grooves {
   position: absolute;
-  left: 47%;
-  top: 48.5%;
-  width: 88%;
-  aspect-ratio: 1;
-  border: 1px solid color-mix(in srgb, var(--pal-accent, var(--accent)) 48%, transparent);
-  border-radius: 50%;
-  background: repeating-radial-gradient(
-    circle,
-    transparent 0 7.5%,
-    color-mix(in srgb, var(--cover-music-blue) 34%, transparent) 7.8% 8.35%,
-    transparent 8.7% 14%
-  );
-  content: "";
-  filter: drop-shadow(0 0 0.42rem color-mix(in srgb, var(--pal-accent, var(--accent)) 30%, transparent));
-  opacity: 0.12;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: color-mix(in srgb, var(--pal-title, var(--fg-base)) 22%, transparent);
+  pointer-events: none;
+}
+
+.cover-music-hover-area {
+  position: absolute;
+  inset: 7% 0 17% 45%;
+  pointer-events: none;
+}
+.cover-music-field__orbits, .cover-music-field__notes {
+  position: absolute;
+  inset: 0;
+  opacity: var(--cover-music-detail-opacity);
+}
+.cover-music-field__orbits {
+  transform: translate3d(calc(var(--cover-pointer-x, 0px) * -0.35), calc(var(--cover-pointer-y, 0px) * -0.35), 0) rotate(-16deg);
+}
+.cover-music-field__notes {
+  transform: translate3d(calc(var(--cover-pointer-x, 0px) * 0.4), calc(var(--cover-pointer-y, 0px) * 0.4), 0);
 }
 
 /* 小提琴蚀刻纹：SVG 图片完整解码后一次绘制，保持为唱片内的低对比度纹理。 */
@@ -185,7 +200,7 @@ html:not(.dark) .cover-music-field {
   filter: grayscale(1) sepia(0.28) contrast(1.08);
   mix-blend-mode: multiply;
   object-fit: contain;
-  opacity: 0.3;
+  opacity: 0.36;
   pointer-events: none;
   transform: rotate(-7deg);
   user-select: none;
@@ -194,7 +209,7 @@ html:not(.dark) .cover-music-field {
 html.dark .cover-music-field__engraving {
   filter: grayscale(1) brightness(1.28) contrast(0.9);
   mix-blend-mode: screen;
-  opacity: 0.22;
+  opacity: 0.25;
 }
 
 .cover-music-field__staff {
@@ -209,19 +224,19 @@ html.dark .cover-music-field__engraving {
     color-mix(in srgb, var(--pal-title, var(--fg-base)) 17%, transparent) 0.82rem,
     transparent 0.86rem
   );
-  opacity: 0.52;
+  opacity: calc(0.52 * var(--cover-music-detail-opacity));
   transform-origin: left center;
 }
 
 .cover-music-field__staff--one {
   top: 34%;
-  transform: rotate(-10deg);
+  transform: translate3d(calc(var(--cover-pointer-x, 0px) * -0.35), calc(var(--cover-pointer-y, 0px) * -0.35), 0) rotate(-10deg);
 }
 
 .cover-music-field__staff--two {
   top: 51%;
-  opacity: 0.34;
-  transform: rotate(11deg);
+  opacity: calc(0.34 * var(--cover-music-detail-opacity));
+  transform: translate3d(calc(var(--cover-pointer-x, 0px) * -0.35), calc(var(--cover-pointer-y, 0px) * -0.35), 0) rotate(11deg);
 }
 
 .cover-music-field__orbit {
@@ -232,64 +247,32 @@ html.dark .cover-music-field__engraving {
   border-bottom-color: color-mix(in srgb, var(--pal-accent, var(--accent)) 32%, transparent);
   border-radius: 50%;
   opacity: 0.46;
-  transform: translate(-50%, -50%) rotate(-16deg);
+  transform: translate(-50%, -50%);
 }
 
-/* 音符节点固定在闭合轨道上，轨道慢转时提供清晰但克制的方向参照。 */
-.cover-music-field__orbit::before,
-.cover-music-field__orbit::after {
+.cover-music-field__orbit--one { width: 74%; height: 39%; }
+.cover-music-field__orbit--two { width: 90%; height: 48%; opacity: 0.28; }
+
+/* 只移动两个节点；轨道线与盘心保持方向。 */
+.cover-music-field__traveller {
   position: absolute;
+  left: 0; top: 0;
   display: grid;
-  width: 0.72rem;
-  aspect-ratio: 1;
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--pal-accent, var(--accent)) 62%, transparent);
+  width: 18px; height: 18px;
+  border: 1px solid color-mix(in srgb, var(--pal-accent, var(--accent)) 50%, transparent);
   border-radius: 50%;
-  background: color-mix(in srgb, var(--pal-bg-from, var(--bg-base)) 88%, transparent);
-  color: color-mix(in srgb, var(--pal-title, var(--fg-base)) 74%, var(--pal-accent, var(--accent)));
-  font-family: var(--font-serif-display);
-  font-size: 0.42rem;
-  line-height: 1;
-  box-shadow: 0 0 0.55rem color-mix(in srgb, var(--pal-accent, var(--accent)) 24%, transparent);
+  background: var(--pal-bg-from, var(--bg-base));
+  color: var(--pal-sub, var(--fg-mute));
+  font: 12px var(--font-serif-display);
+  offset-path: ellipse(37% 19.5% at 50% 50%);
+  offset-rotate: 0deg;
 }
-
-.cover-music-field__orbit--one {
-  width: 74%;
-  height: 39%;
-}
-
-.cover-music-field__orbit--one::before {
-  left: 12%;
-  top: 18%;
-  content: "♪";
-  transform: translate(-50%, -50%);
-}
-
-.cover-music-field__orbit--one::after {
-  right: 12%;
-  bottom: 18%;
-  content: "♫";
-  transform: translate(50%, 50%);
-}
-
-.cover-music-field__orbit--two {
-  width: 90%;
-  height: 48%;
-  opacity: 0.28;
-}
-
-.cover-music-field__orbit--two::before {
-  left: 36%;
-  top: 2%;
-  content: "♩";
-  transform: translate(-50%, -50%);
-}
-
-.cover-music-field__orbit--two::after {
-  right: 8%;
-  bottom: 25%;
-  content: "♬";
-  transform: translate(50%, 50%);
+.cover-music-field__traveller--two {
+  width: 14px; height: 14px;
+  font-size: 9px;
+  offset-path: ellipse(45% 24% at 50% 50%);
+  offset-distance: 52%;
 }
 
 .cover-floating-note {
@@ -297,9 +280,8 @@ html.dark .cover-music-field__engraving {
   color: color-mix(in srgb, var(--pal-title, var(--fg-base)) 76%, var(--pal-accent, var(--accent)));
   font-family: var(--font-serif-display);
   font-size: clamp(1.45rem, 3vw, 2.6rem);
-  opacity: 0.55;
+  opacity: 0.32;
   text-shadow: 0 0.7rem 1.6rem color-mix(in srgb, var(--fg-base) 16%, transparent);
-  animation: cover-note-drift 6.8s var(--cover-carousel-ease, cubic-bezier(0.16, 1, 0.3, 1)) infinite;
 }
 
 .cover-floating-note--one { left: 22%; top: 24%; }
@@ -307,30 +289,16 @@ html.dark .cover-music-field__engraving {
   left: 73%;
   top: 28%;
   color: var(--cover-music-blue);
-  animation-delay: -1.7s;
 }
 .cover-floating-note--three {
   left: 66%;
   top: 68%;
   color: var(--cover-music-sage);
-  animation-delay: -3.4s;
 }
 .cover-floating-note--four {
   left: 31%;
   top: 70%;
   color: var(--cover-music-rose);
-  animation-delay: -5.1s;
-}
-
-@keyframes cover-note-drift {
-  0%, 100% {
-    opacity: 0.24;
-    transform: translate3d(0, 0.8rem, 0) rotate(-6deg);
-  }
-  42% {
-    opacity: 0.76;
-    transform: translate3d(0.8rem, -1.2rem, 0) rotate(8deg);
-  }
 }
 
 /* =============================================================================
@@ -469,16 +437,16 @@ html.dark .cover-music-field__engraving {
     left: 64%;
     top: 38%;
     width: 135vw;
-    opacity: 0.5;
+    --cover-music-detail-opacity: 0.5;
     /* 小屏唱片占 field 比例更大（右缘 ~77%），衰减起点后移避免削到唱片。 */
     -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent 100%);
     mask-image: linear-gradient(90deg, #000 82%, transparent 100%);
   }
   html.dark .cover-music-field {
-    opacity: 0.5;
+    --cover-music-detail-opacity: 0.5;
   }
   html:not(.dark) .cover-music-field {
-    opacity: 0.62;
+    --cover-music-detail-opacity: 0.62;
   }
   .cover-music-field__disc {
     width: 18rem;

@@ -232,9 +232,31 @@
   </div>
 </article>
 
-{{/* ============================================================
-   其他 section：保留原有「左文字 + 右媒体」列表卡
-   ============================================================ */}}
+{{/* friends：沿用 Blowfish 卡片外观与外链箭头，补充友链头像。
+     头像使用本地页面资源及主题已有圆形图片工具类。 */}}
+{{ else if eq $page.Section "friends" }}
+<article class="article-link--card relative min-h-full min-w-full overflow-hidden rounded-lg border border-neutral-300 dark:border-neutral-600">
+  <div class="p-4 flex items-start gap-4">
+    {{ with $page.Resources.GetMatch ($page.Params.avatar | default "avatar.*") }}
+      {{ $avatar := .Fill "64x64 webp" }}
+      {{ $avatar2x := .Fill "128x128 webp" }}
+      <img src="{{ $avatar.RelPermalink }}" srcset="{{ $avatar.RelPermalink }} 1x, {{ $avatar2x.RelPermalink }} 2x" alt="{{ $page.Title }}的头像" width="64" height="64" loading="lazy" decoding="async" class="not-prose w-16 h-16 rounded-full object-cover flex-none">
+    {{ end }}
+    <div class="min-w-0">
+    <header>
+      <a {{ with $page.Params.externalUrl }}href="{{ . }}" target="_blank" rel="external noopener noreferrer"{{ else }}href="{{ $page.RelPermalink }}"{{ end }} class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
+        <h2>{{ .Title | emojify }}{{ if .Params.externalUrl }} <span class="cursor-default align-top text-xs text-neutral-400 dark:text-neutral-500"><span class="rtl:hidden">&#8599;</span><span class="ltr:hidden">&#8598;</span></span>{{ end }}</h2>
+      </a>
+    </header>
+    {{ if .Params.showSummary | default (.Site.Params.list.showSummary | default false) }}
+    <div class="article-link__summary prose dark:prose-invert mt-1 line-clamp-5">{{ .Summary | plainify }}</div>
+    {{ end }}
+    </div>
+  </div>
+  <div class="px-6 pt-4 pb-2"></div>
+</article>
+
+{{/* 其他 section：保留原有「左文字 + 右媒体」列表卡。 */}}
 {{ else }}
 <article
   class="article-link--card relative min-h-full min-w-full overflow-hidden rounded-lg border border-neutral-300 dark:border-neutral-600{{ if $hasMedia }} has-media{{ end }}">

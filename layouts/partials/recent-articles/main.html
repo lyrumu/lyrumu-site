@@ -1,0 +1,9 @@
+{{ if .Site.Params.homepage.showRecent | default false }}
+  <h2 class="mt-8 text-2xl font-extrabold mb-10">
+    <button id="home-feed-toggle" class="home-feed-toggle" type="button" disabled aria-controls="home-articles" aria-label="Show Popular articles" aria-pressed="false">
+      <span data-feed-label>Recent</span><span data-feed-icon hidden aria-hidden="true">⇄</span>
+    </button>
+  </h2>
+  <p id="home-feed-status" class="home-feed-status" role="status" hidden></p>
+  {{ partial "recent-articles/cardview.html" . }}
+{{ end }}

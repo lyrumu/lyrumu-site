@@ -1,0 +1,19 @@
+{{/* Recent 只按发布日期排序；Popular 复用候选文章已有的 Firebase 计数。
+     ponytail: 首页携带全部候选卡片；文章规模明显增大时改用预计算榜单。 */}}
+{{ $pages := (where .Site.RegularPages "Type" "in" .Site.Params.mainSections).ByDate.Reverse }}
+{{ $limit := .Site.Params.homepage.showRecentItems | default 6 }}
+<section id="home-articles" class="home-recent-grid w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3" data-limit="{{ $limit }}">
+  {{ range $index, $page := $pages }}
+    <div data-home-article{{ if ge $index $limit }} hidden{{ end }}>
+      {{ $page.Scratch.Set "listCardIndex" $index }}
+      {{ partial "article-link/card.html" $page }}
+      {{/* 未显示计数的文章仍使用原生计数 ID，只读取、不增加文章访问量。 */}}
+      {{ if or $page.Params.externalURL (not ($page.Params.showViews | default site.Params.article.showViews)) }}
+        <span hidden>{{ partial "meta/views.html" $page }}</span>
+      {{ end }}
+      {{ if or $page.Params.externalURL (not ($page.Params.showLikes | default site.Params.article.showLikes)) }}
+        <span hidden>{{ partial "meta/likes.html" $page }}</span>
+      {{ end }}
+    </div>
+  {{ end }}
+</section>
