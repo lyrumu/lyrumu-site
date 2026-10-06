@@ -232,15 +232,18 @@ html.dark .music-player {
 
 @media (max-width: 540px) {
   .music-player {
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr);
     gap: 0.6rem;
     padding: 0.55rem 0.7rem;
-    bottom: 0.5rem;
+    bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
   }
   .music-player-cover { width: 2.1rem; height: 2.1rem; border-radius: 9999px; }
   .music-player-artist { display: none; }
-  .music-player-btn { width: 1.8rem; height: 1.8rem; }
-  .music-player-btn.is-primary { width: 2.3rem; height: 2.3rem; }
+  .music-player-controls { grid-column: 1 / -1; justify-content: flex-end; }
+  .music-player-btn,
+  .music-player-btn.is-primary { width: 2.75rem; height: 2.75rem; }
+  .music-player-progress { height: 1.5rem; background: transparent; }
+  .music-player-progress::-webkit-slider-thumb { opacity: 1; }
 }
 
 /* 播放列表空态 */
@@ -267,6 +270,9 @@ html.dark .music-player {
 /* 播放器激活时给 body 一点底部 padding，避免内容被遮挡 */
 body:has(.music-player.is-visible) {
   padding-bottom: 5rem;
+}
+@media (max-width: 540px) {
+  body:has(.music-player.is-visible) { padding-bottom: calc(9rem + env(safe-area-inset-bottom, 0px)); }
 }
 
 /* =============================================================================

@@ -256,6 +256,25 @@ html.dark .site-menu-group {
 .site-menu-group--desktop[data-enhanced]:not(.is-expanded) > summary .site-menu-group__chevron { transform: rotate(0deg); }
 .site-menu-group--mobile > summary { justify-content: space-between; }
 .site-menu-group--mobile > .site-menu-group__panel { padding-top: 0.4rem; }
+/* 扩大触屏命中区，负边距保持现有图标位置与顶栏宽度。 */
+.site-mobile-actions > button,
+.site-mobile-actions > a,
+.site-mobile-actions > label {
+  min-height: 2.75rem;
+  padding: 0.5rem;
+  margin-inline: -0.5rem;
+}
+.site-mobile-actions > input:focus-visible + label {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 0.35rem;
+}
+#mobile-menu { overscroll-behavior: contain; }
+#mobile-menu nav > div > a { min-height: 2.75rem; }
+/* 与主题 md = 853px 一致；横屏切回桌面导航后释放滚动。 */
+@media (max-width: 852px) {
+  html:has(#mobile-menu-toggle:checked) { overflow: hidden; }
+}
 @media (prefers-reduced-motion: reduce) {
   .site-menu-group { --menu-duration: 0ms; }
   .site-menu-group__chevron,

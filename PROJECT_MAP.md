@@ -47,6 +47,7 @@
 | 调主题切换动画节奏 / 斜线角度 / 时长 | [`assets/css/_11_theme-transition.css`](file:///f:/Notes
 | 改顶栏左侧品牌标识样式 | [`layouts/partials/header/basic.html`](file:///f:/Notes/layouts/partials/header/basic.html) + [`assets/css/_02_chrome.css`](file:///f:/Notes/assets/css/_02_chrome.css) 的 `.site-brand-badge` |
 | 改顶栏的菜单项 | `hugo.toml` 的 `[[menu.main]]`：ABOUT ME 用 `identifier = 'about'`，个人介绍 / 友情链接 / DAILY 用 `parent = 'about'`；DOCS / WORKS 保留直接入口 |
+| 改移动导航命中区 / 滚动隔离 | `mobile-menu.html` 的 `.site-mobile-actions`、原生 checkbox 和 `#mobile-menu`；`_02_chrome.css` 扩大命中区，开关保留键盘焦点，菜单内独立滚动，≤852px 开启时锁定根滚动，与主题 `md = 853px` 同步 |
 | 改顶栏子菜单交互与样式 | `layouts/partials/header/components/menu-group.html` 供桌面、移动端复用原生 `details`，子项仅显示图标与标题；`assets/js/header-menu.js` 管理桌面 hover / 焦点 / Escape / 外部点击，移出延迟 150ms、过渡时长后关闭，由 `extend-head.html` 加载；`assets/css/_02_chrome.css` 的 `.site-menu-group` 定义 12rem、16px 圆角的半透明玻璃浮层，28px 背景模糊与细亮边；240ms 双向过渡从主项下方舒展 / 缩回，展开和收回使用不同缓动，减少动态效果时关闭位移、缩放和模糊动画。桌面 ABOUT 与 DOCS / WORKS 共用 hover 强调色，展开不另加下划线；鼠标移动到子菜单或连接空隙时，ABOUT 保持该颜色 |
 | 改 DOCS/WORKS/DAILY 首页标题样式 | [`assets/css/_04_hero.css`](file:///f:/Notes/assets/css/_04_hero.css) 的 `.page-hero` 系列规则（2026-07-03 重构：左对齐+缩小+消除顶部空白） |
 | 改 Umami 统计配置 | [`hugo.toml`](file:///f:/Notes/hugo.toml) 的 `[params.umamiAnalytics]` |
@@ -246,7 +247,7 @@ f:\Notes\
 - Recent 在每次 Hugo 构建时通过 `RegularPages` 读取 `[params].mainSections`，只按发布日期倒序显示六篇（数量由 `showRecentItems` 控制），忽略 weight，首页隐藏置顶徽标；修改正文、lastmod 或 dateUpdated 不会自动提前。DOCS 列表的置顶规则保留。
 - 点击标题可切换 Popular，再点击回到 Recent；`assets/js/home-feed.js` 从全部候选卡片的原生 Firebase 计数计算 `views + likes × 10`，同分按发布日期排序，取六篇。复用既有统计监听，不另建数据库查询或写入；当前候选全部随首页生成，新增文章后自动纳入。更新计数时保留榜单内的键盘焦点，焦点文章退出榜单时将焦点交回切换按钮。计数未就绪时保留 Recent 并提示加载，15 秒仍不完整则提示不可用，支持重试；无 JS 保留最近六篇，切换按钮禁用。真实 Firebase 排名与完整页面体验需在部署后核对。
 - 桌面保留一屏左侧文字和音乐底片，封面随正常页面滚动离开；音乐层仅作最多 48px 的滚动视差。盘面静态彩色渐变与轨道保持方向，两个音符以 32 / 47 秒沿轨道游走，四个音符以 12 秒周期错峰浮起、消散；右侧 hover 提供最多 ±12px 分层视差，移出后平滑复位，离屏与后台暂停。没有扫光、sticky 停留、放大、负边距叠层、根元素滚动锁或输入拦截。
-- 手机、减少动态效果与无 JS 环境使用静态首屏和正常内容网格；近期内容锚点始终为 `#home-recent`。所有模式都不创建额外过渡高度。
+- 手机、减少动态效果与无 JS 环境使用静态首屏和正常内容网格；≤980px 且高度 ≤500px 的触控横屏也使用紧凑静态排版，避免文字与滚动提示重叠。手机音乐底片以纵向 mask 渐隐至同色背景，保留至少一屏高度、清晰文字与入口。近期内容锚点始终为 `#home-recent`。所有模式都不创建额外过渡高度。
 - 滚动提示沿用原生平滑锚点与焦点跳转；`_16_cover-scroll.css` 抵消 Recent 内边距和标题上边距的叠加，使标题落在顶栏下方。桌面滚动时，`cover-scroll.js` 复用 rAF，累积 1px 位移后判定方向，停止滚动时保留意图：向下进入 Recent 时只有封面（包括文字）按退出进度模糊；向上回封面时只有 Recent 整块卡片模糊，封面的磨砂层同步关闭。进入的一侧立即清晰，退出的一侧用 200ms CSS 过渡和最多 12px 模糊、轻微淡化；不再延迟到临近视口边缘才模糊。手机、减少动态效果及无 JS 保留静态衔接，不改变内容读取与链接。
 - `home/custom.html` 编排封面与近期内容；`home/cover-intro.html` 只渲染卷首语和滚动提示；镜头逻辑、专属 CSS 仍仅首页加载。
 
@@ -311,6 +312,8 @@ f:\Notes\
 | 资源存放约定 | `static/life/music/<slug>.mp3` + `static/image/life/music/<slug>.jpg` | — |
 
 **分页配置**：歌单超过 `$pageSize`（默认 7 首）时显示「加载更多」按钮。在 [`music-list.html`](file:///f:/Notes/layouts/shortcodes/music-list.html) 修改 `$pageSize` 变量即可调整每页数量。
+
+**窄屏适配**：≤640px 的模式 / 音量栏可换行；≤540px 播放器按钮独占第二行，按钮为 44px、滑块命中高度为 24px，底部和正文空间计入 `safe-area-inset-bottom`。播放、音量和存储继续由现有控制器处理。
 
 ### /about/ 页面内容
 

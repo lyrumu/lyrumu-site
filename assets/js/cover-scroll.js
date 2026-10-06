@@ -6,7 +6,7 @@
   const interaction = scene.querySelector("[data-cover-interaction]");
   const recent = document.getElementById("home-recent");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const compactLayout = window.matchMedia("(max-width: 720px)");
+  const compactLayout = window.matchMedia("(max-width: 720px), (max-width: 980px) and (max-height: 500px) and (pointer: coarse)");
   const coarsePointer = window.matchMedia("(hover: none), (pointer: coarse)");
   let frame = 0;
   let visible = true;

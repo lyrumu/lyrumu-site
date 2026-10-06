@@ -58,7 +58,8 @@
       });
     }
     group.addEventListener("focusout", function (event) {
-      if (!group.contains(event.relatedTarget) && !(desktop && group.matches(":hover"))) close();
+      // 触屏可能先失焦到空目标，再派发链接 click；此时不能提前隐藏子项。
+      if (event.relatedTarget && !group.contains(event.relatedTarget) && !(desktop && group.matches(":hover"))) close();
     });
     group.addEventListener("keydown", function (event) {
       if (event.key === "Escape" && group.open) {
