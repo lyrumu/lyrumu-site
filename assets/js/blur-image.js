@@ -1,7 +1,7 @@
 /* blur-image.js — 通用 LQIP blur-up 加载
    ---------------------------------------------------------------
    - 给 html 加 js-blurup class
-   - 监听 .blur-img[data-lqip] 和 .cover-card__bg-img[data-lqip] 的 load/error
+   - 监听 .blur-img（排除 data-cover-src）和 .cover-card__bg-img 的 load/error
    - 加载完成：给 img 和 .blur-img-wrapper 加 .is-loaded
    - 加载失败：给 img 加 .is-broken
    - 暴露 window.BlurImage.markLoaded(img) 供动态切换封面时调用
@@ -12,7 +12,7 @@
   function markLoaded(img) {
     var cur = img.currentSrc || img.src || "";
     if (cur.indexOf("data:image") === 0) {
-      // 当前仍是 LQIP：高清图由 srcset 异步加载，不手动改 src
+      // 有 srcset 时交给浏览器选图；没有时用 data-full-src 替换 LQIP。
       if (!img.getAttribute("srcset")) {
         var full = img.getAttribute("data-full-src");
         if (full && img.src !== full) img.src = full;
@@ -22,7 +22,7 @@
     img.classList.add("is-loaded");
     var wrapper = img.closest(".blur-img-wrapper");
     if (wrapper) wrapper.classList.add("is-loaded");
-    // 兼容 DOCS 卡片的旧容器名
+    // DOCS 封面卡使用独立的背景容器。
     var bg = img.closest(".cover-card__bg");
     if (bg) bg.classList.add("is-loaded");
   }
@@ -34,7 +34,7 @@
   }
 
   function init() {
-    // 封面延后图片由轮播脚本负责解码和揭示，失败时继续保留 LQIP。
+    // 带 data-cover-src 的图片不在这里接管，其余图片统一绑定加载反馈。
     document.querySelectorAll(".blur-img:not([data-cover-src]), .cover-card__bg-img").forEach(function (img) {
       img.addEventListener("error", function () {
         markBroken(img);

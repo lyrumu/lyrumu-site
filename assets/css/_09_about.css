@@ -7,7 +7,7 @@
      1. .about-profile / .about-avatar / .about-name / .about-role / .about-location
         — 头像 + 个人基本信息（从 inline style 抽出）
      2. .about-tags / .about-tag
-        — 技术栈药丸标签（蓝/紫/绿 三色分类，色值走 _tokens.css 变量）
+        — 技术栈熟练程度标签（蓝/紫/绿，色值走 _tokens.css 变量）
      3. .about-contact / .about-contact-glass / .about-contact-btn
         — iOS 18 液态玻璃卡片 + Simple Icons 按钮（仿 Control Center）
 
@@ -322,7 +322,7 @@
 /* =============================================================================
    技术栈标签
    ----------------------------------------------------------------------------
-   药丸标签：圆角 / 居中 / 字号 / 三色分类（蓝 = 开发工具 / 紫 = 语言与框架 / 绿 = AI）
+   药丸标签：圆角 / 居中 / 字号 / 熟练程度（蓝 = 熟练 / 紫 = 了解 / 绿 = 学习中）
    默认蓝色（.about-tag），用 --purple / --green 修饰类切换
    ============================================================================= */
 .about-tags {
@@ -375,10 +375,9 @@
    - 整体是一个毛玻璃卡片（backdrop-filter blur + saturate），不是单独的图标
    - 卡片大圆角（24px ≈ iOS 控件） + 顶部 1px 高光描边（立体感）
    - 单个图标按钮 = iOS 应用图标：圆角方（squircle） + 内部 icon 居中
-   - 图标本身用 Lucide 风格的细线条（stroke-width: 1.75），与下方 Simple Icons
-     风格的实心技术栈标签形成"硬标签 vs 软图标"的层次区分
-   - 品牌色只施加在 svg 本体（currentColor），按钮本体保持中性玻璃色
-   - 邮箱走 base64 + JS 解码，HTML 源码中无明文邮箱（防爬虫）
+   - 联系方式使用 assets/icons/ 下的 Simple Icons 实心品牌 SVG
+   - 品牌色来自 SVG 自带 fill，按钮本体保持中性玻璃色
+   - 邮箱按钮走 base64 + JS 解码；noscript 保留明文联系方式兜底
    ============================================================================= */
 
 .about-contact {
@@ -387,9 +386,8 @@
   flex-direction: column;
   align-items: center;
   gap: 0.85rem;
-  /* 在 .about-profile 里时清零 margin — 间距由 .about-avatar 的 margin-bottom: 1rem 控制 */
-  /* （放在 .about-profile 后面的兄弟位置 → 紧贴名字/角色/地点） */
-  /* 入场：从下方 12px 浮入并淡入 */
+  /* 嵌入 .about-profile 时由下方规则清零 margin，间距由头像行控制。 */
+  /* 入场：从下方 8px 浮入并淡入 */
   opacity: 0;
   transform: translateY(8px);
   animation: about-contact-rise 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s forwards;
@@ -398,8 +396,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 当 .about-contact 嵌在 .about-profile 里（头像正下方、名字上方）：
-   清零外 margin，间距由 .about-avatar 的 margin-bottom: 1rem 单独控制 */
+/* 联系方式位于头像行下方：清零外 margin，间距由 .about-profile-row 控制。 */
 .about-profile > .about-contact {
   margin: 0;
 }
@@ -674,7 +671,7 @@ html.dark .about-contact-btn:hover {
 
 /* 技术栈图例（2026-08-29 新增）
    ----------------------------------------------------------------------------
-   说明 .about-tags 三色分类（蓝 = 开发工具 / 紫 = 语言与框架 / 绿 = AI & 前沿）。
+   说明 .about-tags 熟练程度（蓝 = 熟练 / 紫 = 了解 / 绿 = 学习中）。
    圆点用标签同款底色 + 同色描边，light/dark 自动跟随 token 变量。
    ============================================================================= */
 .about-tags-legend {

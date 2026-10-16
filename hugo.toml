@@ -2,8 +2,10 @@
 # lyrumu's site — Hugo configuration
 # Theme: Blowfish · 部署 github&&Cloudflare Pages
 #   - 加新模块 = hugo.toml [[menu.main]] 加项 + content/<slug>/_index.md
-# 本地服务启动方式：
-# hugo server --themesDir themes --theme blowfish --config hugo.toml --bind 127.0.0.1 --port 8080（端口可选）
+# 本地服务启动方式：hugo server --port 8080（--port 可省，默认 1313）
+# 说明：theme 已于 2026-08-29 修复到本文件根级（见下方 theme 键），裸 `hugo` / `hugo server`
+#   即可正常加载主题。此前的 --themesDir themes / --theme blowfish / --config hugo.toml /
+#   --bind 127.0.0.1 四项均等于 Hugo 默认值，经构建产物对比实测为冗余，无需再传。
 # 本项目除了存在通过创建同名文件覆写部分themes外 还对themes文件本身做过改写 升级主题时要注意备份
 # =============================================================================
 
@@ -91,7 +93,7 @@ enableEmoji = true
   copyright = "All Rights Reserved © { year } lyrumu"
   copyrightStartYear = 2026
 
-  # 哪些 section 会出现在"最近更新" / 侧栏 quick links
+  # 首页 Recent / Popular 的候选页面类型（模板按 RegularPages.Type 筛选）
   mainSections = ['notes', 'life', 'works', 'about']
 
   defaultBackgroundImage = ''
@@ -115,7 +117,7 @@ enableEmoji = true
     mainSections = ['notes', 'works', 'life']
 
   # 列表页（/notes/ /works/ /life/ 等）的"列表卡片"行为
-  # （被 [params.homepage] 影响，但独立可控）
+  # 定制列表模板独立读取本节，不继承 [params.homepage]。
   [params.list]
     showHero = false
     showSummary = true

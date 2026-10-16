@@ -103,7 +103,7 @@
         audio.removeEventListener('canplay', onceC);
         view.showLoading(false);
       });
-      // 5s 兜底：万一 canplay 不触发（断网/异常），强制解除 loading 避免永久卡住
+      // error 事件到达时解除 loading；当前没有独立的超时兜底。
       audio.addEventListener('error', function onceE() {
         audio.removeEventListener('error', onceE);
         view.showLoading(false);
@@ -204,7 +204,7 @@
     }
 
     // MEDIA_ERR_ABORTED (code=1) = 用户主动 abort（切歌、暂停触发的取消请求），不是真错误
-    // code 2/3/4 = 网络/解码/格式问题，跳过当前曲避免死循环卡住
+    // 其他错误尝试下一曲；当前没有连续失败次数上限。
     function onAudioError() {
       var code = audio.error && audio.error.code;
       if (code === 1) return;

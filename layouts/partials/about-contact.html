@@ -6,8 +6,8 @@
     用 <p> 包裹 → 破坏 flex 布局（图标按钮变成块级段落竖排）
   - 通过 partial 渲染 = 纯 HTML 路径，不经过 markdown 解析器
 
-  邮箱用 base64 防爬虫：HTML 源码中只有 base64，明文邮箱由页面 JS 解码后写入 mailto 链接。
-  base64 不是真正的加密，仅作最低成本的反爬。
+  邮箱按钮使用 base64，JS 解码后生成网页邮箱链接；noscript 保留明文兜底。
+  base64 不是加密，不能据此认为源码中没有明文邮箱。
 
   调用方式（在 layouts/shortcodes/about-contact.html 里）：
     {{ partial "about-contact.html" . }}
@@ -63,10 +63,8 @@
 
 {{/*
   剪贴板反馈 Toast（QQ Mail 用）：
-  顶部居中的 iOS 风毛玻璃 pill，3 秒后自动消失。
-  - data-default-text：通用提示（"邮箱已复制"）
-  - data-success-text：复制成功时的提示（"已复制 x@qq.com"）
-  - showToast(el, text) 函数由下面的脚本调用
+  顶部居中的 iOS 风毛玻璃 pill，2400ms 后自动消失。
+  showToast(text) 接收复制成功或需要手动复制的提示。
 */}}
 <div class="copy-toast" id="copy-toast" role="status" aria-live="polite">
   <svg class="copy-toast-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>

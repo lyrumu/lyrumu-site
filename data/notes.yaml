@@ -1,14 +1,16 @@
 # =============================================================================
 # /notes/ 文章封面 / 图标配置
 # -----------------------------------------------------------------------------
-# 作用：为 DOCS 页每篇文章右侧提供自定义图片或降级图标。
+# 作用：为 DOCS 文章封面卡提供背景图片或降级图标。
 #
 # 读取优先级（在 layouts/partials/article-link/card.html 中实现）：
 #   1. items[].image（真实图片路径）
-#   2. 文章 frontmatter 中的 featureimage / *cover* / *thumbnail* 页面资源
-#   3. items[].icon（Lucide 图标名）
-#   4. 按 fallback_tag 或文章首个 tag 在 tag_icons 中匹配图标
-#   5. 默认图标（notebook）
+#   2. 文章 frontmatter 中的 featureimage / *feature* / *cover* / *thumbnail* 页面资源
+#   3. 站点默认封面（site.Store.defaultFeaturedImage）
+#   4. 无图片时使用 items[].icon（Lucide 图标名）
+#   5. 按 fallback_tag 或文章首个 tag 在 tag_icons 中匹配图标
+#   6. 默认图标（notebook）
+#   hideFeatureImage 会跳过第 2、3 项，不影响 items[].image。
 # -----------------------------------------------------------------------------
 # 图片存放约定（2026-08-05 起）：
 #   - 真实图片放在 assets/image/notes/<slug>.<ext>，然后写 image/notes/<slug>.<ext>

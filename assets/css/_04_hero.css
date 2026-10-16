@@ -91,7 +91,7 @@
   line-height: 1.4;
 }
 
-/* 复用 Splitting 的共享基础样式（由 _08_cover.css 提供 .splitting .word/.char） */
+/* Splitting 共享基础样式见本文件后部的 .splitting .word/.char。 */
 .page-title .word,
 .page-kicker .word { display: inline-block; vertical-align: bottom; }
 .page-title .char,

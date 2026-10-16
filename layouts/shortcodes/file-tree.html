@@ -15,7 +15,7 @@
 {{ $root := .Get "root" }}
 {{/*
   Hugo readDir 走的是相对 Hugo project 根的路径，所以传 "static/notes-assets/..."
-  URL 段：用 static/ 前缀，自动会被 Hugo 当作静态资源服务
+  URL 段：去掉磁盘路径的 static/ 前缀，从站点根路径访问
 */}}
 {{ $absRoot := printf "static/%s" $root }}
 {{ $urlRoot := printf "/%s" $root }}

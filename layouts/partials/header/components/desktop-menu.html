@@ -16,7 +16,7 @@
     {{ partial "header/components/a11y.html" (dict "prefix" "desktop-") }}
   {{ end }}
 
-  {{/* GitHub 项目链接（与 cover 里的"个人 GitHub"不同 — 这个是项目仓库本身） */}}
+  {{/* GitHub 项目仓库链接，地址来自 data/cover.yaml 的 repo_url。 */}}
   {{ $repoUrl := "" }}
   {{ with index hugo.Data "cover" "cover" }}{{ $repoUrl = .repo_url }}{{ end }}
   {{ if not $repoUrl }}{{ $repoUrl = "https://github.com/" }}{{ end }}

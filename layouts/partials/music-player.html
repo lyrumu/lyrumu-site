@@ -58,7 +58,6 @@
   - 6 个模块按依赖顺序 Concat 成 1 个 bundle（dom → storage → store → view → controller → 入口），
     再 Minify + Fingerprint：请求数 6 → 1，且内容变化自动生成新 URL 防旧缓存
   - 各模块均为挂 window.MusicPlayer 命名空间的 IIFE，Concat 顺序即原 <script> 顺序，行为等价
-  - 回滚：git restore static/js + 恢复 6 个 <script defer src="/js/music-player/*.js">
 */}}
 {{ $mpBundle := slice
   (resources.Get "js/music-player/dom.js")

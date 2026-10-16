@@ -1,8 +1,8 @@
 /* =============================================================================
-   store.js — 播放状态机（纯逻辑）
+   store.js — 播放状态与曲目选择
    ---------------------------------------------------------------------------
    只描述当前曲目 / 模式 / 随机顺序。提供 select / next / prev / cycleMode，
-   不碰 DOM、不碰 audio，便于单独写单元测试。
+   从曲目元素的 dataset / classList 读取信息，不操作 audio 或修改页面显示。
    ============================================================================= */
 (function (global) {
   'use strict';
@@ -27,7 +27,7 @@
   /**
    * 增强随机选择：从可用曲目中随机选一首，排除 recentHistory 中的曲目
    * - 当可用曲目足够多时（> SHUFFLE_HISTORY_SIZE），确保不选最近播放过的
-   * - 当曲目数不够时（如歌单很短），退化为普通随机
+   * - 排除历史后没有候选时，退回全部可用曲目中随机选择
    */
   function smartShufflePick(enabled, recentHistory) {
     // 过滤掉最近播放过的曲目
@@ -70,7 +70,7 @@
     function select(i) {
       if (i < 0 || i >= items.length) return false;
       state.curIndex = i;
-      // shuffle 模式：把选中的曲目从历史中移除（避免刚点选的歌马上又被随机到）
+      // 移除该曲的旧历史；下一次切歌时再将当前曲加入历史。
       if (state.mode === 'shuffle') {
         var hPos = state.recentHistory.indexOf(i);
         if (hPos >= 0) state.recentHistory.splice(hPos, 1);

@@ -7,10 +7,10 @@
 #   - title    : 歌名
 #   - artist   : 歌手（可空）
 #   - album    : 专辑（可空）
-#   - cover    : 封面图 url（推荐放到 /image/life/music/<slug>.jpg）
+#   - cover    : 封面资源路径（推荐 image/music/<slug>.webp，源图放 assets/image/music/）
 #   - src      : 30s 试听片段 url（推荐放到 /life/music/preview/<slug>.mp3）
-#   - duration : 时长（mm:ss），可空（前端会等 audio 加载后自动补上）
-#   - mood     : 心情标签（可空）
+#   - duration : 列表显示的时长（mm:ss）；播放器加载当前曲目后另用 audio.duration 显示实际时长
+#   - mood     : 心情记录（可空，当前模板不渲染）
 #   - note     : 一句话小记（可空）
 #   - links    : 外链列表，每条 { label, url }
 #                label 可选值：spotify / apple

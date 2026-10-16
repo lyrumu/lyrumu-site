@@ -1,13 +1,13 @@
 # 项目地图 — 个人网站 `f:\Notes\`
 
-> 最后更新：2026-10-05 · taxonomy 描述统一、友链页面入口与评论加载边界 · 本地验证 Hugo v0.164.0 · Blowfish v2.103.0
+> 最后更新：2026-10-16 · 注释与维护入口核对 · 本地验证 Hugo v0.164.0 · Blowfish v2.103.0
 
 ---
 
 ## 1. 这是什么
 
 一个基于 **本地 Obsidian Vault** 驱动的 **Hugo 静态站点**，部署在 **Cloudflare Pages**。
-所有文章用 Obsidian 写 → 跑同步脚本 → `git push` → 自动部署上线。
+页面内容位于 `content/`，可从 Obsidian 笔记整理迁入；Git 推送后由 Cloudflare Pages 自动部署。当前工作区不包含旧的 Vault 同步脚本。
 
 ---
 
@@ -34,10 +34,9 @@
 | 改 /life/music/ 的外链平台 / 精确 URL | [`data/music.yaml`](file:///f:/Notes/data/music.yaml) 的 `links[].url`；白名单是 `apple` + `spotify`（写在 [`music-list.html`](file:///f:/Notes/layouts/shortcodes/music-list.html)）；**Apple 推荐用 iTunes Search API 返回的精确 trackViewUrl** |
 | 改 /life/music/ 的合规声明 | [`content/life/music/_index.md`](file:///f:/Notes/content/life/music/_index.md) 末尾的 blockquote |
 | 换 /life/music/ 的封面/SVG 动画 | [`assets/css/_05_cards.css`](file:///F:/Notes/assets/css/_05_cards.css) 的 `.life-sub-cover-*` 规则 |
-| 换 /works/ 的子模块卡 | [`data/works.yaml`](file:///f:/Notes/data/works.yaml)（当前仅 projects；resources / tools 源文件暂不发布） |
-| 换 /works/projects/ 的项目卡 | [`data/projects.yaml`](file:///f:/Notes/data/projects.yaml)（加一条填 `- name/title/desc/cover/href/repo/tags/date/featured`） |
+| 换 /works/ 的作品卡与分类 | [`data/projects.yaml`](file:///f:/Notes/data/projects.yaml)（加一条填 `- name/title/category/page/desc/cover/href/repo/tags/date/featured`） |
 | 换 /works/resources/ 的资源卡 | [`data/resources.yaml`](file:///f:/Notes/data/resources.yaml)（加一条填 `- name/title/desc/cover/file/format/size/tags/date/source`） |
-| 改 /works/projects/ 的 3D 倾斜角度 | [`assets/css/_06_works-cards.css`](file:///F:/Notes/assets/css/_06_works-cards.css) 的 `.project-card` 或 shortcode 里的 `data-tilt-*` |
+| 改 Works 整卡链接与详情头部 | `projects-list.html` 的 `.project-card-link`；`layouts/page.html` 的 work 分支与 `layouts/partials/works/project-info.html` |
 | 加一个 Lucide icon | [`layouts/partials/cover/icon.html`](file:///f:/Notes/layouts/partials/cover/icon.html) 加 `else if` 分支 |
 | 改 /about/ 个人内容块（Now / Focus / Path） | [`content/about/_index.md`](file:///f:/Notes/content/about/_index.md) |
 | 改 /friends/ 友链页与条目 | `content/friends/_index.md` 控制页面文案、卡片列数与元信息；入口为 ABOUT ME 子菜单。沿用定制 `list.html` 与 `article-link/card.html`，条目使用 Blowfish 原生 `externalUrl`，按 `weight` 排序；友链分支沿用原生卡片外观，展示圆形头像、名称与简介 |
@@ -54,13 +53,14 @@
 | 配置 Giscus 评论（显示页面/主题/仓库） | `layouts/partials/extend-footer.html` 用 Hugo 页面类型限定 notes 普通文章及 About / Projects / Music；`assets/js/giscus-loader.js` 维护仓库、pathname 映射与主题切换；`layouts/partials/footer.html` 按当前页面调用，不能无区分缓存 |
 | 以后要启用 Blowfish 原生阅读数 / 点赞 | [`hugo.toml`](file:///f:/Notes/hugo.toml) 的 `showViews / showLikes` + `[firebase]`（原生方案推荐 Firebase） |
 | 看 Firebase 安全规则怎么配 | [`FIREBASE_SECURITY.md`](file:///f:/Notes/FIREBASE_SECURITY.md) |
+| 改计数离线保护与联网恢复 | `assets/js/firebase.js` 保留离线空快照保护并接收元数据事件；`assets/js/counter-cache.js` 提供超时缓存显示。必要回归为 `tests/firebase-override.test.cjs` 与 `tests/counter-cache.test.cjs`，已从忽略规则单独放行 |
 | 加一篇新文章 | 见下方 §4 |
 | 从独立 Obsidian Notes 整理文章 | 调用 `$notes-to-hugo` 并指定 `/Users/lyrumu/project/Notes` 下的源文件；Skill 位于 [`.agents/skills/notes-to-hugo/SKILL.md`](.agents/skills/notes-to-hugo/SKILL.md) |
 | 写 CSS（字体 / 颜色 / 间距） | 见下方 §3 · 选对模块文件 |
 | 改文章内容样式 | [`assets/css/_03_prose.css`](file:///F:/Notes/assets/css/_03_prose.css) |
 | 改文章作者位置 / 首屏信息间距 | `content/notes/_index.md` 的 `showAuthorBottom` cascade；实际文章模板为 `layouts/page.html`，排版在 `assets/css/_04_hero.css` |
-| 改页面 CSS / 动效库加载范围 | `layouts/partials/head.html` 分组 CSS；`layouts/partials/extend-head-uncached.html` 按当前 Page 加载 Splitting、VanillaTilt、首页镜头 |
-| 改分类 / 标签等 taxonomy 的页面与分享描述 | `layouts/partials/head.html` 统一解析 description，并替换 Hugo 原生 OG / Twitter 的描述字段；自定义 summary / description 优先于默认文案，其他分享字段保留；`tests/seo_check.py` 检查描述一致且不重复 |
+| 改页面 CSS / 动效库加载范围 | `layouts/partials/head.html` 分组 CSS；`layouts/partials/extend-head-uncached.html` 按当前 Page 加载 Splitting、Works 分类状态、首页镜头 |
+| 改首页 SEO 标题、taxonomy 与 DOCS 分页分享描述 | `content/_index.md` 的 `seoTitle` 仅改变首页 metadata 与分享标题，站名 / RSS 名称不变；`layouts/partials/head.html` 统一解析 description，同步首页、taxonomy 和 DOCS 分页的 OG / Twitter 描述，其他分享字段保留；`tests/seo_check.py` 检查标题与描述一致且不重复 |
 | 改 DOCS 文章的 Markdown 复制功能 | [`layouts/partials/article-copy-markdown.html`](layouts/partials/article-copy-markdown.html) + [`assets/js/article-markdown-copy.js`](assets/js/article-markdown-copy.js) + [`assets/css/_17_article-copy.css`](assets/css/_17_article-copy.css) |
 | 改文章图片点击放大行为 | [`layouts/partials/footer.html`](layouts/partials/footer.html) 的 `mediumZoom` 初始化 |
 | 改"亮色" / "暗色" 主题的 CSS | [`assets/css/_01_tokens.css`](file:///F:/Notes/assets/css/_01_tokens.css) 顶部 `:root`（亮）和 `html.dark`（暗）— **v3 后是唯一调色数据源**，改一处全局生效（封面 + 卡片 + blowfish utility 全部跟着变） |
@@ -93,8 +93,8 @@ f:\Notes\
 │   │   ├── _02_chrome.css          # ★ footer / 主菜单 / scroll-to-top / 分页 / TOC
 │   │   ├── _03_prose.css           # ★ 长文章 .prose + reveal 滚动入场
 │   │   ├── _04_hero.css            # ★ 内页 page-hero + 面包屑 + single 页头
-│   │   ├── _05_cards.css           # ★ module / vault / article-link / life / music-list / works-sub / file-tree / section-rule
-│   │   ├── _06_works-cards.css     # ★ projects (3D 倾斜) + resources (瀑布流)
+│   │   ├── _05_cards.css           # ★ module / vault / article-link / life / music-list / file-tree / section-rule
+│   │   ├── _06_works-cards.css     # ★ projects (整卡链接 + 详情页) + resources (瀑布流)
 │   │   ├── _07_music-player.css    # ★ 全局音乐播放器 + copy-toast
 │   │   ├── _08_cover.css           # ★ 首页全屏封面壳层（紧凑顶部信息带 + 音乐唱片底片）
 │   │   ├── _09_about.css           # ★ About 页（profile + Now/Focus/Path + 标签 + 液态玻璃联系方式）
@@ -110,6 +110,7 @@ f:\Notes\
 │   └── js/                         # ★ 项目级 JS（2026-07-22 从 static/js 迁入，走 Pipes Minify+Fingerprint）
 │       ├── theme-transition.js     # 主题切换斜向擦除（extend-head.html 引用）
 │       ├── header-menu.js          # 顶栏原生折叠菜单的鼠标悬停与关闭交互（extend-head.html 引用）
+│       ├── works-filter.js          # 仅 Works 列表：分类 hash 与返回状态恢复
 │       ├── blur-image.js            # 通用 LQIP 切换 + 失败降级（extend-head.html 引用）
 │       ├── cover-scroll.js          # 仅首页：滚动 / 鼠标轻微视差与离屏暂停，不接管滚轮或触屏
 │       ├── site-stats-days.js      # 站点在线天数前端校正（site-stats.html 引用）
@@ -118,16 +119,19 @@ f:\Notes\
 │                                   #   ↳ music-player.html 里 Concat 成 1 个 bundle 引用
 │
 ├── archetypes/
-│   └── notes.md                    # `hugo new ... --kind notes` 的文章模板
+│   ├── notes.md                    # `hugo new ... --kind notes` 的文章模板
+│   └── work.md                     # 独立作品模板：type work，默认草稿，不继承 Notes 分类
 │
 ├── content/                        # ★ 所有页面内容
 │   ├（待整理）
 │   ├── friends/_index.md           # /friends/ 友链列表；从 ABOUT ME 进入，复用原生外链字段与定制卡片
 │   ├── notes/                      # /notes/ 文章入口（layout:list + list.html 卡片列表）
 │   │   └── _index.md               # notes 入口页（正文 + 自动文章列表 + cascade 控制后代文章的 taxonomy/edit/pagination）
-│   ├── works/                      # /works/ 相关（当前发布 Projects）
-│   │   ├── _index.md               # 入口（works-grid 短代码）
-│   │   ├── projects/_index.md      # 项目子页（projects-list 短代码 + 3D 倾斜）
+│   ├── works/                      # /works/ 作品分类列表（Project / Demo）
+│   │   ├── _index.md               # projects-list：整卡进入详情，默认 Project
+│   │   ├── pi-diff/index.md         # README 快照与本地截图资源
+│   │   ├── musicpocket/index.md     # README 快照与本地封面资源
+│   │   ├── linear-algebra-calculator/index.md # README 快照
 │   │   ├── resources/_index.md     # 资源子页源文件（build.render: never，待有内容再发布）
 │   │   └── tools/_index.md         # 工具子页源文件（build.render: never，待有内容再发布）
 │   ├── life/                       # /life/ 生活（可扩展子模块网格）
@@ -138,17 +142,15 @@ f:\Notes\
 ├── data/                           # ★ 数据驱动（改这里就能改 UI）
 │   ├── cover.yaml                  # 首页首帧文案 / masthead 信息 / show_stats + 全站导航 avatar / 顶栏 GitHub repo_url
 │   ├── about_timeline.yaml         # ABOUT ME 的 Path so far 里程碑（文字 / 顺序 / 可选图片）
-│   ├── vault.yaml                  # 旧版 /notes/ 分类卡数据（当前前台未使用，保留作历史参考）
 │   ├── life.yaml                   # /life/ 子模块清单（music / 图片 / 读书…）
 │   ├── music.yaml                  # /life/music/ 歌单
 │   ├── site.yaml                   # 站点 launch_date（只填一次；site-stats 用它计算在线天数）
-│   ├── works.yaml                  # /works/ 子模块清单（projects / resources / tools…）
-│   ├── projects.yaml               # /works/projects/ 项目清单
+│   ├── projects.yaml               # /works/ 作品清单（category: project / demo）
 │   ├── resources.yaml              # /works/resources/ 资源清单
 │   └── notes.yaml                  # /notes/ 每篇文章的封面图 / 降级图标配置 + tag_icons 映射（图片在 assets/image/notes/）
 │
 ├── layouts/                        # ★ 自定义模板（覆写主题）
-│   ├── _default/list.html          # section 主页 → page-hero + 正文 + 子页面列表（notes/about 当前走这里）
+│   ├── _default/list.html          # 栏目入口 → page-hero + 正文 + 子页面列表（notes/friends/about/works/life/music）
 │   ├── _default/_markup/render-image.html # 正文 Markdown 图片：响应式 WebP + 24px LQIP blur-up
 │   ├── page.html                   # kind=page 的项目级模板；当前 notes 普通文章也命中这里，taxonomy/edit/pagination 需在此补回
 │   ├── partials/
@@ -156,7 +158,7 @@ f:\Notes\
 │   │   │                           #  原因：CSS `@import` 在 Hugo Pipes 不展开（详见 §8 踩坑提醒）
 │   │   │                           #  改为：resources.Match "css/_*.css" + Concat
 │   │   ├── article-pagination.html  # 项目级覆写上一篇/下一篇结构（保留逻辑，只改样式挂钩）
-│   │   ├── article-link/card.html  # 项目级覆写文章卡：notes 走影像阴影式封面卡，其他 section 走左文字+右媒体横向卡
+│   │   ├── article-link/card.html  # notes 封面卡、friends 头像卡及横向卡；首图标志由列表显式传入，不写共享 Scratch
 │   │   ├── cover/icon.html         # Lucide SVG icon 字典
 │   │   ├── cover/page-hero.html    # 内页"小封面" partial
 │   │   ├── header/basic.html        # 全站顶部品牌徽章（导航头像 + 站点标题 + 桌面/移动菜单装配）
@@ -168,37 +170,31 @@ f:\Notes\
 │   │   │   ├── menu-group.html     # 桌面 / 手机共享的原生 details 子菜单
 │   │   │   └── mobile-menu.html    # 加 GitHub 按钮
 │   │   ├── extend-head.html        # 全站共享脚本与 IO reveal（按 Site 缓存）
-│   │   ├── extend-head-uncached.html # 按 Page 加载 Splitting、VanillaTilt 与首页镜头
+│   │   ├── extend-head-uncached.html # 按 Page 加载 Splitting、Works 分类状态与首页镜头
 │   │   ├── extend-footer.html      # Giscus 按 Hugo 页面类型加载（notes 普通文章 + 独立页面白名单，列表/分页不加载）；JS 负责配置与主题适配
 │   │   ├── music-player.html       # 粘性音乐播放器（被 music-list 自动注入）
 │   │   └── about-contact.html      # /about/ 联系方式图标卡 partial（被 about-contact shortcode 调）
 │   └── shortcodes/
 │       ├── page-hero.html          # {{< page-hero >}} 短代码
-│       ├── vault-sections.html     # 旧版 /notes/ 分类网格（当前前台未使用）
 │       ├── life-grid.html          # /life/ 子模块网格
 │       ├── music-list.html         # /life/music/ 歌曲列表
-│       ├── works-grid.html         # /works/ 子模块网格
-│       ├── projects-list.html      # /works/projects/ 项目列表（3D 倾斜）
+│       ├── projects-list.html      # /works/ 分类作品列表（整卡站内链接）
 │       ├── resources-list.html     # /works/resources/ 资源列表（瀑布流）
 │       ├── file-tree.html          # 可折叠文件树
 │       ├── about-contact.html      # /about/ 联系方式图标卡（壳）
 │       ├── site-stats.html         # 站点统计 shortcode 壳（实际渲染委托给 partial）
 │       └── section-rule.html       # ✦ 分隔符
-├── scripts/                        # ★ 运维脚本
-│   └── vault-to-hugo.ps1           # Vault → Hugo 同步（日常使用）
-│
 ├── static/                         # 静态资源
 │   ├── _headers                    # Cloudflare Pages 静态响应安全头
 │   ├── _redirects                  # Cloudflare Pages 旧 URL 301 重定向
 │   ├── fonts/                      # 字体文件（本地化）
 │   ├── js/                         # ★ 仅第三方 JS（版本固定，无需指纹）
-│   │   ├── splitting.min.js        # Splitting.js 字符分割
-│   │   └── vanilla-tilt.min.js     # VanillaTilt.js 3D 倾斜
+│   │   └── splitting.min.js        # Splitting.js 字符分割
 │   ├── image/                      # 稳定 URL 图片（导航头像 / music 页装饰 / 小提琴蚀刻纹等）
 │   │   │                           # 注：/notes/ 卡片封面图已迁到 assets/image/notes/（2026-08-05）
 │   │   ├── life/music/             # /life/music/ 封面（用户自行放入）
-│   │   └── works/                  # /works/ 子模块封面
-│   │       ├── projects/           # /works/projects/ 项目封面（用户自行放入）
+│   │   └── works/                  # 旧 Works 静态封面目录
+│   │       ├── projects/           # 旧项目封面位置；新图使用 assets/image/projects/
 │   │       └── resources/          # /works/resources/ 资源封面（用户自行放入）
 │   ├── life/music/                 # /life/music/ 30s 试听片段（fair use 抗辩）
 │   ├── works-resources/            # /works/resources/ 下载文件（用户自行放入）
@@ -213,7 +209,9 @@ f:\Notes\
 │                                # 升级主题时优先看 [lyrumu 改造] 段，对比后再决定
 │                                # ⚠️ 例外 3：layouts/partials/vendor.html
 │                                # 被项目级 layouts/partials/vendor.html 覆盖（Firebase 加载范围
-│                                # 收紧为：首页 + notes 区 + term 页；2026-07-22）
+│                                # 收紧为：首页 + notes 区 + term 页；2026-07-22。2026-10-13 起
+│                                # SDK 改为 DOMContentLoaded 动态注入，避免 gstatic 被墙时堵住
+│                                # 后面的 defer 脚本；仍走 fingerprint + integrity）
 │                                # 升级主题时 diff 主题版，保留末尾 Firebase 段的 $firebaseNeeded 条件
 │
 ├── DONE.md                         # 当前技术变更与接手记录（结果/关键位置/验证边界）
@@ -245,7 +243,7 @@ f:\Notes\
 
 - 首屏文字、统计开关和导航头像仍维护在 `data/cover.yaml`；左侧不再重复输出作者链接或栏目索引。
 - Recent 在每次 Hugo 构建时通过 `RegularPages` 读取 `[params].mainSections`，只按发布日期倒序显示六篇（数量由 `showRecentItems` 控制），忽略 weight，首页隐藏置顶徽标；修改正文、lastmod 或 dateUpdated 不会自动提前。DOCS 列表的置顶规则保留。
-- 点击标题可切换 Popular，再点击回到 Recent；`assets/js/home-feed.js` 从全部候选卡片的原生 Firebase 计数计算 `views + likes × 10`，同分按发布日期排序，取六篇。复用既有统计监听，不另建数据库查询或写入；当前候选全部随首页生成，新增文章后自动纳入。更新计数时保留榜单内的键盘焦点，焦点文章退出榜单时将焦点交回切换按钮。计数未就绪时保留 Recent 并提示加载，15 秒仍不完整则提示不可用，支持重试；无 JS 保留最近六篇，切换按钮禁用。真实 Firebase 排名与完整页面体验需在部署后核对。
+- 点击标题可切换 Popular，再点击回到 Recent；`assets/js/home-feed.js` 从全部候选卡片的原生 Firebase 计数计算 `views + likes × 10`，同分按发布日期排序，取六篇。复用既有统计监听，不另建数据库查询或写入；当前候选全部随首页生成，新增文章后自动纳入。计数实时值优先，缺失时用 localStorage 缓存的上次值兜底（`home-feed-counts:v1`，按 span id 存），并提示 `Using counts from your last visit.`；实时到达后覆盖缓存。更新计数时保留榜单内的键盘焦点，焦点文章退出榜单时将焦点交回切换按钮。计数与缓存都缺失时保留 Recent 并提示加载，15 秒仍不完整则提示不可用，支持重试；无 JS 保留最近六篇，切换按钮禁用。真实 Firebase 排名与完整页面体验需在部署后核对。
 - 桌面保留一屏左侧文字和音乐底片，封面随正常页面滚动离开；音乐层仅作最多 48px 的滚动视差。盘面静态彩色渐变与轨道保持方向，两个音符以 32 / 47 秒沿轨道游走，四个音符以 12 秒周期错峰浮起、消散；右侧 hover 提供最多 ±12px 分层视差，移出后平滑复位，离屏与后台暂停。没有扫光、sticky 停留、放大、负边距叠层、根元素滚动锁或输入拦截。
 - 手机、减少动态效果与无 JS 环境使用静态首屏和正常内容网格；≤980px 且高度 ≤500px 的触控横屏也使用紧凑静态排版，避免文字与滚动提示重叠。手机音乐底片以纵向 mask 渐隐至同色背景，保留至少一屏高度、清晰文字与入口。近期内容锚点始终为 `#home-recent`。所有模式都不创建额外过渡高度。
 - 滚动提示沿用原生平滑锚点与焦点跳转；`_16_cover-scroll.css` 抵消 Recent 内边距和标题上边距的叠加，使标题落在顶栏下方。桌面滚动时，`cover-scroll.js` 复用 rAF，累积 1px 位移后判定方向，停止滚动时保留意图：向下进入 Recent 时只有封面（包括文字）按退出进度模糊；向上回封面时只有 Recent 整块卡片模糊，封面的磨砂层同步关闭。进入的一侧立即清晰，退出的一侧用 200ms CSS 过渡和最多 12px 模糊、轻微淡化；不再延迟到临近视口边缘才模糊。手机、减少动态效果及无 JS 保留静态衔接，不改变内容读取与链接。
@@ -281,8 +279,7 @@ f:\Notes\
 
 **说明：**
 
-- 当前前台的 `/notes/` 已不再使用 `data/vault.yaml + vault-sections.html` 这条旧链路
-- `vault.yaml` / `vault-sections.html` 目前保留在仓库里，主要用于历史参考；若以后确认不再回退，可再统一清理
+- 旧版 `data/vault.yaml` 与 `layouts/shortcodes/vault-sections.html` 已不在当前工作区；`/notes/` 由文章列表模板渲染。
 - `notes` 的 taxonomy / Edit Link / 上一篇下一篇不靠全局配置硬开，而是通过 `content/notes/_index.md` 的 `cascade` 只作用到 `notes` 后代文章
 - 分类由作者逐篇决定：`categories: [tutorials]`、`categories: [share-resources]` 或 `categories: [engineering-practice]`，每篇选一项；对应 Tutorials、Share & Resources、Engineering Practice。未决定时可留空。
 - 现有文章已分配到这三类；DOCS 顶部只列出这三类。分类通过文章字段维护，不新增 `content/categories` 栏目或空分类页；Hugo 继续根据实际文章生成原生 taxonomy 聚合页。
@@ -388,26 +385,20 @@ f:\Notes\
 | 菜单项 | `hugo.toml` → `[[menu.main]]` | 主题默认 |
 | GitHub 按钮 | `data/cover.yaml` → `repo_url` | [`desktop-menu.html`](file:///f:/Notes/layouts/partials/header/components/desktop-menu.html) / [mobile-menu.html](file:///f:/Notes/layouts/partials/header/components/mobile-menu.html) |
 
-### /works/ 子模块网格
+### /works/ 分类作品列表
 
-| 元素 | 数据源 | 模板 |
-|------|--------|------|
-| 子模块卡列表（当前仅 projects） | [`data/works.yaml`](file:///f:/Notes/data/works.yaml) | [`layouts/shortcodes/works-grid.html`](file:///f:/Notes/layouts/shortcodes/works-grid.html) |
-| 视觉 | **与 about/ 主入口的 module-card 同源**（完全复用 `_05_cards.css` 的 `.module-card` 样式） | — |
-| 独有元素 | `works-sub-tags`（标签列表）/ `works-sub-draft-badge`（准备中徽章） | [`assets/css/_05_cards.css`](file:///F:/Notes/assets/css/_05_cards.css) |
-| icon | `works.yaml` → `icon` | 走 `cover/icon.html` 解释为 Lucide SVG |
-| 加新子模块 | 在 `data/works.yaml` 加一条 + 在 `content/works/<id>/_index.md` 建子页 | — |
+原生单选框 + CSS 切换 `Project / Demo`，默认 Project。分类胶囊及数量徽章复用 `_14_docs-taxonomy.css`，数量按 `category` 自动统计。`works-filter.js` 仅在列表加载，恢复 `#project` / `#demo`，切换时更新当前地址且不跳动；无 JS 仍能手动切换。旧 `/works/projects/` 及其 RSS 保持 301。Works 全部页面不加载 Giscus。
 
-### /works/projects/ 项目列表
-
-| 元素 | 数据源 | 模板 |
-|------|--------|------|
-| 项目卡列表 | [`data/projects.yaml`](file:///f:/Notes/data/projects.yaml) | [`layouts/shortcodes/projects-list.html`](file:///f:/Notes/layouts/shortcodes/projects-list.html) |
-| 3D 倾斜 + 鼠标反光 | shortcode 里的 `data-tilt*` 属性（VanillaTilt.js） | [`assets/css/_06_works-cards.css`](file:///F:/Notes/assets/css/_06_works-cards.css) 的 `.project-card` + `.project-card::after`（含 `mix-blend-mode: multiply` 防反光洗文字）|
-| hover 揭示（tags + actions） | — | [`_06_works-cards.css`](file:///F:/Notes/assets/css/_06_works-cards.css) 的 `.project-card:hover .project-card-tags` 等 |
-| 项目按钮（在线 / 源码） | `href` / `repo` 字段 | [`_06_works-cards.css`](file:///F:/Notes/assets/css/_06_works-cards.css) 的 `.project-card-btn`（**v3 修复后是独立 `<a>`**，各自跳对应地址；默认 + hover 对比度均 ≥ AA 4.5:1）|
-| 入场淡入 | v2026-07-10 已移除 AOS（与 VanillaTilt transform 冲突）— 改为自然出现，无外部库 | — |
-| 资源存放约定 | `static/image/works/projects/<slug>.png` | — |
+| 元素 | 数据与入口 | 实现 |
+|------|------------|------|
+| 分类与整卡站内链接 | `data/projects.yaml` 的 `category` / `page` | `projects-list.html`；封面 `nozoom`，单一原生链接，无嵌套按钮 |
+| 卡片反馈 | `_06_works-cards.css` | 标签常显，整卡进入详情；边框、焦点与封面轻反馈，已移除倾斜库 |
+| 独立内容模板 | `archetypes/work.md`，`type: work` / `layout: page` | 原生 Hugo 内容页，复用站内文章模板、目录、代码复制、图片放大 |
+| 详情项目头部 | 数据中 `page` 对应当前 `.RelPermalink` | `works/project-info.html` 仅展示一个 GitHub 原文按钮；默认面包屑 Works 链接由项目级 `breadcrumbs.html` 补充分类 hash，不额外添加返回入口 |
+| README 正文与来源 | 各叶子 bundle 的 `index.md` / `readmeSource` | 默认 README 本地快照，来源 URL 固定到提交且仅供源文件维护；徽章保持原始图片与链接 |
+| 图片与徽章 | bundle 原图、`render-image.html` | 截图使用 WebP / srcset / LQIP；work 类型的 Shields 徽章输出行内 `nozoom` 图片，仍依赖外站可用性 |
+| 发现范围 | `type: work` 区分于 `works` 栏目 | 收录到站内搜索与 sitemap，不加入首页 Recent / Popular；无相关文章推荐 |
+| 日期 | 卡片数据 `date` / 内容 front matter `date` | 前者为项目首次提交年月，后者为站内快照创建日期，避免 RSS 零日期 |
 
 ### /works/resources/ 资源列表（暂不发布）
 
@@ -424,7 +415,6 @@ f:\Notes\
 | 元素 | 来源 | 说明 |
 |---|---|---|
 | 资源卡入场 fade-up + stagger | `assets/css/_06_works-cards.css` 的 `.resource-card[data-aos]` + `.aos-animate` | IntersectionObserver 内联实现；支持 `data-aos` / `data-aos-delay` / `prefers-reduced-motion`（AOS 已删除） |
-| 项目卡 3D 倾斜 | VanillaTilt.js 1.8.1 | `extend-head.html` 的 `window.load` 回调里，IntersectionObserver 延迟挂载 |
 
 ---
 
@@ -432,14 +422,15 @@ f:\Notes\
 
 | 事项 | 说明 |
 |------|------|
-| 本地预览 | `hugo server --themesDir themes --theme blowfish --config hugo.toml --bind 127.0.0.1 --port 1313` |
+| 本地预览 | `hugo server --port 8080`。`--themesDir` / `--theme` / `--config` / `--bind` 均等于 Hugo 默认值（`--theme` 已由 `hugo.toml` 根级声明），经产物对比实测为冗余。注意 `hugo server` 会把 `baseURL` 覆盖为 `http://localhost:<port>/`，因此本地预览的 canonical / JSON-LD / sitemap 绝对地址**不能**用于判断线上状态 |
 | 生产构建 | `hugo --minify --themesDir themes --theme blowfish --config hugo.toml` |
 | SEO 回归 | 构建至临时目录后运行 `python3 tests/seo_check.py <输出目录>`；优先级、扫描噪音与部署后检查见 `SEO_REPORT.md` |
 | SEO 模板 | `layouts/partials/head.html` 生成分面元数据并支持文章 `seoTitle`；`layouts/_default/term.html` 区分 Tag / Category / Series 的 H1；分享覆写位于 `layouts/partials/sharing-links.html` |
 | Cloudflare 响应头、重定向与邮箱分享 | `static/_headers` 添加基础安全头；`static/_redirects` 管理旧 URL；邮箱分享由 `sharing-links.html` 输出 Base64 `data-email`，再由 `email.js` 在客户端还原，不依赖 HTML 注释 |
-| vault 同步 | `powershell -File scripts/vault-to-hugo.ps1` 或加 `-Watch` 持续监听 |
+| vault 同步 | 旧的 `scripts/vault-to-hugo.ps1` 不在当前工作区；不要直接使用历史同步命令。独立笔记迁移入口见 `notes-to-hugo` Skill |
 | 部署到 Cloudflare Pages | 详见 [DEPLOY.md](file:///f:/Notes/DEPLOY.md) |
 | 已知警告（Hugo + Blowfish 不兼容） | 正常，可忽略；详见 `.trae/rules/个人网站开发规则.md` |
+| 卡片图片加载优先级（2026-10-16 修复） | 首页、DOCS 与 term 列表用局部顺序显式传入 `dict context/isFirst`，不再读写共享 `listCardIndex`；年份分组不重置计数，分页内重新计数。仅首张卡片的 Notes 封面使用 `eager/high`，其余为 `lazy/low`；直接传 Page 的主题调用默认延后加载。`tests/seo_check.py` 检查实际图片顺序；连续三次构建的 72 个 HTML 完全一致，跨年分组与普通/宽屏四种 term 分支通过。线上加载表现待部署验证 |
 
 ---
 
@@ -580,16 +571,20 @@ hugo new content notes/<slug>/index.md --kind notes
 
 > 本节是「加新内容」的完整 SOP。日常参考够用；更长的示例 / 排错细节看上面的 §2 §4 §8。
 
-### 添加新项目（/works/projects/）
+### 添加与更新作品（/works/）
 
-1. **准备封面图**：放图到 `static/image/works/projects/<slug>.png`（推荐 16:9 比例）
+卡片、分类与仓库链接统一维护在 `data/projects.yaml`；详情正文与快照来源维护在作品 bundle，避免重复填写展示信息。模板继续使用独立 `archetypes/work.md`。
+
+1. **准备封面图**：放图到 `assets/image/projects/<slug>.png`（推荐 16:9 比例）
 2. **编辑 yaml**：在 [data/projects.yaml](file:///f:/Notes/data/projects.yaml) 加一条：
 
    ```yaml
    - name: "项目名"
      title: "English Subtitle"
+     category: project                  # project / demo
+     page: "/works/<slug>/"              # 对应 type: work 的内容页
      desc: "衬线斜体描述，1-2 行"
-     cover: "/image/works/projects/<slug>.png"
+     cover: "image/projects/<slug>.png"
      href: "https://demo.example.com"   # 可空（在线 demo）
      repo: "https://github.com/..."     # 可空（源码）
      tags: [tag1, tag2]                  # 技术栈标签
@@ -597,7 +592,16 @@ hugo new content notes/<slug>/index.md --kind notes
      featured: true                      # 加 FEATURED 角标（可选）
    ```
 
-3. **保存后** `hugo server` 刷新即可
+3. **创建原生作品内容页**：
+
+   ```sh
+   # 使用独立 work archetype 创建草稿。
+   hugo new content --kind work works/<slug>/index.md
+   ```
+
+4. 填写 `title` / `description`，保留 `type: work` / `layout: page`；`date` 是快照创建日期，项目首次提交年月单独填写到作品数据。将 `readmeSource` 填成具体提交的 GitHub README URL，再将 `draft` 改为 false。
+5. 适配默认 README：精简重复标题与介绍，保留正文、代码、许可和徽章；正文图片放进 bundle，相对链接按目标改为站内资源或来源提交。语言徽章链接 GitHub 对应版本，关键信息同时保留文字，避免外部徽章失效后空白。
+6. 更新时手动比对 GitHub 提交，同步正文、图片、`readmeSource` 和 `lastmod`，首提交与快照创建日期不变；构建时不联网同步。运行临时目录生产构建、`tests/seo_check.py` 与补丁检查，核对目录、图片及链接。
 
 ### 添加新资源（/works/resources/）
 
@@ -620,29 +624,11 @@ hugo new content notes/<slug>/index.md --kind notes
 
 4. **保存后** `hugo server` 刷新即可
 
-### 添加新子模块（如 /works/designs/）
-
-1. 在 [data/works.yaml](file:///f:/Notes/data/works.yaml) 加一条：
-
-   ```yaml
-   - id: designs
-     name: "设计"
-     title: "Designs · Posters & UI"
-     icon: "palette"                        # Lucide icon 名
-     desc: "偶尔做的小海报和 UI mockup。"
-     href: "/works/designs/"
-     tags: [design]
-   ```
-
-2. 新建 `content/works/designs/_index.md`（参考 [content/works/projects/_index.md](file:///f:/Notes/content/works/projects/_index.md) 或 [content/works/resources/_index.md](file:///f:/Notes/content/works/resources/_index.md)）
-3. 如果新子页有特定列表（如 designs 的画廊），参考 `music-list` / `projects-list` / `resources-list` 的模式写 shortcode + 数据文件
-4. **不需要改菜单**：`hugo.toml` 的 `[[menu.main]]` 已经包含 `/works/`，新子页通过 `/works/` 入口可达
-
 ### 微调视觉
 
 | 想调什么 | 改哪里 |
 |---|---|
-| 3D 倾斜角度 / 反光 / 缩放 | [layouts/shortcodes/projects-list.html](file:///f:/Notes/layouts/shortcodes/projects-list.html) 里的 `data-tilt-*` 属性 |
+| 卡片边框 / 焦点 / 封面缩放 | `assets/css/_06_works-cards.css` 的 `.project-card` 与 `.project-card-cover` |
 | 资源卡入场动画时长 / 触发距离 | `assets/css/_06_works-cards.css` 的 `.resource-card[data-aos]` transition + `extend-head.html` 的 IntersectionObserver `rootMargin` |
 | 卡片整体间距 / 圆角 / 边框 | [assets/css/_06_works-cards.css](file:///F:/Notes/assets/css/_06_works-cards.css) (projects / resources 共用) |
 | 瀑布流列数 | [`_06_works-cards.css`](file:///F:/Notes/assets/css/_06_works-cards.css) 的 `.resources-masonry { column-count: ... }` |
@@ -655,7 +641,7 @@ hugo new content notes/<slug>/index.md --kind notes
 - **date 格式**：`YYYY-MM`（如 `2026-05`）
 - **空数据**：`resources` / `projects` 为空时短代码会显示空态文案（"还没有项目" / "资源还在路上"），不会报错
 - **图片加载失败**：shortcode 用 `onerror` 兜底（封面图变淡显示），但建议还是补上正确路径
-- **a11y**：用户开启 `prefers-reduced-motion` 时资源卡 reveal 直接显示、不再有位移动画；3D 倾斜仍是 hover 触发（用户主动操作，合理）
+- **a11y**：用户开启 `prefers-reduced-motion` 时资源卡 reveal 直接显示、不再有位移动画；作品卡片减少动态效果时关闭封面缩放过渡
 
 ---
 
@@ -692,7 +678,7 @@ hugo new content notes/<slug>/index.md --kind notes
 - 不要跳号（`_12_` 用完才能用 `_13_`，不能直接跳到 `_20_`）
 
 **是否要拆 `_05_cards.css`**：
-当前 1041 行包含 6 类卡片（module / vault / article-link / life / music-list / works-sub / file-tree / section-rule），review 价值仍可接受。**只在行数超过 1500 或某个子模块独立维护时才拆**，届时建议按"使用场景"再拆：`cards-list.css`（列表型） + `cards-grid.css`（瀑布流） + `shortcodes.css`（file-tree / section-rule 这种工具型）。
+当前包含多类卡片（module / vault / article-link / life / music-list / file-tree / section-rule），review 价值仍可接受。**只在行数超过 1500 或某个子模块独立维护时才拆**，届时建议按"使用场景"再拆：`cards-list.css`（列表型） + `cards-grid.css`（瀑布流） + `shortcodes.css`（file-tree / section-rule 这种工具型）。
 
 ### 加新 CSS 模块的反模式（不要这样做）
 
@@ -718,7 +704,7 @@ cp assets/css/custom.css.bak.v2 assets/css/_99_all.css   # 复制原文件作为
 
 - `head.html` 的 `main.bundle` 保留共享样式；`_08_cover.css`、`_16_cover-scroll.css` 合为仅首页加载的 `cover.bundle`，`_10_music-darkside.css` 仅在使用 `music-list` 的页面加载。顺序为共享样式后加载页面样式；新共享规则不要写入这三个页面文件。
 - `_09_about.css` 仍包含首页也使用的 `site-stats` 和共享联系组件，不按文件名直接从其他页面移除；Splitting 基础和 `cover-fade` 关键帧放在共享 `_04_hero.css`。
-- `extend-head.html` 按 Site 缓存，只承载共享逻辑；页面级库放在 `extend-head-uncached.html`：Splitting 给栏目头部 / `page-hero`，VanillaTilt 给 `projects-list`，镜头只给首页。减少动态效果时不初始化倾斜。
+- `extend-head.html` 按 Site 缓存，只承载共享逻辑；页面级库放在 `extend-head-uncached.html`：Splitting 给栏目头部 / `page-hero`，Works 分类脚本仅给 `projects-list`，镜头只给首页。作品卡片已不加载倾斜库。
 - 首页音乐层视差只读取原生滚动进度，搜索浮层保留原生滚动；不锁根元素滚动，不拦截滚轮或触屏。封面仅约束超出的装饰，近期内容与页脚保持文档流。不要在限宽 `body` 上设置 overflow 裁剪，否则宽屏全屏封面会被截断。About 在 480px 以下纵排，页脚 RSS 使用明确的 SVG 尺寸，不依赖主题未编译的工具类。
 
 ### 版本与升级核对
