@@ -137,6 +137,7 @@
     '[role="button"]',
     'label',
     'summary',
+    '.site-menu-group--desktop', // 菜单留白也属于悬停区，避免上下移动时圆环反复缩放。
     '.project-card',
     '.module-card',
     '.article-link',
