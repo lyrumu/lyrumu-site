@@ -83,6 +83,10 @@ tests/*
 !tests/cover-scroll.test.cjs
 !tests/home-feed.test.cjs
 !tests/header-menu.test.cjs
+!tests/custom-cursor.test.cjs
+!tests/counter-cache.test.cjs
+!tests/firebase-override.test.cjs
+!tests/works-filter.test.cjs
 COVER_CAROUSEL_PLAN.md
 deploy-logs/
 Vault/

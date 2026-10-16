@@ -3,7 +3,7 @@
   --------------------------------------------------------------------------
   Blowfish 的官方扩展点：在 <head> 末尾插入内容。
   - 字体：本地化到 static/fonts/*（避免 Google Fonts CDN 不稳）
-  - Splitting.js / VanillaTilt.js：本地化到 static/，由 extend-head-uncached.html 按页面加载
+  - Splitting.js：本地化到 static/，由 extend-head-uncached.html 按页面加载
     原 jsDelivr CDN + SRI 已弃用，避免 npm republish 时 hash 失效 → CDN 拒载
   - AOS.js + aos.css 已于 2026-07-25 删除，改用 IntersectionObserver 内联实现
   --------------------------------------------------------------------------
@@ -13,15 +13,14 @@
   主题切换斜向擦除动画（DeepWiki 风格，2026-07-12）
   - 必须在 appearance.js 之后加载（appearance.js 在 head.html 中以普通 script 加载），
     所以这里用 defer 即可保证执行顺序在 appearance.js 之后。
-  - 通过 cloneNode(true) 替换 #appearance-switcher 按钮，清掉 appearance.js 绑定的
-    原 click 监听器，再用 document.startViewTransition 包裹 toggle。
-  - 不支持 View Transition API 的浏览器（Firefox / 旧 Safari）自动降级为普通切换。
+  - 在捕获阶段拦截主题按钮的 click，阻止 appearance.js 再次切换主题，
+    用 document.startViewTransition 包裹 toggle。
+  - 按 API 是否存在检测支持情况，不支持时降级为普通切换。
 */}}
 {{/*
   theme-transition.js（2026-07-22 起从 static/js 迁入 assets/js）
   - 走 Hugo Pipes：Minify + Fingerprint → 内容变化自动生成新 URL，解决
     static 固定 URL 的浏览器/CDN 旧缓存问题
-  - 回滚：git restore static/js + 把本段改回 <script src="/js/theme-transition.js" defer>
 */}}
 {{ $themeTransition := resources.Get "js/theme-transition.js" | resources.Minify | resources.Fingerprint "sha512" }}
 <script src="{{ $themeTransition.RelPermalink }}" integrity="{{ $themeTransition.Data.Integrity }}" defer></script>
@@ -38,10 +37,18 @@
 <script src="{{ $headerMenu.RelPermalink }}" integrity="{{ $headerMenu.Data.Integrity }}" defer></script>
 
 {{/*
-  统一管理动画库的初始化：
-  - 全部包装在 window.load 里，确保所有 defer 脚本加载完成
-  - AOS.init()：检测 prefers-reduced-motion
-  - VanillaTilt.init()：用 IntersectionObserver 延迟初始化，节省性能
+  counter-cache.js（2026-10-13）— 计数缓存显示
+  - 实时计数 15 秒内到达就用实时值，否则显示上次缓存的数字，不再一直 loading
+  - 不依赖 gstatic，直连时也能显示；与首页 Popular 共用同一份缓存
+  - 须在 extend-head-uncached 的 home-feed.js 之前执行（本 partial 先输出）
+*/}}
+{{ $counterCache := resources.Get "js/counter-cache.js" | resources.Minify | resources.Fingerprint "sha512" }}
+<script src="{{ $counterCache.RelPermalink }}" integrity="{{ $counterCache.Data.Integrity }}" defer></script>
+
+{{/*
+  全站搜索快捷键与资源卡 reveal 初始化：
+  - 包装在 window.load 里，确保所有 defer 脚本加载完成
+  - IntersectionObserver 揭示 [data-aos] 元素，并尊重 prefers-reduced-motion
 */}}
 <script>
 window.addEventListener("load", function () {
@@ -109,26 +116,7 @@ window.addEventListener("load", function () {
     }
   }
 
-  // ---------- VanillaTilt ----------
-  if (typeof VanillaTilt !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    // Avoid the library's automatic [data-tilt] initialization before this preference check.
-    var cards = document.querySelectorAll(".project-card[data-project-tilt]");
-    if (cards.length) {
-      if ("IntersectionObserver" in window) {
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (e) {
-            if (e.isIntersecting) {
-              VanillaTilt.init(e.target);
-              io.unobserve(e.target);
-            }
-          });
-        }, { rootMargin: "120px" });
-        cards.forEach(function (c) { io.observe(c); });
-      } else {
-        cards.forEach(function (c) { VanillaTilt.init(c); });
-      }
-    }
-  }
+
 });
 </script>
 

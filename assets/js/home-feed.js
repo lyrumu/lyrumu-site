@@ -1,4 +1,5 @@
-/* 首页 Recent / Popular：复用 Firebase 已更新的计数，不另建读写链路。 */
+/* 首页 Recent / Popular：复用 Firebase 已更新的计数，不另建读写链路。
+   实时计数不可用时（如 gstatic 被墙）用 counter-cache.js 的共用缓存兜底排序。 */
 (() => {
   const button = document.getElementById("home-feed-toggle");
   const grid = document.getElementById("home-articles");
@@ -11,6 +12,7 @@
     views: card.querySelector("span[id^='views_']"),
     likes: card.querySelector("span[id^='likes_']"),
   }));
+
   let popular = false, timer;
 
   function count(node) {
@@ -18,6 +20,14 @@
     if (!/^(\d+|\d{1,3}(,\d{3})+)$/.test(text)) return null;
     const value = Number(text.replaceAll(",", ""));
     return Number.isSafeInteger(value) ? value : null;
+  }
+
+  // 实时优先，缺失时退回 counter-cache.js 写入的共用缓存。
+  function value(node) {
+    const live = count(node);
+    if (live !== null) return live;
+    const cached = window.CounterCache && window.CounterCache.get(node);
+    return Number.isSafeInteger(cached) ? cached : null;
   }
 
   function message(text) {
@@ -45,8 +55,8 @@
 
   function update() {
     if (!popular) return;
-    const scores = counters.map(({ views, likes }) => {
-      const v = count(views), l = count(likes);
+    const scores = counters.map(pair => {
+      const v = value(pair.views), l = value(pair.likes);
       return v === null || l === null ? null : v + l * 10;
     });
     if (scores.includes(null)) return;
@@ -54,7 +64,8 @@
     const ranked = recent.map((card, index) => ({ card, index, score: scores[index] }))
       .sort((a, b) => b.score - a.score || a.index - b.index);
     show(ranked.map(item => item.card), "Popular");
-    message("");
+    const live = counters.every(pair => count(pair.views) !== null && count(pair.likes) !== null);
+    message(live ? "" : "Using counts from your last visit.");
   }
 
   const observer = new MutationObserver(update);

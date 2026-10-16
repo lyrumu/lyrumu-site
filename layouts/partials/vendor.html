@@ -1,8 +1,8 @@
 {{/*
   vendor.html — 覆盖 blowfish 主题版本（[lyrumu 改造]）
   --------------------------------------------------------------------------
-  与主题版 themes/blowfish/layouts/partials/vendor.html 完全一致，
-  唯一差异在文件末尾的 Firebase 段（搜索 "lyrumu 改造" 定位）：
+  相比 themes/blowfish/layouts/partials/vendor.html，修正 Mermaid / Chart / KaTeX
+  资源变量的重新赋值，并定制文件末尾的 Firebase 段（搜索 "lyrumu 改造"）：
     原版：只要 site.Params.firebase.apiKey 存在，全站每个页面都加载 firebase.min.js
     新版：只在真正渲染 views_/likes_ span 的页面加载（首页 / notes 区 / term 页）
 
@@ -185,7 +185,32 @@
 {{ if and site.Params.firebase.apiKey $firebaseNeeded }}
   {{ $firebase := resources.Get "js/firebase.js" }}
   {{ $firebase = $firebase | resources.Minify | resources.Fingerprint (site.Params.fingerprintAlgorithm | default "sha512") }}
-  <script type="module" src="{{ $firebase.RelPermalink }}" integrity="{{ $firebase.Data.Integrity }}"></script>
+  {{/*
+    [lyrumu 改造] 动态注入 Firebase，避免堵住后面的 defer 脚本（2026-10-13）
+    --------------------------------------------------------------------------
+    firebase.js 从 gstatic.com 静态 import SDK。国内直连 gstatic 被墙时，静态
+    <script type="module"> 会一直不 ready，而 module 与普通 defer 脚本共用同一条
+    按文档顺序执行的队列 → 排在它后面的 blur-image / cover-scroll / home-feed
+    全部被卡住（模糊动画消失、Recent/Popular 按钮失效），DOMContentLoaded 也延迟。
+    改为运行时注入：动态脚本默认 async，不参与该队列，gstatic 卡住只影响计数本身。
+  */}}
+  <script>
+    (function () {
+      function load() {
+        var s = document.createElement("script");
+        s.type = "module";
+        s.src = "{{ $firebase.RelPermalink }}";
+        s.integrity = "{{ $firebase.Data.Integrity }}";
+        document.head.appendChild(s);
+      }
+      // DOM ready 后再注入，确保后面的 #firebase-config 已解析。
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", load, { once: true });
+      } else {
+        load();
+      }
+    })();
+  </script>
 
   {{ if in (slice "page" "section") .Kind }}
     {{ $translations := .AllTranslations }}
