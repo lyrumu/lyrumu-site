@@ -85,7 +85,8 @@ chezmoi add ~/.codex/AGENTS.md
 当本机实际配置文件发生改动或者更新 可以使用以下命令检查和同步chezmoi本地源
 ```zsh
 chezmoi status #会显示本机实际配置文件和chezmoi本地源的差异
-chezmoi diff #显示详细差异
+chezmoi diff ~/.Your_File #显示具体文件的详细差异
+#注意 这里显示的差异将是指:此时使用chezmoi apply后该实际文件将会发生的变化(和git相反 需稍加理解)
 
 chezmoi re-add #直接同步所有差异(更新chezmoi本地源)
 chezmoi re-add ~/.zshrc #只更新某一个文件
