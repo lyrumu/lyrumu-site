@@ -5,8 +5,7 @@
 <section id="home-articles" class="home-recent-grid w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3" data-limit="{{ $limit }}">
   {{ range $index, $page := $pages }}
     <div data-home-article{{ if ge $index $limit }} hidden{{ end }}>
-      {{ $page.Scratch.Set "listCardIndex" $index }}
-      {{ partial "article-link/card.html" $page }}
+      {{ partial "article-link/card.html" (dict "context" $page "isFirst" (eq $index 0)) }}
       {{/* 未显示计数的文章仍使用原生计数 ID，只读取、不增加文章访问量。 */}}
       {{ if or $page.Params.externalURL (not ($page.Params.showViews | default site.Params.article.showViews)) }}
         <span hidden>{{ partial "meta/views.html" $page }}</span>

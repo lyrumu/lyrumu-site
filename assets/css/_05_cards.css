@@ -17,10 +17,10 @@ main > section.prose {
 }
 
 /* =============================================================================
-   _cards.css — 列表型卡片组件（module / vault / article-link / life / music / works）
+   _cards.css — 列表型卡片组件（module / vault / article-link / life / music）
    ----------------------------------------------------------------------------
    来源：原 custom.css §15, §16, §23, §28(section-rule), §29(file-tree),
-                  §32(life), §33(music list 部分), §34(works tags)
+                  §32(life), §33(music list 部分)
    ----------------------------------------------------------------------------
    本文件包含"短代码驱动"的列表型卡片。所有卡片共享同一套设计语言：
      - 边框 1px + 圆角 + 透明底（暗色轻微叠加 3% 白）
@@ -68,9 +68,8 @@ html.dark .life-sub-card:hover {
        移除 .modules-grid-stack 容器规则，.module-card 通用样式保留
    ============================================================================= */
 
-/* 标签药丸共享基础样式（life / works / project / resource） */
+/* 标签药丸共享基础样式（life / project / resource） */
 .life-sub-tag,
-.works-sub-tag,
 .project-card-tag,
 .resource-card-tag {
   font-family: var(--font-mono);
@@ -1075,7 +1074,7 @@ html.dark .music-item.is-disabled:hover {
      - 不修改 HTML，不在 .music-item 内插入任何新节点
      - 不修改任何既有 CSS 规则，仅追加
      - ::after 伪元素 + mask-image 完成色彩与主题切换
-   资源引用：站点 static/弹琴.svg → 站点绝对路径 /弹琴.svg
+   资源引用：static/svg/play-the-piano.svg → /svg/play-the-piano.svg
    --------------------------------------------------------------------------- */
 .music-item::after {
   content: "";
@@ -1148,63 +1147,6 @@ html.dark .music-item.is-disabled:hover {
     font-size: 0.75rem;
   }
 }
-
-/* =============================================================================
-   34. works 子页 (/works/)
-   ----------------------------------------------------------------------------
-   主体复用 §15 .module-card 样式（shortcode 给元素加双类 module-card works-sub-card）
-   本节只定义 works 独有的：tags 列表 + draft 徽章 + draft 态
-   数据驱动：data/works.yaml → layouts/shortcodes/works-grid.html
-   ============================================================================= */
-.works-grid-stack {
-  max-width: 56rem;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.works-sub-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.7rem;
-}
-.works-sub-tag {
-  background: transparent;
-  transition: border-color 0.3s, color 0.3s;
-}
-.works-sub-card:hover .works-sub-tag {
-  border-color: color-mix(in srgb, var(--fg-soft) 35%, transparent);
-}
-
-.works-sub-draft-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  margin-top: 0.5rem;
-  padding: 0.15rem 0.55rem;
-  border-radius: 9999px;
-  border: 1px dashed var(--line);
-  font-family: var(--font-serif-display);
-  font-size: 0.65rem;
-  font-style: italic;
-  color: var(--fg-soft);
-  letter-spacing: 0.05em;
-  width: max-content;
-}
-
-/* draft 态：覆盖 .module-card 的 hover 上浮和渐变光 */
-.works-sub-card.is-draft {
-  cursor: not-allowed;
-  opacity: 0.62;
-  filter: grayscale(20%);
-}
-.works-sub-card.is-draft:hover {
-  transform: none;
-  border-color: var(--line);
-}
-.works-sub-card.is-draft::before { display: none; }
 
 /* =============================================================================
    28. 段间分隔小符号（用于 markdown 短行间分隔）

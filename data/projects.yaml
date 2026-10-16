@@ -1,28 +1,54 @@
 # =============================================================================
-# works/projects — 项目清单（/works/projects/）
+# works — 作品清单（/works/）
 # 数据驱动：layouts/shortcodes/projects-list.html 渲染
 # 字段说明：
 #   - name     : 项目名（卡片标题）
 #   - title    : 英文副标题
+#   - category : project / demo（页面默认显示 project）
+#   - page     : 站内作品详情页（与 work 类型的内容页对应）
 #   - desc     : 衬线斜体描述（一两行）
-#   - cover    : 封面图 URL（建议 /image/works/projects/<slug>.png 或外链）
-#   - href     : 在线 demo / 部署地址（可空，置空时按钮自动隐藏）
-#   - repo     : 源码仓库链接（可空）
+#   - cover    : 封面资源路径（建议 image/projects/<slug>.png，源图放 assets/）
+#   - href     : 在线 demo / 部署地址记录（当前卡片和详情头部不渲染）
+#   - repo     : 源码仓库链接（可空，详情头部用它生成 README 链接）
 #   - tags     : 技术栈 / 类型标签
-#   - date     : 起始年月（可选，如 2025-11）
+#   - date     : GitHub 默认分支首个提交的年月（可选，如 2025-11）
 #   - status   : live / draft / archived（默认 live）
 #   - featured : true 时在卡片左上角显示"亮点"小角标（可选）
 # =============================================================================
 projects:
-  - name: "LINEAR ALGEBRA CALCULATOR"
+  - name: "pi-diff PLUGIN"
+    title: "Diff Viewer for pi"
+    category: project
+    page: "/works/pi-diff/"
+    desc: "Review per-turn, session-wide, and Git changes inside pi, with unified and split diff views."
+    cover: "image/projects/pi-diff.png"
+    repo: "https://github.com/lyrumu/pi-diff"
+    tags: [TypeScript, pi, TUI]
+    # First commit: 2026-10-14, https://github.com/lyrumu/pi-diff/commit/339cc7b63a71129c3bd3b3bbd1912062be6e4809
+    date: "2026-10"
+
+  - name: "MusicPocket"
+    title: "Local Music Player"
+    category: demo
+    page: "/works/musicpocket/"
+    desc: "A local-first Flutter music player for organizing your library, building playlists, and listening offline."
+    cover: "image/projects/musicpocket.png"
+    repo: "https://github.com/lyrumu/MusicPocket"
+    tags: [Flutter, Dart, local-first]
+    # First commit: 2026-07-24, https://github.com/lyrumu/MusicPocket/commit/091278f9a00d195dff0267a881edc7adf9951135
+    date: "2026-07"
+
+  - name: "Linear Algebra Calculator"
     title: "Linear Algebra Calculator"
+    category: demo
+    page: "/works/linear-algebra-calculator/"
     desc: "A Very simple linear algebra calculation for static website"
     cover: "image/projects/linear-algebra-cover.webp"
     href: "https://lyrumu.github.io/linear_algebra_calculator/"
     repo: "https://github.com/lyrumu/linear_algebra_calculator"
     tags: [linear-algebra,static website,algorithm]
-    date: "2026-01"
+    # First commit: 2026-04-24, https://github.com/lyrumu/linear_algebra_calculator/commit/a735fafe1b3d2ffe156d578d4c4ea7b0ae7a1d34
+    date: "2026-04"
     status: archived
     featured: true
 
-  

@@ -5,7 +5,7 @@
 title: "Personal Project Git Management"
 date: 2026-07-15
 draft: false
-description: "Git 初始化、日常更新、出错回滚、Remote 管理、.gitignore 实践"
+description: "记录个人项目的 Git 管理流程：从 GitHub 仓库创建与本地初始化，到日常提交、推送、版本与文件回滚，再到 Remote 地址维护和 .gitignore 配置。"
 
 # =============================================================================
 # URL 与权重（slug 留空 = 使用文件夹名）

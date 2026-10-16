@@ -2,7 +2,7 @@
 title: "DAILY"
 kicker: "DAILY · MODULE 03"
 subtitle: "hi"
-description: "Daily life — music playlist, photos, reading notes, and travel"
+description: "Daily life on lyrumu's page, currently centered on music: explore my favorite tracks and open the playlist for previews and listening links."
 layout: "page"
 showHero: true
 showBreadcrumbs: true

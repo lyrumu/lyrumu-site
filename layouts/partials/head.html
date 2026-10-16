@@ -31,8 +31,9 @@
     {{ $pageTitle = printf "%s · Page %d" $pageTitle $notesPageNumber }}
   {{ end }}
   {{ if .IsHome }}
-    <title>{{ .Site.Title | emojify }}</title>
-    <meta name="title" content="{{ .Site.Title | emojify }}">
+    {{ $pageTitle = .Params.seoTitle | default .Site.Title }}
+    <title>{{ $pageTitle | plainify | emojify }}</title>
+    <meta name="title" content="{{ $pageTitle | plainify | emojify }}">
   {{ else }}
     <title>{{ $pageTitle | plainify | emojify }} &middot; {{ .Site.Title | emojify }}</title>
     <meta name="title" content="{{ $pageTitle | plainify | emojify }} &middot; {{ .Site.Title | emojify }}">
@@ -104,10 +105,16 @@
   {{ end }}
 
   {{/* Social */}}
-  {{ if in (slice "term" "taxonomy") .Kind }}
-    {{/* Keep native social fields; replace only their descriptions with the resolved taxonomy description. */}}
+  {{ if or .IsHome (in (slice "term" "taxonomy") .Kind) (gt $notesPageNumber 1) }}
+    {{/* Keep native social fields; sync resolved descriptions and the homepage SEO title. */}}
     {{ $openGraph := partial "opengraph.html" . }}
     {{ $twitterCards := partial "twitter_cards.html" . }}
+    {{ if .IsHome }}
+      {{ $openGraph = $openGraph | replaceRE `<meta\s+property="og:title"\s+content="[^"]*"\s*/?>` "" }}
+      {{ $twitterCards = $twitterCards | replaceRE `<meta\s+name="twitter:title"\s+content="[^"]*"\s*/?>` "" }}
+      <meta property="og:title" content="{{ $pageTitle | plainify | emojify }}">
+      <meta name="twitter:title" content="{{ $pageTitle | plainify | emojify }}">
+    {{ end }}
     {{ with $openGraph }}
       {{ . | replaceRE `<meta\s+property="og:description"\s+content="[^"]*"\s*/?>` "" | safeHTML }}
       <meta property="og:description" content="{{ $metaDescription | plainify }}">

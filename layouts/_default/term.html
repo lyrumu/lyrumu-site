@@ -1,6 +1,7 @@
 {{/* Project override: distinguish tag/category/series headings; retain theme layout. */}}
 {{ define "main" }}
   {{ .Scratch.Set "scope" "term" }}
+  {{ $cardIndex := 0 }}
   {{ $showHero := .Params.showHero | default site.Params.term.showHero | default false }}
   {{ if $showHero }}
     {{ $heroStyle := print "hero/" site.Params.term.heroStyle ".html" }}
@@ -59,7 +60,8 @@
           </h2>
           <section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {{ range .Pages }}
-              {{ partial "article-link/card.html" . }}
+              {{ partial "article-link/card.html" (dict "context" . "isFirst" (eq $cardIndex 0)) }}
+              {{ $cardIndex = add $cardIndex 1 }}
             {{ end }}
           </section>
         {{ end }}
@@ -69,7 +71,8 @@
         <section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {{ range (.Paginate (.Pages.GroupByDate "2006")).PageGroups }}
             {{ range .Pages }}
-              {{ partial "article-link/card.html" . }}
+              {{ partial "article-link/card.html" (dict "context" . "isFirst" (eq $cardIndex 0)) }}
+              {{ $cardIndex = add $cardIndex 1 }}
             {{ end }}
           {{ end }}
         </section>
@@ -86,7 +89,8 @@
             </h2>
             <section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
               {{ range .Pages }}
-                {{ partial "article-link/card.html" . }}
+                {{ partial "article-link/card.html" (dict "context" . "isFirst" (eq $cardIndex 0)) }}
+                {{ $cardIndex = add $cardIndex 1 }}
               {{ end }}
             </section>
           </div>
@@ -98,7 +102,8 @@
           <section class="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {{ range (.Paginate (.Pages.GroupByDate "2006")).PageGroups }}
               {{ range .Pages }}
-                {{ partial "article-link/card.html" . }}
+                {{ partial "article-link/card.html" (dict "context" . "isFirst" (eq $cardIndex 0)) }}
+                {{ $cardIndex = add $cardIndex 1 }}
               {{ end }}
             {{ end }}
           </section>

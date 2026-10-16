@@ -1,18 +1,27 @@
 {{/*
   项目级 article-link/card.html
   ----------------------------------------------------------------
-  覆写 Blowfish 主题默认卡片，改为“左侧文字 + 右侧图片/图标”的横向布局。
+  覆写 Blowfish 主题默认卡片：Notes 使用背景封面卡，Friends 使用头像友链卡，
+  其他 section 使用“左侧文字 + 右侧图片/图标”的横向布局。
+  列表传入 dict context/isFirst，首图优先级只属于当前调用；兼容直接传 Page。
   图片读取优先级：
     1. data/notes.yaml 中 items[].image
-    2. 文章 frontmatter featureimage / 页面资源 *cover* / *thumbnail*
+    2. 文章 frontmatter featureimage / 页面资源 *feature* / *cover* / *thumbnail*
     3. 站点默认 featured image（site.Store.defaultFeaturedImage）
   无图片时降级为图标：
     1. data/notes.yaml 中 items[].icon
     2. items[].fallback_tag 或文章首个 tag 在 tag_icons 中匹配
-    3. 默认 file-text 图标
+    3. 默认 notebook 图标
   ----------------------------------------------------------------
 */}}
 
+{{ $context := . }}
+{{ $isFirst := false }}
+{{ if reflect.IsMap . }}
+  {{ $context = .context }}
+  {{ $isFirst = .isFirst | default false }}
+{{ end }}
+{{ with $context }}
 {{ $disableImageOptimization := site.Store.Get "disableImageOptimization" }}
 
 {{ $page := .Page }}
@@ -21,8 +30,6 @@
 {{ $imgLQIP := "" }}     {{/* 极小模糊占位（data URI），空 = 无占位 */}}
 {{ $imgSrc := "" }}      {{/* 实际展示图（600px WebP）*/}}
 {{ $imgSrcset := "" }}   {{/* Retina 2x srcset */}}
-{{ $cardIndex := .Scratch.Get "listCardIndex" | default 0 }}
-{{ $isFirst := eq $cardIndex 0 }}
 
 {{/* ---- 1. 读取 data/notes.yaml 配置 ---- */}}
 {{ $notesData := hugo.Data.notes | default (dict) }}
@@ -80,7 +87,7 @@
   {{ end }}
 {{ end }}
 
-{{/* ---- 5. 生成展示图 + LQIP：$featured 是 Hugo 资源时，缩放为 WebP 并产出模糊占位。
+{{/* ---- 4. 生成展示图 + LQIP：$featured 是 Hugo 资源时，缩放为 WebP 并产出模糊占位。
        注意：必须放在上面「未找到图才进入」的守卫块之外，否则 data 图一旦被
        resources.Get 命中（assets/ 迁移后），整段会被跳过 → src 为空。 ---- */}}
 {{ if not $featuredURL }}
@@ -99,7 +106,7 @@
   {{ end }}
 {{ end }}
 
-{{/* ---- 4. 无图片时解析图标 ---- */}}
+{{/* ---- 5. 无图片时解析图标 ---- */}}
 {{ $iconName := "" }}
 {{ if not (or $featuredURL $featured) }}
   {{ with $notesItem.icon }}
@@ -315,4 +322,5 @@
     {{ end }}
   </div>
 </article>
+{{ end }}
 {{ end }}

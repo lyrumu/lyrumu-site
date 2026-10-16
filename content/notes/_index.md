@@ -2,7 +2,7 @@
 title: "DOCS"
 kicker: "NOTES · MODULE 01"
 subtitle: "Notes from my Obsidian Vault"
-description: "Environment setup, algorithms,recordings— synced from Obsidian Vault"
+description: "Learning notes from my Obsidian Vault on development environments, Git, AI agents, software tools, and hands-on technical practice."
 layout: "list"
 cascade:
   # 仅对 notes 下的文章生效：显示 taxonomy、编辑入口、上一篇/下一篇、views / likes。

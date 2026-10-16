@@ -2,7 +2,7 @@
 title: "Good Tools(资源&工具分享)"
 date: 2026-07-26
 draft: false
-description: "宝藏站点,宝藏资源.程序员、软件工程学生日常使用的软件、插件和网站推荐"
+description: "按跨平台、macOS、Windows 和浏览器扩展整理自用软件与网站资源，涵盖开发环境、终端、文件传输、dot-files 管理，以及学习、素材和在线处理工具。"
 slug: ""
 weight: -1
 tags: [tools, website, os]

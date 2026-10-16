@@ -2,7 +2,7 @@
 title: "Agent配置"
 date: 2026-07-29
 draft: false
-description: "我常用的 AI Agent 工具配置分享 —— OpenCode、AGENTS.md、MCP、Skill 等"
+description: "分享自用 AI Agent 配置与使用记录，整理 Skills 和插件、MCP 工具、OpenCode 的权限与配置示例，以及 AGENTS.md 约定和配置备份入口。"
 slug: ""
 aliases: []
 weight: -1

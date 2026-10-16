@@ -2,7 +2,7 @@
 title: "WORKS"
 kicker: "WORKS · MODULE 02"
 subtitle: "My works"
-description: "My projects — vibe coding, demos, and experimental works"
+description: "Explore lyrumu's projects and demos, including pi-diff, MusicPocket, and a linear algebra calculator, with source code and available online demos."
 layout: "page"
 showHero: true
 showBreadcrumbs: true
@@ -11,4 +11,4 @@ showTableOfContents: true
 showChildList: false
 ---
 
-{{< works-grid >}}
+{{< projects-list >}}

@@ -3,7 +3,8 @@
   <script src="/js/splitting.min.js" defer></script>
 {{ end }}
 {{ if .HasShortcode "projects-list" }}
-  <script src="/js/vanilla-tilt.min.js" defer></script>
+  {{ $worksFilter := resources.Get "js/works-filter.js" | resources.Minify | resources.Fingerprint "sha512" }}
+  <script src="{{ $worksFilter.RelPermalink }}" integrity="{{ $worksFilter.Data.Integrity }}" defer></script>
 {{ end }}
 {{ if .IsHome }}
   {{ $coverScroll := resources.Get "js/cover-scroll.js" | resources.Minify | resources.Fingerprint "sha512" }}

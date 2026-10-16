@@ -2,7 +2,7 @@
 title: "MUSIC"
 kicker: "LIFE · MUSIC"
 subtitle: ""
-description: "My playlist — Japanese Animation Melodies and Jay Chou's Music."
+description: "Explore my playlist of anime songs and Jay Chou tracks, with 30-second previews and links to listen on Apple Music and Spotify."
 layout: "page"
 showHero: true
 showBreadcrumbs: true

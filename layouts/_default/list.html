@@ -1,11 +1,9 @@
 {{/*
   _default/list.html — Claude 风覆写版
   ----------------------------------------------------------------
-  适用：当前项目实际服务 2 个 _index.md
-    1. content/notes/_index.md — 显式 layout: "list"（笔记入口）
-    2. content/about/_index.md — frontmatter 在 HTML 注释里（无 layout）→ kind=section fallback
-  注：6 个 _index.md（life / life-music / works / 3 个 works 子页）显式 layout: "page" 走 page.html
-      封面走主题 layouts/index.html → partials/home/custom.html
+  当前栏目入口（notes / friends / about / works / life / life-music）使用本模板；
+  _index.md 中的 layout: "page" 并不使这些 section 命中根级 page.html。
+  普通文章与作品详情使用 page.html；首页由 partials/home/custom.html 渲染。
   替换掉默认 blowfish list.html 的"大黑标题 + 元信息条"，
   改为我们的"小封面"模式（page-hero） + 下方正文 + 文章列表。
   ----------------------------------------------------------------
@@ -13,8 +11,8 @@
 
 {{ define "main" }}
   {{ .Scratch.Set "scope" "list" }}
-  {{/* 2026-06-24：about section 渲染 page-hero 时加 page-hero--no-deco class
-       （CSS 用这个 class 隐藏 eyebrow 和 divider 两组装饰线） */}}
+  {{ $cardIndex := 0 }}
+  {{/* About 加 page-hero--no-deco，由 CSS 隐藏整个 page-hero 块。 */}}
   {{ $heroClass := "" }}
   {{ if eq .Section "about" }}{{ $heroClass = "page-hero--no-deco" }}{{ end }}
   {{ $sectionName := .Section }}
@@ -111,7 +109,7 @@
         {{ end }}
       </section>
     {{ else }}
-      {{/* 2026-06-25 加 cardColumns 控制（默认 3，notes/_index.md 用 1） */}}
+      {{/* cardColumns 默认 3；notes/_index.md 当前设为 2。 */}}
       {{ $cardColumns := .Params.cardColumns | default 3 }}
       {{ if $groupByYear }}
         {{ range (.Paginate (.Pages.GroupByDate "2006")).PageGroups }}
@@ -123,9 +121,9 @@
           {{ else }}
           <section class="not-prose w-full grid gap-4 sm:grid-cols-2 md:grid-cols-{{ $cardColumns }}{{ if eq $sectionName "notes" }} section-notes{{ end }}">
           {{ end }}
-            {{ range $i, $p := .Pages }}
-              {{ $p.Scratch.Set "listCardIndex" $i }}
-              {{ partial "article-link/card.html" $p }}
+            {{ range .Pages }}
+              {{ partial "article-link/card.html" (dict "context" . "isFirst" (eq $cardIndex 0)) }}
+              {{ $cardIndex = add $cardIndex 1 }}
             {{ end }}
           </section>
         {{ end }}
@@ -137,15 +135,15 @@
         {{ end }}
           {{ if not $orderByWeight }}
             {{ range (.Paginate (.Pages.GroupByDate "2006")).PageGroups }}
-              {{ range $i, $p := .Pages }}
-                {{ $p.Scratch.Set "listCardIndex" $i }}
-                {{ partial "article-link/card.html" $p }}
+              {{ range .Pages }}
+                {{ partial "article-link/card.html" (dict "context" . "isFirst" (eq $cardIndex 0)) }}
+                {{ $cardIndex = add $cardIndex 1 }}
               {{ end }}
             {{ end }}
           {{ else }}
-            {{ range $i, $p := (.Paginate (.Pages.ByWeight)).Pages }}
-              {{ $p.Scratch.Set "listCardIndex" $i }}
-              {{ partial "article-link/card.html" $p }}
+            {{ range (.Paginate (.Pages.ByWeight)).Pages }}
+              {{ partial "article-link/card.html" (dict "context" . "isFirst" (eq $cardIndex 0)) }}
+              {{ $cardIndex = add $cardIndex 1 }}
             {{ end }}
           {{ end }}
         </section>

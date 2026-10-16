@@ -7,6 +7,14 @@
 */}}
 {{ define "main" }}
   {{ .Scratch.Set "scope" "single" }}
+  {{ $project := dict }}
+  {{ if eq .Type "work" }}
+    {{ with where hugo.Data.projects.projects "page" .RelPermalink }}
+      {{ $project = index . 0 }}
+    {{ else }}
+      {{ errorf "Work page %s needs a matching page entry in data/projects.yaml" .RelPermalink }}
+    {{ end }}
+  {{ end }}
   <article>
     {{/* Hero */}}
     {{ if .Params.showHero | default (site.Params.article.showHero | default false) }}
@@ -31,11 +39,15 @@
       <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
         {{ partial "article-meta/basic.html" (dict "context" . "scope" "single") }}
       </div>
+      {{ if $project }}
+        {{ partial "works/project-info.html" $project }}
+      {{ else }}
       {{ if not (.Params.showAuthorBottom | default (site.Params.article.showAuthorBottom | default false)) }}
         {{ template "SingleAuthor" . }}
       {{ end }}
       {{ if eq .Section "notes" }}
         {{ partial "article-copy-markdown.html" . }}
+      {{ end }}
       {{ end }}
     </header>
 

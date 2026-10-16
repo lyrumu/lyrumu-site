@@ -2,35 +2,33 @@
   Shortcode: projects-list
   ----------------------------------------------------------------
   渲染 data/projects.yaml 的项目列表
-  视觉特点：双列 grid 卡片 + 3D 倾斜（VanillaTilt.js）+ hover 揭示
+  视觉特点：整卡站内链接 + 常显信息 + 轻量悬停反馈
   用法: {{< projects-list >}}
   数据源: data/projects.yaml -> hugo.Data.projects.projects
   ----------------------------------------------------------------
 */}}
 {{ $projects := hugo.Data.projects.projects }}
-<div class="projects-list not-prose my-10">
+<fieldset class="projects-list not-prose my-10">
+  <legend class="sr-only">Work category</legend>
   {{ if $projects }}
+    <input class="works-category-input" type="radio" name="works-category" id="works-project" value="project" autocomplete="off" checked>
+    <label class="docs-taxonomy-chip works-category-label" for="works-project">
+      <span class="docs-taxonomy-chip__label">Project</span>
+      <span class="docs-taxonomy-chip__count">{{ len (where $projects "category" "project") }}</span>
+    </label>
+    <input class="works-category-input" type="radio" name="works-category" id="works-demo" value="demo" autocomplete="off">
+    <label class="docs-taxonomy-chip works-category-label" for="works-demo">
+      <span class="docs-taxonomy-chip__label">Demo</span>
+      <span class="docs-taxonomy-chip__count">{{ len (where $projects "category" "demo") }}</span>
+    </label>
     <div class="projects-grid">
       {{ range $i, $p := $projects }}
       {{ $isDraft := eq ($p.status | default "live") "draft" }}
       {{ $isFeatured := eq ($p.featured | default false) true }}
-      {{/*
-        项目卡片结构（v2 修复）：
-
-        历史 bug：整个卡片是一个 <a href="$p.href">，"在线""源码"两个按钮
-        只是 <span> 装饰 → 点哪个按钮都跳到 href。
-
-        重构：移除外层 <a>，整张卡不可点，只有底部两个按钮各自跳对应地址。
-        HTML 不允许 <a> 嵌套 <a>，所以必须用这种"信息卡 + 独立按钮"模式。
-      */}}
-      <article class="project-card{{ if $isFeatured }} is-featured{{ end }}{{ if $isDraft }} is-draft{{ end }}"
-               data-project-tilt
-               data-tilt-max="5"
-               data-tilt-glare
-               data-tilt-max-glare="0.12"
-               data-tilt-speed="600"
-               data-tilt-scale="1.012">
-
+      {{ $detail := site.GetPage $p.page }}
+      {{ if not $detail }}{{ errorf "Missing detail page for work %s: %s" $p.name $p.page }}{{ end }}
+      <article class="project-card{{ if $isFeatured }} is-featured{{ end }}{{ if $isDraft }} is-draft{{ end }}" data-category="{{ $p.category }}">
+        <a class="project-card-link" href="{{ $detail.RelPermalink }}" aria-labelledby="work-title-{{ $i }}">
         {{/* 封面：assets/image/ 资源 → LQIP blur-up；resources.Get 失败回退原 cover 直出 */}}
         {{ $coverPath := strings.TrimPrefix "/" $p.cover }}
         {{ $img := resources.Get $coverPath }}
@@ -58,7 +56,7 @@
                  {{ if $imgLQIP }}data-lqip="1"{{ end }}
                  alt="{{ $p.name }}"
                  loading="lazy"
-                 class="blur-img"
+                 class="blur-img nozoom"
                  onerror="this.style.opacity='0.18'" />
           {{ else }}
             <span class="project-card-cover-fallback" aria-hidden="true">
@@ -76,13 +74,13 @@
           <div class="project-card-head">
             {{ with $p.date }}<span class="project-card-date">{{ . }}</span>{{ end }}
             {{ if $p.repo }}
-              <span class="project-card-source" aria-label="源码">
+              <span class="project-card-source" aria-hidden="true">
                 {{ partial "cover/icon.html" (dict "name" "github" "size" 14) }}
               </span>
             {{ end }}
           </div>
 
-          <h3 class="project-card-name">{{ $p.name }}</h3>
+          <h3 class="project-card-name" id="work-title-{{ $i }}">{{ $p.name }}</h3>
           <div class="project-card-title">{{ $p.title }}</div>
           <p class="project-card-desc">{{ $p.desc }}</p>
 
@@ -94,27 +92,8 @@
           </div>
           {{ end }}
 
-          <div class="project-card-actions">
-            {{ if $p.href }}
-              <a class="project-card-btn"
-                 href="{{ $p.href }}" target="_blank" rel="noopener noreferrer">
-                <span>在线</span>
-                <span class="project-card-btn-arrow" aria-hidden="true">
-                  {{ partial "cover/icon.html" (dict "name" "external-link" "size" 14) }}
-                </span>
-              </a>
-            {{ end }}
-            {{ if $p.repo }}
-              <a class="project-card-btn is-secondary"
-                 href="{{ $p.repo }}" target="_blank" rel="noopener noreferrer">
-                <span>源码</span>
-                <span class="project-card-btn-arrow" aria-hidden="true">
-                  {{ partial "cover/icon.html" (dict "name" "github" "size" 14) }}
-                </span>
-              </a>
-            {{ end }}
-          </div>
         </div>
+        </a>
       </article>
       {{ end }}
     </div>
@@ -124,6 +103,4 @@
       在 <code>data/projects.yaml</code> 里加上你的第一个作品吧。
     </div>
   {{ end }}
-</div>
-
-{{/* VanillaTilt 初始化在 layouts/partials/extend-head.html 统一管理 */}}
+</fieldset>

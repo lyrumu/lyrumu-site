@@ -1,12 +1,11 @@
 /* =============================================================================
-   _works-cards.css — works 子页的"特化"卡片：projects + resources
+   _works-cards.css — Works 分类与卡片：projects + resources
    ----------------------------------------------------------------------------
    来源：原 custom.css §35 (projects) + §36 (resources)
    ----------------------------------------------------------------------------
    与 _cards.css 的区别：
-     - projects: 3D 倾斜 + hover 揭示 tags/actions + glare 反光层
+     - projects: 整卡链接 + 常显标签 + 轻量反馈
      - resources: CSS columns 瀑布流 + 格式徽章 + 来源链接
-     - 两者都比 module-card/vault-section-card 复杂（多 hover 揭示层、3D 上下文）
 
    数据驱动：
      - projects: data/projects.yaml → layouts/shortcodes/projects-list.html
@@ -14,22 +13,51 @@
    ============================================================================= */
 
 /* =============================================================================
-   35. works/projects — 项目卡片网格（双列 + 3D 倾斜 + hover 揭示）
+   35. works — 分类选择器与作品卡片网格（双列 + 整卡链接）
    ----------------------------------------------------------------------------
    - 桌面端：双列 grid，移动端单列
-   - 3D 倾斜：VanillaTilt.js 处理，CSS 只负责 perspective 和反光层
-   - hover 揭示：tags + actions 默认折叠，hover 时展开
+   - 标签常显，GitHub 入口放在详情页
    - 封面缩放 + 边框描边
    ============================================================================= */
 
-.projects-list { max-width: 64rem; margin: 0 auto; }
+.projects-list {
+  width: 100%;
+  min-width: 0;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+}
+
+.works-category-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.works-category-label {
+  margin: 0 0.6rem 1.5rem 0;
+  cursor: pointer;
+}
+
+.works-category-input:focus-visible + .works-category-label {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* 原生单选框控制筛选，禁用 JavaScript 时仍可切换。 */
+#works-project:checked ~ .projects-grid > [data-category="demo"],
+#works-demo:checked ~ .projects-grid > [data-category="project"] {
+  display: none;
+}
 
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
-  /* 3D 透视容器 —— 移到父元素，避免和 VanillaTilt 的 transform 冲突 */
-  perspective: 1000px;
 }
 @media (max-width: 720px) {
   .projects-grid { grid-template-columns: 1fr; }
@@ -44,52 +72,25 @@
   background: transparent;
   overflow: hidden;
   text-decoration: none !important;
-  /* 保留 3D 渲染上下文；transform 完全交给 VanillaTilt 接管 */
-  transform-style: preserve-3d;
   transition: border-color 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
               background 0.5s;
   isolation: isolate;
-  will-change: transform;
 }
 html.dark .project-card {
   background: rgba(255, 255, 255, 0.03);
 }
 
-/* 鼠标反光层（VanillaTilt 会写入 --glare-x / --glare-y）
-   v2 修复：加 mix-blend-mode: multiply 让反光只影响"下层"（封面/背景），
-   不洗"上层"的按钮文字（即使 z-index 没赢透，也能保证文字清晰） */
-.project-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at var(--glare-x, 50%) var(--glare-y, 50%),
-    rgba(255, 255, 255, 0.18) 0%,
-    transparent 60%
-  );
-  opacity: 0;
-  transition: opacity 0.4s;
-  pointer-events: none;
-  z-index: 1;
-  mix-blend-mode: multiply;
-}
-.project-card:hover::after { opacity: 1; }
-html.dark .project-card::after {
-  background: radial-gradient(
-    circle at var(--glare-x, 50%) var(--glare-y, 50%),
-    rgba(255, 255, 255, 0.08) 0%,
-    transparent 60%
-  );
-}
-
-.project-card:hover {
+.project-card:hover,
+.project-card:focus-within {
   border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
 }
 
-.project-card-link {
+.project-card-link,
+.project-card-link:link,
+.project-card-link:visited {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1;
   text-decoration: none !important;
   color: inherit;
   position: relative;
@@ -197,107 +198,59 @@ html.dark .project-card-cover {
   margin: 0.2rem 0 0;
 }
 
-/* tags — 默认折叠，hover 时展开 */
+/* 标签常显，整卡可由触屏与键盘直接访问。 */
 .project-card-tags {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 0.3rem;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  margin-top: 0;
-  transition: max-height 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
-              opacity 0.3s 0.1s,
-              margin-top 0.3s;
-}
-.project-card:hover .project-card-tags,
-.project-card:focus-within .project-card-tags {
-  max-height: 4rem;
-  opacity: 1;
   margin-top: 0.6rem;
 }
-.project-card-tag {
-  /* 基础样式（font / 边框 / 圆角等）见 _cards.css 共享 .project-card-tag 块 */
+.project-card-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+  border-radius: inherit;
 }
 
-/* 动作按钮 — 默认折叠，hover 时展开 */
-.project-card-actions {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  margin-top: 0;
-  transition: max-height 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
-              opacity 0.3s 0.15s,
-              margin-top 0.3s;
-}
-.project-card:hover .project-card-actions,
-.project-card:focus-within .project-card-actions {
-  max-height: 3rem;
-  opacity: 1;
-  margin-top: 0.9rem;
-}
-/* v2 修复（重构为 <a>）：覆盖 :link / :visited / :hover / :active 全状态
-   避免浏览器默认 <a> 蓝色 + 下划线盖掉我们设的颜色 */
 .project-card-btn,
 .project-card-btn:link,
 .project-card-btn:visited {
-  /* 必须比 .project-card::after 反光层（z-index: 1）更高，
-     否则 hover 反光层 opacity 1 时会蒙在按钮上、文字被冲淡 */
-  position: relative;
-  z-index: 2;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  font-family: var(--font-serif-display);
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 0.35rem 0.7rem;
-  border-radius: 9999px;
-  /* v3 关键修复：米白 #FAF9F5 在 accent #D97757 上对比度只有 3.08:1，
-     勉强够 AA Large 但小字看不清。
-     改成 color-mix(accent 70%, fg-base 30%) = #A15C46，对比度 4.64:1 ✓ AA 通过 */
-  background: color-mix(in srgb, var(--accent) 70%, var(--fg-base));
-  color: var(--bg-base);
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  background: #f6f8fa;
+  color: #1f2328;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.25;
   text-decoration: none;
-  transition: background 0.3s, transform 0.3s;
+  box-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
 }
-/* v3 关键修复：hover 时进一步加深 background（60% accent + 40% fg-base = #9A5A38），
-   对比度 5.5:1 ✓ AA / AAA Large 都通过，文字始终清晰。
-   视觉反馈：背景更深 + transform 上浮，配合源码按钮的"低调"风格。 */
 .project-card-btn:hover,
-.project-card-btn:focus,
-.project-card-btn:active {
-  background: color-mix(in srgb, var(--accent) 60%, var(--fg-base));
-  color: var(--bg-base);
-  transform: translateY(-1px);
+.project-card-btn:active,
+.project-card-btn:focus-visible,
+html.dark .project-card-btn:hover,
+html.dark .project-card-btn:active,
+html.dark .project-card-btn:focus-visible {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border-color: var(--accent);
+  color: var(--accent);
   text-decoration: none;
 }
-.project-card-btn.is-secondary,
-.project-card-btn.is-secondary:link,
-.project-card-btn.is-secondary:visited {
-  background: transparent;
-  color: var(--fg-base);
-  border: 1px solid var(--line);
+.project-card-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
-.project-card-btn.is-secondary:hover,
-.project-card-btn.is-secondary:focus,
-.project-card-btn.is-secondary:active {
-  background: color-mix(in srgb, var(--fg-base) 6%, transparent);
-  color: var(--fg-base);
-  text-decoration: none;
-}
-.project-card-btn-arrow {
-  display: inline-flex;
-  align-items: center;
-  transition: transform 0.3s;
-}
-.project-card-btn:hover .project-card-btn-arrow {
-  transform: translate(2px, -2px);
+html.dark .project-card-btn {
+  background: #212830;
+  border-color: #3d444d;
+  color: #f0f6fc;
 }
 
 /* 草稿态 */
@@ -307,16 +260,21 @@ html.dark .project-card-cover {
   pointer-events: none;
 }
 
-/* 移动端禁用 3D 倾斜，hover 揭示改为常显 */
-@media (max-width: 720px) {
+@media (prefers-reduced-motion: reduce) {
   .project-card,
-  .project-card:hover { transform: none !important; }
-  .project-card-tags,
-  .project-card-actions {
-    max-height: 5rem;
-    opacity: 1;
-    margin-top: 0.6rem;
-  }
+  .project-card-cover img { transition: none; }
+  .project-card:hover .project-card-cover img { transform: none; }
+}
+
+.work-project-actions { margin: 1rem 0; }
+.article-content img.readme-badge {
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  vertical-align: middle;
 }
 
 /* 空态 */

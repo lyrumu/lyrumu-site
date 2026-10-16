@@ -70,6 +70,9 @@
   {{- $resource = or ($.Page.Resources.GetMatch $urlStr) (resources.Get $urlStr) -}}
 {{- end -}}
 
+{{- if and (eq .Page.Type "work") (eq $url.Host "img.shields.io") -}}
+  <img class="readme-badge nozoom" src="{{ $urlStr }}" alt="{{ $altText }}" loading="lazy" decoding="async">
+{{- else -}}
 <figure
   {{- range $k, $v := .Attributes -}}
     {{- if $v -}}
@@ -96,3 +99,4 @@
 
   {{- template "RenderImageCaption" (dict "caption" $caption) -}}
 </figure>
+{{- end -}}

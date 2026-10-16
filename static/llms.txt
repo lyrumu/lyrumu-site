@@ -11,7 +11,10 @@
 
 ## Works
 
-- [Projects](/works/projects/): Personal projects — vibe coding, demos, experimental works
+- [Works](/works/): Browse projects and demos
+- [pi-diff](/works/pi-diff/): Features, installation, usage, and limitations of the diff viewer for pi
+- [MusicPocket](/works/musicpocket/): Local-first music player features, platform status, and source setup
+- [Linear Algebra Calculator](/works/linear-algebra-calculator/): Matrix and vector tools, development setup, and online demo
 
 ## Daily
 
