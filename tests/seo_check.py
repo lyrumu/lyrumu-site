@@ -121,7 +121,7 @@ def check(root):
             for key, descriptions in page.social_descriptions.items():
                 assert descriptions == page.description, (file, key, "Social description mismatch or duplicate")
         if path == "/":
-            assert page.title.startswith("lyrumu's page · "), (file, "Missing descriptive homepage title")
+            assert page.title == "lyrumu's page", (file, "Unexpected homepage title")
             for key, titles in page.social_titles.items():
                 assert titles == [page.title], (file, key, "Homepage title mismatch or duplicate")
         comments_enabled = (is_article and path.startswith("/notes/")) or path in {

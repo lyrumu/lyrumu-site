@@ -1,6 +1,5 @@
 ---
 title: "lyrumu's page"
-seoTitle: "lyrumu's page · 编程实践、学习笔记与个人项目"
 description: "lyrumu 的个人网站，分享编程与工具实践，整理学习笔记、个人项目与日常记录。"
 ---
 
