@@ -52,6 +52,9 @@ tag_icons:
 
 # 每篇文章的独立配置
 items:
+  - slug: Claude网页版稳定使用方法
+    image: "image/notes/Claude网页版稳定使用方法-v2.png"
+
   - slug: 注册美区Apple-ID指南
     image: "image/notes/注册美区Apple-ID指南.png"
     icon: smartphone
