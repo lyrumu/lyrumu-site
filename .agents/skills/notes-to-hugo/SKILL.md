@@ -36,7 +36,7 @@ description: 将指定 Obsidian 笔记迁移或整理为 Hugo 文章；保留原
 - 用户指定目录名就照做；否则用源文件名去 `.md`，仅把连续空格改为 `-`，保留 Unicode，不擅改 URL。新文章用 `hugo new content "notes/<name>/index.md" --kind notes` 创建，不用 `--force`。
 - 新文章 `date` 为整理当天；更新文章保留原日期，有实质更新才启用 `showDateUpdated` 并填写当天日期。`slug` 留空、`weight: 0`，除非用户明确要求置顶。
 - `title` 和 `description` 取自真实内容；摘要用正文主要语言写得具体。
-- `categories` 由作者决定，每篇选一项：`tutorials`（Tutorials）、`share-resources`（Share & Resources）、`engineering-practice`（Engineering Practice）。只维护文章 front matter，分类展示在 DOCS 顶部，不为预置分类创建独立栏目或空分类页。作者未指定时，新文章留空并在交付中提示待分类；已有文章保留作者的选择，不自行分配或迁移。不能仅因内容按步骤编写就判为 Tutorials；Git 使用、Python 打包、Flutter 部署也可由作者归入 Engineering Practice。
+- `categories` 由作者决定，每篇必须且仅选择一个现有分类：`tutorials`（Tutorials）、`share-resources`（Share & Resources）、`engineering-practice`（Engineering Practice），不新增分类。作者未指定时，先根据内容给出建议并询问，确认后填写，不以空分类交付；已有文章保留作者的选择，不自行分配或迁移。只维护文章 front matter，分类展示在 DOCS 顶部，不为预置分类创建独立栏目或空分类页。不能仅因内容按步骤编写就判为 Tutorials；Git 使用、Python 打包、Flutter 部署也可由作者归入 Engineering Practice。
 - `tags` 用于串联具体主题，可留空，通常 0–2 个；保留作者指定的标签，不把空数组视为缺漏，不为每个技术名创建标签。作者未指定时不自动补写；需要新增或合并标签时先确认。`topics`、`series` 仅在作者明确需要时填写。
 
 ### 正文与读者视角
@@ -66,7 +66,7 @@ description: 将指定 Obsidian 笔记迁移或整理为 Hugo 文章；保留原
 
 ## 完成检查
 
-1. 完整迁移时比较源 Markdown 和引用附件前后的 SHA-256；逐段核对成稿是否漏写或擅改，复查层级、表格/列表、步骤、命令/提示词、图注、强调、分隔符和读者视角。检查无残留 `![[...]]`、`file://`、本机绝对路径、抓取噪音或失效内链。仅补图时只检查图片与映射。
+1. 完整迁移时比较源 Markdown 和引用附件前后的 SHA-256；逐段核对成稿是否漏写或擅改，复查层级、表格/列表、步骤、命令/提示词、图注、强调、分隔符和读者视角。核对 front matter 字段与顺序沿用 `archetypes/notes.md`，且 `categories` 恰有一个作者确认的现有分类。检查无残留 `![[...]]`、`file://`、本机绝对路径、抓取噪音或失效内链。仅补图时只检查图片与映射。
 2. 检查卡片图落盘、映射唯一且路径可解析，仍走缩放与占位管线；运行 `git diff --check`。若失败来自已有 WIP，说明归属，不顺手修改。
 3. 运行一次非服务构建：`hugo --renderToMemory --themesDir themes --theme blowfish --config hugo.toml --cacheDir /tmp/lyrumu-hugo-cache`。若用户已有本地预览，可复用它检查桌面和窄屏的标题、表格、代码、图注及连续图片节奏；不自行开长期服务。无预览时只称构建通过，浏览器视觉验收待用户完成。
 4. 交付时简报目标文件、复制附件、卡片图与风格、必要的非排版改动及理由、源文件未变证明、验证结果和待用户决定事项；明确未做 Git 发布。
