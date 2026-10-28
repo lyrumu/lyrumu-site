@@ -240,14 +240,19 @@
 </article>
 
 {{/* friends：沿用 Blowfish 卡片外观与外链箭头，补充友链头像。
-     头像使用本地页面资源及主题已有圆形图片工具类。 */}}
+     本地头像复用通用 LQIP 加载，保持固定圆形尺寸。 */}}
 {{ else if eq $page.Section "friends" }}
 <article class="article-link--card relative min-h-full min-w-full overflow-hidden rounded-lg border border-neutral-300 dark:border-neutral-600">
   <div class="p-4 flex items-start gap-4">
     {{ with $page.Resources.GetMatch ($page.Params.avatar | default "avatar.*") }}
       {{ $avatar := .Fill "64x64 webp" }}
       {{ $avatar2x := .Fill "128x128 webp" }}
-      <img src="{{ $avatar.RelPermalink }}" srcset="{{ $avatar.RelPermalink }} 1x, {{ $avatar2x.RelPermalink }} 2x" alt="{{ $page.Title }}的头像" width="64" height="64" loading="lazy" decoding="async" class="not-prose w-16 h-16 rounded-full object-cover flex-none">
+      {{ $tiny := .Fill "24x24 webp" }}
+      {{ $avatarLQIP := printf "data:image/webp;base64,%s" (base64Encode $tiny.Content) | safeURL }}
+      {{/* 模糊图的定位层不拦截整卡链接。 */}}
+      <div class="blur-img-wrapper w-16 h-16 rounded-full flex-none pointer-events-none" style="--blur-img: url('{{ $avatarLQIP }}')">
+        <img src="{{ $avatar.RelPermalink }}" srcset="{{ $avatar.RelPermalink }} 1x, {{ $avatar2x.RelPermalink }} 2x" data-lqip="1" alt="{{ $page.Title }}的头像" width="64" height="64" loading="lazy" decoding="async" class="not-prose blur-img">
+      </div>
     {{ end }}
     <div class="min-w-0">
     <header>

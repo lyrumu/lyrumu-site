@@ -14,7 +14,7 @@ class Page(HTMLParser):
         super().__init__()
         self.title, self.description, self.headings = "", [], []
         self.canonical, self.icons, self.images, self.links, self.schemas = [], [], [], [], []
-        self.scripts = []
+        self.scripts, self.blur_wrappers = [], []
         self.inputs, self.project_cards, self.stylesheets = [], [], []
         self.card_count, self.cover_images = 0, []
         self.ids, self.nested_links = [], []
@@ -33,6 +33,8 @@ class Page(HTMLParser):
             self.in_head = True
         if tag == "script":
             self.scripts.append(attrs)
+        if "blur-img-wrapper" in attrs.get("class", "").split():
+            self.blur_wrappers.append(attrs)
         if tag == "input":
             self.inputs.append(attrs)
         if tag == "article" and "project-card" in attrs.get("class", "").split():
@@ -181,6 +183,20 @@ def check(root):
     assert "/css/cover.bundle.min." in home and "/css/cover.bundle.min." not in notes
     assert "/css/music.bundle.min." in music and "/css/music.bundle.min." not in home
     assert "/js/vanilla-tilt.min.js" not in works and "data-project-tilt" not in works
+    friends_page = Page((root / "friends/index.html").read_text())
+    avatars = [image for image in friends_page.images if urlparse(image.get("src", "")).path.startswith("/friends/")]
+    assert avatars and len(friends_page.blur_wrappers) == len(avatars)
+    for wrapper in friends_page.blur_wrappers:
+        assert {"w-16", "h-16", "rounded-full", "flex-none", "pointer-events-none"} <= set(wrapper.get("class", "").split()), wrapper
+        assert "--blur-img:" in wrapper.get("style", "") and "data:image/webp;base64," in wrapper["style"], wrapper
+    for image in avatars:
+        assert "blur-img" in image.get("class", "").split() and image.get("data-lqip") == "1", image
+        assert (image.get("width"), image.get("height"), image.get("loading"), image.get("decoding")) == ("64", "64", "lazy", "async"), image
+        assert image.get("alt"), image
+        candidates = [part.split() for part in image["srcset"].split(",")]
+        assert [descriptor for _, descriptor in candidates] == ["1x", "2x"] and candidates[0][0] == image["src"], image
+        for src in [image["src"]] + [src for src, _ in candidates]:
+            assert src.endswith(".webp") and (root / unquote(src).lstrip("/")).is_file(), src
     works_page = Page(works)
     radios = [item for item in works_page.inputs if item.get("name") == "works-category"]
     assert [item["value"] for item in radios] == ["project", "demo"]

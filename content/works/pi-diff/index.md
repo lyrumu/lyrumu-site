@@ -2,7 +2,7 @@
 title: "pi-diff"
 description: "Review pi-diff features, installation, usage, and limitations in pi, with unified and split diff views."
 date: 2026-10-16
-lastmod: 2026-10-21
+lastmod: 2026-10-25
 type: "work"
 layout: "page"
 draft: false
@@ -44,7 +44,11 @@ Click either image to view it at full size.
 
 ### File tree and draggable divider
 
+<div style="max-width: 220px; margin-inline: auto;">
+
 ![File tree with A/M/D markers and a highlighted draggable divider](file-tree-resize.png)
+
+</div>
 
 Find changed files in collapsible directories. `A`, `M`, and `D` indicate added, modified, and deleted files.
 

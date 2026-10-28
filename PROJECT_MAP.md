@@ -440,7 +440,7 @@ f:\Notes\
 
 `/friends/` 复用当前定制列表和 Blowfish 原生 `externalUrl` 外链字段，从 ABOUT ME 顶栏子菜单进入。已录入 Wangtanzhi 的 blog；共享卡片的 friends 分支沿用 Blowfish 卡片外观与外链箭头，增加左侧圆形头像，字体与颜色继续使用站点主题。
 
-后续每个友链可放在 `content/friends/<slug>/index.md`，填写真实的 `title`、`description`、`externalUrl` 与排序用的 `weight`；头像放在同目录，使用 `avatar: "avatar.webp"` 指定（未指定时匹配 `avatar.*`）；Hugo 输出 64 / 128px WebP 与 1x / 2x 候选，页面显示为 64px 圆形头像。日期、阅读时长、点赞等文章元信息由父级 `cascade` 默认关闭。卡片简介使用 `summary` 并设置 `showSummary: true`；`description` 用于页面元数据，不会自动作为卡片简介。没有头像资源时仅展示名称与简介，不填充默认图标；优先保存对方公开使用的真实头像，不依赖远程热链。
+后续每个友链可放在 `content/friends/<slug>/index.md`，填写真实的 `title`、`description`、`externalUrl` 与排序用的 `weight`；头像放在同目录，使用 `avatar: "avatar.webp"` 指定（未指定时匹配 `avatar.*`）；Hugo 输出 64 / 128px WebP 与 1x / 2x 候选，页面显示为 64px 圆形头像，并生成 24×24 WebP 内嵌占位，复用 `.blur-img-wrapper` / `.blur-img` 与 `blur-image.js` 的统一模糊加载及失败降级。圆形容器固定尺寸，不拦截整卡链接；无 JS 时仍直接加载实际头像。日期、阅读时长、点赞等文章元信息由父级 `cascade` 默认关闭。卡片简介使用 `summary` 并设置 `showSummary: true`；`description` 用于页面元数据，不会自动作为卡片简介。没有头像资源时仅展示名称与简介，不填充默认图标；优先保存对方公开使用的真实头像，不依赖远程热链。
 
 友链子条目仍遵循 Hugo 普通内容页的生成规则。当前搜索索引保留 `externalUrl`，搜索结果跳转外部站点；Blowfish sitemap 模板排除 HTTP(S) 外链条目。本地条目页面仍会生成，后续新增需核对这三类输出。
 

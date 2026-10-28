@@ -1,6 +1,7 @@
 ---
 title: "Claude网页版稳定使用方法"
 date: 2026-10-23T11:38:07-04:00
+lastmod: 2026-10-25
 draft: false
 description: "记录 Claude 网页版使用环境的配置方法：选择与检测 VPS、搭建 sing-box 中转节点、导入 Clash Verge Rev，以及检查 IPv6、浏览器语言和系统时区。"
 slug: ""
@@ -10,8 +11,8 @@ tags: [] # 可留空，通常 0–2 个具体主题；由作者选择
 categories: [tutorials]
 topics: []
 series: []
-showDateUpdated: false
-dateUpdated: ""
+showDateUpdated: true
+dateUpdated: "2026-10-25"
 images: []
 showHero: true
 heroStyle: "background"
@@ -125,6 +126,40 @@ bash <(curl -fsSL --connect-timeout 15 --retry 3 https://github.com/233boy/sing-
 
 可以告诉 AI 自己的设备，然后询问关闭 IPv6 的具体方法。
 
+#### macOS：关闭与检查
+
+> 以下命令在本机 macOS 的终端执行，不是在 VPS 的 SSH 会话中执行。`Wi-Fi` 和 `Ethernet` 是网络服务名称，需要与本机实际名称一致；名称含空格时用引号括起。修改网络设置需要管理员权限。
+
+按实际连接方式选择对应命令：
+
+```bash
+# 关闭 Wi-Fi 的 IPv6。
+sudo networksetup -setv6off Wi-Fi
+
+# 关闭有线网络的 IPv6（如适用）。
+sudo networksetup -setv6off Ethernet
+```
+
+执行后，可以查看对应网络服务的信息，确认 IPv6 状态；有线网络将 `Wi-Fi` 换成 `Ethernet`：
+
+```bash
+# 查看 Wi-Fi 的网络配置，包括 IPv6 状态。
+networksetup -getinfo Wi-Fi
+```
+
+> 关闭 IPv6 后，部分依赖 IPv6 的服务可能受影响，但对大多数日常使用（包括访问 Claude）影响很小。修改后建议断开并重新连接网络，或重启一次，确保生效。
+
+#### macOS：恢复自动配置
+
+如需恢复，将 IPv6 配置改回“自动”，或执行：
+
+```bash
+# 将 Wi-Fi 的 IPv6 恢复为自动配置。
+sudo networksetup -setv6automatic Wi-Fi
+```
+
+如果此前关闭的是有线网络，同样将 `Wi-Fi` 换成 `Ethernet`。
+
 ### 浏览器语言
 
 最后需要把浏览器语言改为英语，删除中文语言选项，可以多备几个浏览器使用。
@@ -132,6 +167,19 @@ bash <(curl -fsSL --connect-timeout 15 --retry 3 https://github.com/233boy/sing-
 ### 系统时区
 
 然后把系统时区设置为和 VPS 地区接近的时区，也是通过询问 AI 来修改，macOS 和 Windows 方法不同。
+
+macOS 也可以通过本机终端操作。先查看当前时区和可用时区列表，再根据 VPS 地区选择对应时区；下面以 `America/Toronto` 为设置示例：
+
+```bash
+# 查看当前时区。
+sudo systemsetup -gettimezone
+
+# 查看本机支持的时区列表。
+sudo systemsetup -listtimezones
+
+# 将系统时区设置为 America/Toronto（示例）。
+sudo systemsetup -settimezone America/Toronto
+```
 
 ***
 
