@@ -375,7 +375,7 @@
    - 整体是一个毛玻璃卡片（backdrop-filter blur + saturate），不是单独的图标
    - 卡片大圆角（24px ≈ iOS 控件） + 顶部 1px 高光描边（立体感）
    - 单个图标按钮 = iOS 应用图标：圆角方（squircle） + 内部 icon 居中
-   - 联系方式使用 assets/icons/ 下的 Simple Icons 实心品牌 SVG
+   - 联系方式优先使用 assets/icons/ 下的品牌 SVG，公众号复用主题聊天图标
    - 品牌色来自 SVG 自带 fill，按钮本体保持中性玻璃色
    - 邮箱按钮走 base64 + JS 解码；noscript 保留明文联系方式兜底
    ============================================================================= */
@@ -547,6 +547,64 @@ html.dark .about-contact-btn:hover {
 .about-contact-btn--email:not([href]),
 .about-contact-btn--email[href=""] {
   cursor: pointer;
+}
+
+.prose details.about-contact-wechat {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.about-contact-wechat > summary {
+  list-style: none;
+}
+.about-contact-wechat > summary::-webkit-details-marker {
+  display: none;
+}
+.about-contact .about-contact-btn--wechat {
+  padding: 0;
+  color: #07c160;
+  cursor: pointer;
+}
+.about-contact-wechat-panel {
+  position: absolute;
+  z-index: 20;
+  top: 50%;
+  left: calc(100% + 0.75rem);
+  box-sizing: border-box;
+  width: 15rem;
+  padding: 0.75rem;
+  transform: translateY(-50%);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: var(--bg-base);
+  color: var(--fg-base);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+  text-align: center;
+}
+.about-contact-wechat-qr {
+  display: block;
+  width: min(13.4375rem, 100%);
+  height: auto;
+  margin: 0 auto;
+  border-radius: 0.75rem;
+}
+.about-contact-wechat-panel .about-contact-wechat-hint {
+  margin: 0;
+  color: var(--fg-mute);
+  font-family: var(--font-serif-body);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 760px) {
+  .about-contact-wechat-panel {
+    top: calc(100% + 0.75rem);
+    right: 0;
+    left: auto;
+    width: min(15rem, calc(100vw - 2rem));
+    transform: none;
+  }
 }
 
 /* 无 JS / 邮箱解码失败兜底（noscript 块里纯文本联系方式） */

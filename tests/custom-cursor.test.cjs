@@ -34,7 +34,7 @@ test("cursor hover stays continuous on vertical menu paths and resets outside", 
   cursor.querySelector = () => ({ style: {} });
   runInNewContext(source, {
     Element,
-    window: { matchMedia: () => ({ matches: false }), addEventListener() {} },
+    window: { matchMedia: () => ({ matches: false }), addEventListener() {}, innerWidth: 1200, innerHeight: 800 },
     document: { documentElement: root, hidden: false, querySelector: () => cursor,
       addEventListener: (name, fn) => { events[name] = fn; } },
   });
@@ -58,7 +58,15 @@ test("cursor hover stays continuous on vertical menu paths and resets outside", 
   assert.equal(root.classes.has("custom-cursor-hover"), false);
   events.pointerover({ target: new Element("a") });
   assert.equal(root.classes.has("custom-cursor-hover"), true);
+  root.classes.add("custom-cursor-active");
   events.pointerout({ relatedTarget: null });
-  assert.equal(root.classes.has("custom-cursor-hover"), false);
+  assert.equal(root.classes.has("custom-cursor-hover"), true);
+  assert.equal(root.classes.has("custom-cursor-active"), true);
+  assert.equal(cursor.classes.has("is-hidden"), false);
+  events.mouseleave({ clientX: 480, clientY: 32 });
+  assert.equal(root.classes.has("custom-cursor-active"), true);
+  assert.equal(cursor.classes.has("is-hidden"), false);
+  events.mouseleave({ clientX: -1, clientY: 32 });
+  assert.equal(root.classes.has("custom-cursor-active"), false);
   assert.equal(cursor.classes.has("is-hidden"), true);
 });

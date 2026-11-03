@@ -164,9 +164,9 @@
   }, { passive: true });
 
   document.addEventListener('pointerover', (event) => syncHoverState(event.target));
+  // 层重排时 relatedTarget 会空一帧；这时指针仍在原处，不能把 hover 清掉。
   document.addEventListener('pointerout', (event) => {
-    syncHoverState(event.relatedTarget);
-    if (!event.relatedTarget) hide();
+    if (event.relatedTarget instanceof Element) syncHoverState(event.relatedTarget);
   });
 
   document.addEventListener('pointerdown', (event) => {
@@ -177,7 +177,13 @@
 
   document.addEventListener('pointerup', () => root.classList.remove('custom-cursor-click'));
   document.addEventListener('pointercancel', () => root.classList.remove('custom-cursor-click'));
-  document.addEventListener('mouseleave', () => {
+  document.addEventListener('mouseleave', (event) => {
+    const x = event.clientX;
+    const y = event.clientY;
+    // 下拉层插入会让 document 收到一次坐标仍在按钮上的 mouseleave。
+    const inside = Number.isFinite(x) && Number.isFinite(y)
+      && x > 0 && y > 0 && x < window.innerWidth && y < window.innerHeight;
+    if (inside) return;
     hide();
   });
   document.addEventListener('mouseenter', (event) => {

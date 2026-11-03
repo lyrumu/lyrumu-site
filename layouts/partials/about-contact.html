@@ -20,6 +20,7 @@
 {{- $github := resources.Get "icons/github.svg" -}}
 {{- $gmail  := resources.Get "icons/gmail.svg" -}}
 {{- $qq     := resources.Get "icons/qq.svg" -}}
+{{- $wechat := resources.Get "icons/comment.svg" -}}
 
 <div class="about-contact">
   <p class="about-contact-label">Find me on</p>
@@ -47,6 +48,26 @@
        role="listitem" aria-label="QQ Mail: xkjdq_2025@qq.com">
       <span class="about-contact-icon">{{ $qq.Content | safeHTML }}</span>
     </a>
+
+    <span role="listitem">
+      <details class="about-contact-wechat">
+        <summary class="about-contact-btn about-contact-btn--wechat"
+                 aria-label="显示微信公众号二维码">
+          <span class="about-contact-icon">{{ $wechat.Content | safeHTML }}</span>
+        </summary>
+        <div class="about-contact-wechat-panel">
+          <img
+            class="about-contact-wechat-qr"
+            src="/image/wechat-official-account.png"
+            alt="微信公众号二维码"
+            width="215"
+            height="215"
+            loading="lazy"
+            decoding="async" />
+          <p class="about-contact-wechat-hint">微信扫码关注</p>
+        </div>
+      </details>
+    </span>
   </div>
 
   <noscript>
@@ -135,5 +156,14 @@
       /* atob 失败时保持 # 链接 */
     }
   });
+
+  var wechat = document.querySelector('.about-contact-wechat');
+  if (wechat) {
+    document.addEventListener('click', function (event) {
+      if (wechat.open && !wechat.contains(event.target)) {
+        wechat.open = false;
+      }
+    });
+  }
 })();
 </script>

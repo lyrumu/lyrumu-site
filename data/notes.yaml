@@ -60,7 +60,7 @@ items:
     icon: smartphone
 
   - slug: Codex-Plus
-    image: "image/notes/Codex-Plus.webp"
+    image: "image/notes/Codex-Plus.png"
     icon: brain
     fallback_tag: ai
 

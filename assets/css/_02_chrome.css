@@ -242,14 +242,17 @@ html.dark .site-menu-group {
   /* 从主项下方舒展；收回使用同一组属性，反向时不会重启动画。 */
   transform: translateY(-6px) scale(0.96, 0.92);
   filter: blur(1.5px);
+  /* 上移 6px 会盖住触发器。裁掉同样的一截后，指针仍留在 ABOUT ME 上，下方留白继续连通菜单。 */
+  clip-path: inset(7px 0 0 0);
   pointer-events: none;
-  transition: opacity var(--menu-duration), transform var(--menu-duration), filter var(--menu-duration);
+  transition: opacity var(--menu-duration), transform var(--menu-duration), filter var(--menu-duration), clip-path var(--menu-duration);
   transition-timing-function: cubic-bezier(0.4, 0, 0.7, 0.2);
 }
 .site-menu-group--desktop.is-expanded > .site-menu-group__panel {
   opacity: 1;
   transform: translateY(0) scale(1);
   filter: none;
+  clip-path: inset(0 0 0 0);
   pointer-events: auto;
   transition-timing-function: var(--menu-ease);
 }
@@ -280,7 +283,7 @@ html.dark .site-menu-group {
   .site-menu-group__chevron,
   .main-menu .site-menu-group__items a,
   .site-menu-group--desktop[data-enhanced] > .site-menu-group__panel { transition: none; }
-  .site-menu-group--desktop[data-enhanced] > .site-menu-group__panel { transform: none; filter: none; }
+  .site-menu-group--desktop[data-enhanced] > .site-menu-group__panel { transform: none; filter: none; clip-path: none; }
 }
 
 /* =============================================================================
