@@ -15,6 +15,12 @@
     ⚠️ 升级 blowfish 时如果本行被覆盖，重新加这一段即可。
 */}}
   <body class="{{ $bodyLayout }} {{ $bodyColor }} {{ if site.Params.enableStyledScrollbar | default true }}bf-scrollbar{{ end }}{{ if .IsHome }} is-cover-page{{ end }}{{ if eq .RelPermalink "/life/music/" }} is-music-page{{ end }}">
+    {{/*
+      [lyrumu 改造] 在 body 起始处注入自定义光标，优先恢复跨页导航前的位置。
+      光标的实际启用由 JS 根据设备与偏好自行判断。
+      ⚠️ 升级 blowfish 时如果本行被覆盖，重新加这一段即可。
+    */}}
+    {{- partial "custom-cursor.html" . -}}
     <div id="the-top" class="absolute flex self-center">
       <a
         class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
@@ -41,12 +47,6 @@
         {{- partial "search.html" . -}}
       {{ end }}
     </div>
-    {{/*
-      [lyrumu 改造] 在 body 末尾注入自定义光标 partial。
-      光标的实际启用由 JS 根据设备与偏好自行判断。
-      ⚠️ 升级 blowfish 时如果本行被覆盖，重新加这一段即可。
-    */}}
-    {{- partial "custom-cursor.html" . -}}
   </body>
   {{ if site.Params.buymeacoffee.globalWidget | default false }}
     <script

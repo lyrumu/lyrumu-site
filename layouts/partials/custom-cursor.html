@@ -1,13 +1,12 @@
 {{/*
   custom-cursor.html — 自定义光标注入
   ----------------------------------------------------------------------------
-  在 body 结束之前注入光标容器与对应 JS。
+  在 body 开始后立即注入光标容器与对应 JS。
   光标的启用逻辑（触摸设备 / reduced-motion / 小视口）全部由 JS 自行判断。
 */}}
 <div class="custom-cursor" aria-hidden="true">
   <div class="cursor-ring-wrapper"><div class="cursor-ring"></div></div>
 </div>
-{{ $alg := .Site.Params.fingerprintAlgorithm | default "sha512" }}
-{{ $js := resources.Get "js/custom-cursor.js" | resources.Minify | resources.Fingerprint $alg }}
-{{/* 位于 body 末尾，立即执行可尽早接管系统光标，避免页面切换后的闪现。 */}}
-<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+{{ $js := resources.Get "js/custom-cursor.js" | resources.Minify }}
+{{/* 关键小脚本直接内联，避免同步网络请求，同时优先恢复跨页导航前的位置。 */}}
+<script>{{ $js.Content | safeJS }}</script>

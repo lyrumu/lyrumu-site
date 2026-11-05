@@ -272,6 +272,20 @@ html.dark .life-sub-card:hover {
   border-color: var(--fg-base) !important;
   transform: translateY(-2px);
 }
+
+/* 普通内容卡片统一底色；封面卡和音乐播放列表保留各自的视觉。 */
+:is(.module-card, .article-link--card, .article-link--related, .article-link--simple,
+    .life-sub-card, .project-card, .resource-card, .article-pagination-card) {
+  background: var(--bg-deep) !important;
+}
+html.dark :is(.module-card, .article-link--card, .article-link--related, .article-link--simple,
+              .life-sub-card, .project-card, .resource-card, .article-pagination-card) {
+  background: color-mix(in srgb, var(--bg-base) 95%, var(--fg-base)) !important;
+}
+html.dark :is(.module-card, .article-link--card, .article-link--related, .article-link--simple,
+              .life-sub-card, .project-card, .resource-card, .article-pagination-card):hover {
+  background: color-mix(in srgb, var(--bg-base) 92%, var(--fg-base)) !important;
+}
 .article-link--card h2,
 .article-link--related h2 {
   font-family: var(--font-serif-display) !important;

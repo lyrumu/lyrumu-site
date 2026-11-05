@@ -5,7 +5,7 @@
      - 非触摸主输入设备 (pointer: fine)
      - 未开启 prefers-reduced-motion
      - 视口宽度 > 720px
-   满足条件时复用 body 末尾的光标 DOM，并在真实指针事件后接管系统光标。
+   满足条件时复用 body 起始处的光标 DOM，并在真实指针事件后接管系统光标。
    ============================================================================= */
 
 (function () {
@@ -36,6 +36,8 @@
   const ringWrapper = container.querySelector('.cursor-ring-wrapper');
   if (!ringWrapper) return;
 
+  const positionStorageKey = 'lyrumu.customCursorPosition.v2';
+  const restoreMaxAge = 10000;
   const followTime = 18;
 
   let mouseX = 0;
@@ -44,6 +46,7 @@
   let ringY = 0;
   let hasPosition = false;
   let isPageVisible = !document.hidden;
+  let restoreOnPageShow = false;
   let rafId = null;
   let lastFrameTime = 0;
 
@@ -66,11 +69,17 @@
     root.classList.remove('custom-cursor-active', 'custom-cursor-click', 'custom-cursor-hover');
   };
 
+  const suspend = () => {
+    cancelLoop();
+    container.classList.add('is-hidden');
+    root.classList.remove('custom-cursor-click', 'custom-cursor-hover');
+  };
+
   const activate = () => {
     if (!hasPosition || !isPageVisible) return;
-    root.classList.add('custom-cursor-active');
-    container.classList.add('is-ready');
-    container.classList.remove('is-hidden');
+    if (!root.classList.contains('custom-cursor-active')) root.classList.add('custom-cursor-active');
+    if (!container.classList.contains('is-ready')) container.classList.add('is-ready');
+    if (container.classList.contains('is-hidden')) container.classList.remove('is-hidden');
   };
 
   const tick = (time) => {
@@ -125,6 +134,37 @@
 
     activate();
     scheduleTick();
+  };
+
+  const savePosition = () => {
+    try {
+      if (!hasPosition || !root.classList.contains('custom-cursor-active')) {
+        window.sessionStorage.removeItem(positionStorageKey);
+        return;
+      }
+      window.sessionStorage.setItem(positionStorageKey, JSON.stringify({
+        x: mouseX,
+        y: mouseY,
+        savedAt: Date.now()
+      }));
+    } catch (_) {
+      // 存储不可用时继续等待下一次真实指针事件。
+    }
+  };
+
+  const restorePosition = () => {
+    try {
+      const saved = JSON.parse(window.sessionStorage.getItem(positionStorageKey) || 'null');
+      window.sessionStorage.removeItem(positionStorageKey);
+      const age = saved && Number.isFinite(saved.savedAt) ? Date.now() - saved.savedAt : -1;
+      if (age < 0 || age > restoreMaxAge) return false;
+      if (!Number.isFinite(saved.x) || !Number.isFinite(saved.y)) return false;
+      if (saved.x < 0 || saved.x >= window.innerWidth || saved.y < 0 || saved.y >= window.innerHeight) return false;
+      setPosition(saved.x, saved.y, true);
+      return true;
+    } catch (_) {
+      return false;
+    }
   };
 
   // hover 检测：给常见交互元素及项目卡片加 class
@@ -195,13 +235,37 @@
   document.addEventListener('visibilitychange', () => {
     isPageVisible = !document.hidden;
     if (document.hidden) {
-      hide();
+      suspend();
+    } else {
+      if (restoreOnPageShow || !container.classList.contains('is-hidden')) activate();
+      restoreOnPageShow = false;
+      if (!container.classList.contains('is-hidden')
+        && root.classList.contains('custom-cursor-active')
+        && (ringX !== mouseX || ringY !== mouseY)) scheduleTick();
     }
   });
 
-  window.addEventListener('pagehide', hide);
-  window.addEventListener('pageshow', () => {
-    isPageVisible = true;
+  window.addEventListener('pagehide', () => {
+    restoreOnPageShow = root.classList.contains('custom-cursor-active');
+    savePosition();
+    hide();
   });
-  window.addEventListener('blur', hide);
+  window.addEventListener('pageshow', () => {
+    isPageVisible = !document.hidden;
+    if (restoreOnPageShow && isPageVisible) {
+      activate();
+      if (root.classList.contains('custom-cursor-active')) {
+        syncHoverState(document.elementFromPoint(mouseX, mouseY));
+        if (ringX !== mouseX || ringY !== mouseY) scheduleTick();
+      }
+      restoreOnPageShow = false;
+    }
+  });
+  window.addEventListener('blur', suspend);
+
+  if (restorePosition()) {
+    document.addEventListener('DOMContentLoaded', () => {
+      syncHoverState(document.elementFromPoint(mouseX, mouseY));
+    }, { once: true });
+  }
 })();

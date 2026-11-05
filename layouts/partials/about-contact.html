@@ -21,6 +21,9 @@
 {{- $gmail  := resources.Get "icons/gmail.svg" -}}
 {{- $qq     := resources.Get "icons/qq.svg" -}}
 {{- $wechat := resources.Get "icons/comment.svg" -}}
+{{- $wechatQR := resources.Get "image/wechat-official-account.png" -}}
+{{- $wechatTiny := $wechatQR.Resize "24x webp" -}}
+{{- $wechatLQIP := printf "data:image/webp;base64,%s" (base64Encode $wechatTiny.Content) | safeURL -}}
 
 <div class="about-contact">
   <p class="about-contact-label">Find me on</p>
@@ -56,14 +59,19 @@
           <span class="about-contact-icon">{{ $wechat.Content | safeHTML }}</span>
         </summary>
         <div class="about-contact-wechat-panel">
-          <img
-            class="about-contact-wechat-qr"
-            src="/image/wechat-official-account.png"
-            alt="微信公众号二维码"
-            width="215"
-            height="215"
-            loading="lazy"
-            decoding="async" />
+          <div
+            class="about-contact-wechat-qr-frame blur-img-wrapper"
+            style="--blur-img: url('{{ $wechatLQIP }}'); aspect-ratio: {{ $wechatQR.Width }} / {{ $wechatQR.Height }}">
+            <img
+              class="about-contact-wechat-qr blur-img"
+              src="{{ $wechatQR.RelPermalink }}"
+              alt="微信公众号二维码"
+              width="{{ $wechatQR.Width }}"
+              height="{{ $wechatQR.Height }}"
+              loading="lazy"
+              decoding="async"
+              data-lqip="1" />
+          </div>
           <p class="about-contact-wechat-hint">微信扫码关注</p>
         </div>
       </details>

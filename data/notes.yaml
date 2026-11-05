@@ -75,7 +75,7 @@ items:
     fallback_tag: agent
 
   - slug: git-guide
-    image: "image/notes/git.webp"
+    image: "image/notes/git-guide-v2.png"
     icon: code-2
     fallback_tag: git
 
@@ -85,7 +85,7 @@ items:
     fallback_tag: tools
 
   - slug: 使用chezmoi管理dot-files
-    image: "image/notes/chezmoi.webp"
+    image: "image/notes/chezmoi-v2.png"
     icon: folder-sync
     fallback_tag: tools
 
@@ -105,11 +105,11 @@ items:
     fallback_tag: os
 
   - slug: 影视飓风AI课程总结
-    image: "image/notes/影视飓风AI课程总结.png"
+    image: "image/notes/mediastorm-ai-v2.png"
     icon: brain
     fallback_tag: ai
 
   - slug: Flutter项目部署至ios
-    image: "image/notes/Flutter项目部署至ios.png"
+    image: "image/notes/flutter-iphone-v2.png"
     icon: smartphone
     fallback_tag: development
