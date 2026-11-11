@@ -38,7 +38,7 @@
 
 {{/*
   counter-cache.js（2026-10-13）— 计数缓存显示
-  - 实时计数 15 秒内到达就用实时值，否则显示上次缓存的数字，不再一直 loading
+  - 立即显示已有缓存，实时计数到达后自动更新
   - 不依赖 gstatic，直连时也能显示；与首页 Popular 共用同一份缓存
   - 须在 extend-head-uncached 的 home-feed.js 之前执行（本 partial 先输出）
 */}}

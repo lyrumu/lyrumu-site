@@ -50,8 +50,10 @@ test("cached and repeated metadata snapshots keep the count visible, followed by
   const s = setup();
   s.emit(true, 1234);
   assert.equal(s.node.innerText, "1,234");
+  assert.equal(s.node._counterCached, true);
   assert.equal(s.node.className, "");
   s.emit(false, 1234);
+  assert.equal(s.node._counterCached, false);
   s.emit(true, 1234);
   assert.equal(s.node.innerText, "1,234");
   assert.equal(s.node.className, "");

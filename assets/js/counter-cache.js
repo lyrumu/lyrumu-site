@@ -1,6 +1,6 @@
 /* 计数缓存（2026-10-13）
    ---------------------------------------------------------------
-   - 实时计数 15 秒内到达就用实时值；否则显示上次缓存的数字，避免一直 loading。
+   - 立即显示上次缓存的数字，实时计数到达后静默更新。
    - 直连（gstatic 被墙）时 firebase.js 的 module 不会执行，本脚本不依赖它。
    - 与首页 Popular 共用同一份缓存：window.CounterCache.get(node)。
    - 缓存揭示使用内联样式；Firebase 实时值到达并清除加载类后仍正常显示。
@@ -8,7 +8,6 @@
 (function () {
   var KEY = "counter-cache:v2";
   var MAX = 1000;
-  var GRACE = 15000;
   var SELECTOR = "[id^='views_'], [id^='likes_']";
 
   var cache = (function () {
@@ -53,7 +52,8 @@
 
   function reveal(node) {
     var value = get(node);
-    if (value === null || number(node) !== null) return;
+    if (value === null || (number(node) !== null && !node._counterCached)) return;
+    node._counterCached = true;
     node.textContent = format(value);
     node.style.color = "inherit";
     node.style.background = "none";
@@ -66,12 +66,13 @@
     var nodes = Array.prototype.slice.call(document.querySelectorAll(SELECTOR));
     nodes.forEach(function (node) {
       if (!node.id) return;
-      store(node);
+      node._counterCached = node.dataset.counterCached === "true";
+      if (node._counterCached) reveal(node);
+      else { store(node); reveal(node); }
       // 实时值写入缓存；揭示缓存后 firebase 再写实时值时也会更新缓存。
       new MutationObserver(function () { store(node); })
         .observe(node, { childList: true, characterData: true, subtree: true });
     });
-    setTimeout(function () { nodes.forEach(reveal); }, GRACE);
   }
 
   window.CounterCache = { get: get, key: KEY };

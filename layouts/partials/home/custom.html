@@ -55,8 +55,8 @@
               <span class="cover-views-num">
                 <span
                   id="views_home"
-                  class="animate-pulse"
-                  title="home views">···</span>
+                  {{ if hugo.Data.counter_snapshot }}data-counter-cached="true"{{ else }}class="animate-pulse"{{ end }}
+                  title="home views">{{ if hugo.Data.counter_snapshot }}{{ index hugo.Data.counter_snapshot.counts "views_home" | default 0 }}{{ else }}···{{ end }}</span>
               </span>
               <span class="cover-views-eye" aria-hidden="true">{{ partial "icon.html" "eye" }}</span>
             </span>

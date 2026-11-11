@@ -53,7 +53,7 @@
 | 配置 Giscus 评论（显示页面/主题/仓库） | `layouts/partials/extend-footer.html` 用 Hugo 页面类型限定 notes 普通文章及 About / Projects / Music；`assets/js/giscus-loader.js` 维护仓库、pathname 映射与主题切换；`layouts/partials/footer.html` 按当前页面调用，不能无区分缓存 |
 | 以后要启用 Blowfish 原生阅读数 / 点赞 | [`hugo.toml`](file:///f:/Notes/hugo.toml) 的 `showViews / showLikes` + `[firebase]`（原生方案推荐 Firebase） |
 | 看 Firebase 安全规则怎么配 | [`FIREBASE_SECURITY.md`](file:///f:/Notes/FIREBASE_SECURITY.md) |
-| 改计数离线保护与联网恢复 | `assets/js/firebase.js` 保留离线空快照保护并接收元数据事件；`assets/js/counter-cache.js` 提供超时缓存显示。必要回归为 `tests/firebase-override.test.cjs` 与 `tests/counter-cache.test.cjs`，已从忽略规则单独放行 |
+| 改计数离线保护与联网恢复 | `assets/js/firebase.js` 保留离线空快照保护并接收元数据事件。`assets/js/counter-cache.js` 提供即时缓存显示，`tools/counter-snapshot/` 提供构建快照，`.github/workflows/refresh-counter-snapshot.yml` 每四天触发 Pages 构建。上线步骤见 `tools/counter-snapshot/README.md`，回归见 `tests/firebase-override.test.cjs` 和 `tests/counter-cache.test.cjs` |
 | 加一篇新文章 | 见下方 §4 |
 | 从独立 Obsidian Notes 整理文章 | 调用 `$notes-to-hugo` 并指定 `/Users/lyrumu/project/Notes` 下的源文件；Skill 位于 [`.agents/skills/notes-to-hugo/SKILL.md`](.agents/skills/notes-to-hugo/SKILL.md) |
 | 写 CSS（字体 / 颜色 / 间距） | 见下方 §3 · 选对模块文件 |

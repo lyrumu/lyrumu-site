@@ -85,6 +85,7 @@ tests/*
 !tests/header-menu.test.cjs
 !tests/custom-cursor.test.cjs
 !tests/counter-cache.test.cjs
+!tests/counter-snapshot.test.cjs
 !tests/firebase-override.test.cjs
 !tests/works-filter.test.cjs
 COVER_CAROUSEL_PLAN.md
@@ -98,3 +99,7 @@ Vault/
 
 # codegraph
 .codegraph/
+
+# 构建期间生成的 Firebase 计数快照
+/data/counter_snapshot.json
+/data/counter_snapshot.json.tmp

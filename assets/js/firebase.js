@@ -66,6 +66,7 @@ function updateDisplay(collection, nodeId) {
     // fromCache 快照是之前读到的真实值，照常显示，保持在线时的首屏速度。
     (snapshot) => {
       if (snapshot.metadata && snapshot.metadata.fromCache && !snapshot.exists()) return;
+      node._counterCached = !!(snapshot.metadata && snapshot.metadata.fromCache);
       node.innerText = snapshot.exists() ? formatNumber(snapshot.data()[collection]) : 0;
       node.className = "";
     },

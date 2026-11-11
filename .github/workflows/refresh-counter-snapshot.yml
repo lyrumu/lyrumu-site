@@ -1,0 +1,36 @@
+name: Refresh counter snapshot
+
+on:
+  schedule:
+    - cron: '23 5 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  refresh:
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Trigger Cloudflare Pages build
+        shell: bash
+        env:
+          PAGES_DEPLOY_HOOK: ${{ secrets.PAGES_DEPLOY_HOOK }}
+        run: |
+          # Count UTC days across month boundaries. Manual runs bypass the schedule.
+          if [[ "$GITHUB_EVENT_NAME" == schedule ]] && (( $(date -u +%s) / 86400 % 4 != 0 )); then
+            exit 0
+          fi
+
+          if [[ -z "$PAGES_DEPLOY_HOOK" ]]; then
+            echo 'Add the PAGES_DEPLOY_HOOK repository secret before running this workflow.' >&2
+            exit 1
+          fi
+
+          if ! status=$(curl --silent --output /dev/null --write-out '%{http_code}' \
+            --proto '=https' --max-time 30 --request POST -- "$PAGES_DEPLOY_HOOK") || [[ "$status" != 2[0-9][0-9] ]]; then
+            echo "Pages rejected the build request or could not be reached (HTTP ${status:-unknown})." >&2
+            exit 1
+          fi
+          echo 'Pages accepted the build request. Check the deployment in Cloudflare.'

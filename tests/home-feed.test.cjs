@@ -130,3 +130,14 @@ test("Popular falls back to counts cached from a previous visit when live counte
   s.cards[1].views.textContent = "999"; s.changed();
   assert.deepEqual(s.visible(), [1, 0, 2, 4, 3, 5]);
 });
+
+
+test("Popular identifies displayed cached counts until live values arrive", () => {
+  const s = setup([["10", "0"], ["20", "0"]]);
+  s.cards[0].views._counterCached = true;
+  s.click();
+  assert.match(s.status.textContent, /last visit/);
+  s.cards[0].views._counterCached = false;
+  s.changed();
+  assert.equal(s.status.hidden, true);
+});

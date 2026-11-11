@@ -64,7 +64,7 @@
     const ranked = recent.map((card, index) => ({ card, index, score: scores[index] }))
       .sort((a, b) => b.score - a.score || a.index - b.index);
     show(ranked.map(item => item.card), "Popular");
-    const live = counters.every(pair => count(pair.views) !== null && count(pair.likes) !== null);
+    const live = counters.every(pair => count(pair.views) !== null && !pair.views._counterCached && count(pair.likes) !== null && !pair.likes._counterCached);
     message(live ? "" : "Using counts from your last visit.");
   }
 

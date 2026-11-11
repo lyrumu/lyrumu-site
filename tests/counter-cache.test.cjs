@@ -7,7 +7,7 @@ const { test } = require("node:test");
 const source = readFileSync(join(__dirname, "../assets/js/counter-cache.js"), "utf8");
 const KEY = "counter-cache:v2";
 
-function node(id, text) { return { id, textContent: text, style: {} }; }
+function node(id, text) { return { id, textContent: text, style: {}, dataset: {} }; }
 
 function setup(nodes, cached) {
   const store = {};
@@ -29,12 +29,11 @@ function setup(nodes, cached) {
     saved: () => JSON.parse(store[KEY]) };
 }
 
-test("shows the cached count after the grace period when the counter never loads", () => {
+test("shows the cached count immediately when the counter never loads", () => {
   const n = node("views_notes/a.md", "loading");
   const s = setup([n], { "views_notes/a.md": 1234 });
-  assert.equal(n.textContent, "loading");
-  s.expire();
   assert.equal(n.textContent, "1,234");
+  assert.equal(n._counterCached, true);
   assert.equal(n.style.color, "inherit");
   assert.equal(n.style.background, "none");
   assert.equal(n.style.animation, "none");
@@ -83,4 +82,22 @@ test("exposes the shared cache for the Popular ranking", () => {
   const n = node("views_x", "9");
   const s = setup([n]);
   assert.equal(s.window.CounterCache.get(n), 9);
+});
+
+test("a previous local value replaces the embedded snapshot without overwriting it first", () => {
+  const n = node("views_home", "10");
+  n.dataset.counterCached = "true";
+  const s = setup([n], { views_home: 25 });
+  assert.equal(n.textContent, "25");
+  assert.equal(s.window.CounterCache.get(n), 25);
+  assert.equal(n._counterCached, true);
+});
+
+test("an embedded snapshot stays visible when local storage is empty", () => {
+  const n = node("views_home", "10");
+  n.dataset.counterCached = "true";
+  const s = setup([n]);
+  assert.equal(n.textContent, "10");
+  assert.equal(n._counterCached, true);
+  assert.equal(s.store[KEY], undefined);
 });
