@@ -18,6 +18,7 @@
   用 resources.Get + safeHTML 直接输出 SVG 节点
 */ -}}
 {{- $github := resources.Get "icons/github.svg" -}}
+{{- $x      := resources.Get "icons/x.svg" -}}
 {{- $gmail  := resources.Get "icons/gmail.svg" -}}
 {{- $qq     := resources.Get "icons/qq.svg" -}}
 {{- $wechat := resources.Get "icons/comment.svg" -}}
@@ -29,12 +30,21 @@
   <p class="about-contact-label">Find me on</p>
 
   <div class="about-contact-glass" role="list">
-    <a class="about-contact-btn about-contact-btn--github"
+    <a class="about-contact-btn about-contact-btn--github about-contact-btn--monochrome"
        href="https://github.com/lyrumu"
        target="_blank" rel="noopener noreferrer"
        role="listitem" aria-label="GitHub: github.com/lyrumu">
       <span class="about-contact-icon">{{ $github.Content | safeHTML }}</span>
     </a>
+
+    <span class="flex" role="listitem">
+      <a class="about-contact-btn about-contact-btn--x about-contact-btn--monochrome"
+         href="https://x.com/lyrumu58068"
+         target="_blank" rel="noopener noreferrer"
+         aria-label="X: @lyrumu58068">
+        <span class="about-contact-icon" aria-hidden="true">{{ $x.Content | safeHTML }}</span>
+      </a>
+    </span>
 
     <a class="about-contact-btn about-contact-btn--gmail about-contact-btn--email"
        href="#"
@@ -81,6 +91,8 @@
   <noscript>
     <p class="about-contact-fallback">
       GitHub: <a href="https://github.com/lyrumu" target="_blank" rel="noopener noreferrer">github.com/lyrumu</a>
+      &nbsp;·&nbsp;
+      X: <a href="https://x.com/lyrumu58068" target="_blank" rel="noopener noreferrer">@lyrumu58068</a>
       &nbsp;·&nbsp;
       Gmail: <a href="https://mail.google.com/mail/?view=cm&fs=1&to=llyrumu@gmail.com" target="_blank" rel="noopener noreferrer">写信</a>
       &nbsp;·&nbsp;

@@ -29,15 +29,15 @@ showComments: false
 sharingLinks: []
 ---
 
-> 使用agents时 用户目录下会产生很多以点开头的配置文件(下文统一称为dot-files)
+> 使用多个agents工具时 User目录下会产生很多以点开头的配置文件(下文统一称为dot-files)
 > 
 > 这些文件常常有重要价值 例如你的agents.md 以及各种记忆 skill/mcp配置
-> 同时难以管理 因此可以用chezmoi这个工具进行备份 同时能够在不同设备间快速同步
+> 这些配置文件可能会多次迭代变化 因此可以用chezmoi这个工具进行备份 同时能够在不同设备间快速同步
 
 - [**chezmoi官方docs**](https://www.chezmoi.io/) - 查看官方使用教程
 (还在学习使用中 keep updated)
 
-- [**我的个人管理示例**](https://github.com/lyrumu/dot-files)
+- [**我的个人管理示例**](https://github.com/lyrumu/MY_AGENT)
 
 - **注意 如果你没有使用过git 建议先熟悉git的使用再学习chezmoi**
 

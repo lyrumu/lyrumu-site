@@ -53,7 +53,7 @@
 | 配置 Giscus 评论（显示页面/主题/仓库） | `layouts/partials/extend-footer.html` 用 Hugo 页面类型限定 notes 普通文章及 About / Projects / Music；`assets/js/giscus-loader.js` 维护仓库、pathname 映射与主题切换；`layouts/partials/footer.html` 按当前页面调用，不能无区分缓存 |
 | 以后要启用 Blowfish 原生阅读数 / 点赞 | [`hugo.toml`](file:///f:/Notes/hugo.toml) 的 `showViews / showLikes` + `[firebase]`（原生方案推荐 Firebase） |
 | 看 Firebase 安全规则怎么配 | [`FIREBASE_SECURITY.md`](file:///f:/Notes/FIREBASE_SECURITY.md) |
-| 改计数离线保护与联网恢复 | `assets/js/firebase.js` 保留离线空快照保护并接收元数据事件。`assets/js/counter-cache.js` 提供即时缓存显示，`tools/counter-snapshot/` 提供构建快照，`.github/workflows/refresh-counter-snapshot.yml` 每四天触发 Pages 构建。上线步骤见 `tools/counter-snapshot/README.md`，回归见 `tests/firebase-override.test.cjs` 和 `tests/counter-cache.test.cjs` |
+| 改计数离线保护与联网恢复 | `assets/js/firebase.js` 保留离线空快照保护并接收元数据事件。`assets/js/counter-cache.js` 提供即时缓存显示，`tools/counter-snapshot/` 提供构建快照，`.github/workflows/refresh-counter-snapshot.yml` 每周三触发 Pages 构建。上线步骤见 `tools/counter-snapshot/README.md`，回归见 `tests/firebase-override.test.cjs` 和 `tests/counter-cache.test.cjs` |
 | 加一篇新文章 | 见下方 §4 |
 | 从独立 Obsidian Notes 整理文章 | 调用 `$notes-to-hugo` 并指定 `/Users/lyrumu/project/Notes` 下的源文件；Skill 位于 [`.agents/skills/notes-to-hugo/SKILL.md`](.agents/skills/notes-to-hugo/SKILL.md) |
 | 写 CSS（字体 / 颜色 / 间距） | 见下方 §3 · 选对模块文件 |
@@ -320,8 +320,7 @@ f:\Notes\
 | `Technical stack` 下方的 `Current focus / Path so far` | [`content/about/_index.md`](file:///f:/Notes/content/about/_index.md) + [`data/about_timeline.yaml`](file:///f:/Notes/data/about_timeline.yaml) | markdown + data + [`layouts/shortcodes/about-timeline.html`](file:///f:/Notes/layouts/shortcodes/about-timeline.html) + [`assets/css/_09_about.css`](file:///F:/Notes/assets/css/_09_about.css) 的 `.about-focus-* / .about-timeline-group-* / .about-milestone-* / .about-timeline-*` |
 | about 首屏头像 / 字体预加载 | — | [`layouts/partials/head.html`](file:///f:/Notes/layouts/partials/head.html) |
 | 联系方式短代码壳 | — | [`layouts/shortcodes/about-contact.html`](file:///f:/Notes/layouts/shortcodes/about-contact.html)（仅调 partial） |
-| 联系方式 partial：3 个图标按钮 + base64 邮箱 + Toast + 解码 JS | 邮箱 base64 直接硬编码在 partial 里 | [`layouts/partials/about-contact.html`](file:///f:/Notes/layouts/partials/about-contact.html) |
-| 邮箱按钮图标（GitHub / Gmail / QQ） | — | [`assets/icons/github.svg`](file:///f:/Notes/assets/icons/github.svg) / [gmail.svg](file:///f:/Notes/assets/icons/gmail.svg) / [qq.svg](file:///f:/Notes/assets/icons/qq.svg)（Simple Icons 品牌色填充） |
+| 联系方式（GitHub / X / Gmail / QQ / 微信公众号） | `assets/icons/`，X 官方标志为 `assets/icons/x.svg` | [`layouts/partials/about-contact.html`](file:///f:/Notes/layouts/partials/about-contact.html) 负责账号链接、SVG、邮箱解码和二维码 |
 | 液态玻璃效果 + 应用图标按钮 + 顶部 Toast | — | [`assets/css/_09_about.css`](file:///F:/Notes/assets/css/_09_about.css) |
 
 **点击行为**：
@@ -334,10 +333,10 @@ f:\Notes\
 
 **邮箱 base64 防爬**：HTML 中只有 `data-contact-b64="bGx5cnVtdUBnbWFpbC5jb20="`，JS 用 `atob` 解码后写入 `href`。无 JS 时降级到 `<noscript>` 块明文邮箱 + 跳转链接。
 
-**加新联系方式**（如 Twitter / Bilibili）：
+**加新联系方式**（如 Bilibili）：
 
-1. 从 `https://cdn.simpleicons.org/<name>` 下载 SVG → [`assets/icons/`](file:///f:/Notes/assets/icons/)
-2. [`layouts/partials/about-contact.html`](file:///f:/Notes/layouts/partials/about-contact.html) 复制一个 `<a>` 块，改类名 + `href` + 调 `{{< icon >}}`
+1. 把 SVG 放入 [`assets/icons/`](file:///f:/Notes/assets/icons/)。
+2. 在 [`layouts/partials/about-contact.html`](file:///f:/Notes/layouts/partials/about-contact.html) 添加链接，用 `resources.Get` 取得图标。
 3. 邮箱类按钮还需要加 `data-contact-b64` + `data-contact-platform`，并在 JS 里加平台 URL 拼装分支
 
 **调整 about 新增内容块**：

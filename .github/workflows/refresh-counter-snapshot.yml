@@ -2,7 +2,7 @@ name: Refresh counter snapshot
 
 on:
   schedule:
-    - cron: '23 5 * * *'
+    - cron: '23 5 * * 3'
   workflow_dispatch:
 
 permissions: {}
@@ -18,11 +18,6 @@ jobs:
         env:
           PAGES_DEPLOY_HOOK: ${{ secrets.PAGES_DEPLOY_HOOK }}
         run: |
-          # Count UTC days across month boundaries. Manual runs bypass the schedule.
-          if [[ "$GITHUB_EVENT_NAME" == schedule ]] && (( $(date -u +%s) / 86400 % 4 != 0 )); then
-            exit 0
-          fi
-
           if [[ -z "$PAGES_DEPLOY_HOOK" ]]; then
             echo 'Add the PAGES_DEPLOY_HOOK repository secret before running this workflow.' >&2
             exit 1

@@ -34,12 +34,12 @@ showLikes: true
 
 ## All OS
 
+- [magpie](https://usemagpie.ai/) - 通过本地网关 支持任意模型接入任意Agent 能力比CC-switch更强
 - [CC-switch](https://www.ccswitch.io/zh/) - 编程工具(尤其是claude-code)统一管理系统
 - [Localsend](https://localsend.org) — 跨win，mac设备文件传输工具
 - [sdkman](https://sdkman.io/) - 可以用来管理java等各种版本的工具
 - [chezmoi](https://www.chezmoi.io/) - 管理你家目录下的dot-files
 - [Watt Toolkit](https://steampp.net) — github，steam社区加速工具
-- [UU游戏加速器](https://uu.163.com/download/)  — steam加速器
 - [Deskflow](https://github.com/deskflow/deskflow) - 同一套键鼠，局域网下控制多台设备（可跨端），开销远小于远程桌面。不过win连接mac时，流畅度和键盘映射还有一定问题
 
 ***
@@ -93,4 +93,5 @@ showLikes: true
 ### Tools
 
 - [SoniqTools](https://soniqtools.com/zh/) - 音频处理工具在线网站
-- [FreeConvert](https://www.freeconvert.com/zh-CN) - 把图片转换为webp 让你的网站加载更快 负载更低
+- [Squoosh](https://squoosh.app/) - 谷歌开源的离线图片处理工具 支持压缩等操作 完全本地 保护隐私
+- [FreeConvert](https://www.freeconvert.com/zh-CN) - 处理图片等 格式转换webp 压缩...

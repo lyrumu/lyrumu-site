@@ -5,6 +5,18 @@ groups:
     meta: "My Milestone in Computer Learning"
     default_open: false
     items:
+      - id: "wechat-100-followers"
+        mark: "6"
+        title: "Reached 100 followers on my WeChat Official Account"
+        meta: "2026.11"
+        summary: "Use the last icon in the contact row above to open the QR code and follow my account."
+        open: false
+      - id: "magpie-gemini"
+        mark: "5"
+        title: "Started using new AI tools"
+        meta: "2026.11"
+        summary: "I started using magpie and the Gemini family of models and tools."
+        open: false
       - id: "Double-OS"
         mark: "4"
         title: "开始使用macOS和Windows双系统"

@@ -505,7 +505,7 @@ html.dark .about-contact-btn::before {
   );
 }
 
-/* SVG 图标本体：Simple Icons 自带品牌色填充，不再需要 color override */
+/* 联系图标共用尺寸与动效 */
 .about-contact-btn svg {
   width: 1.35rem;
   height: 1.35rem;
@@ -514,6 +514,14 @@ html.dark .about-contact-btn::before {
   position: relative;
   z-index: 1;
   transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.about-contact-btn--monochrome svg path {
+  fill: #000;
+}
+
+html.dark .about-contact-btn--monochrome svg path {
+  fill: #fff;
 }
 
 /* hover：上浮 + 微缩放 + 高亮背景 + accent 描边（iOS 按钮触感） */
@@ -601,7 +609,7 @@ html.dark .about-contact-btn:hover {
   font-size: 0.78rem;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 50rem) {
   .about-contact-wechat-panel {
     top: calc(100% + 0.75rem);
     right: 0;

@@ -66,6 +66,9 @@ showTableOfContents: true
     </p>
   </section>
   <section class="about-focus-item">
+    <h3>Continue publishing on my WeChat Official Account</h3>
+  </section>
+  <section class="about-focus-item">
     <h3>Learn FastAPI and Frontend Foundation</h3>
     <p>
       Just Trying to master more basic knowledge 
