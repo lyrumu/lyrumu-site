@@ -25,6 +25,28 @@
 #   - 全曲收听请走 links 列表里的官方平台
 # =============================================================================
 tracks:
+  - title: "So Sick"
+    artist: "Ne-Yo"
+    album: "《In My Own Words》"
+    cover: "image/music/cover-so-sick.webp"
+    src:   "/life/music/preview/so-sick.mp3"
+    duration: "3:27"
+    mood: ""
+    links:
+      - { label: "apple",    url: "https://music.apple.com/us/song/so-sick/1444855845" }
+      - { label: "spotify",  url: "https://open.spotify.com/search/So%20Sick%20Ne-Yo" }
+
+  - title: "Because Of You"
+    artist: "Ne-Yo"
+    album: "《Because Of You》"
+    cover: "image/music/cover-because-of-you.webp"
+    src:   "/life/music/preview/because-of-you.mp3"
+    duration: "4:27"
+    mood: ""
+    links:
+      - { label: "apple",    url: "https://music.apple.com/us/song/because-of-you/1444281358" }
+      - { label: "spotify",  url: "https://open.spotify.com/search/Because%20Of%20You%20Ne-Yo" }
+
   - title: "Crossing Field"
     artist: "LiSA"
     cover: "image/music/cover-crossing-field.webp"
