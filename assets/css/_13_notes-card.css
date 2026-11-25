@@ -225,6 +225,15 @@ html.dark .cover-card__icon-fallback {
   padding: 0.85rem 1.25rem 0.7rem;
   border-radius: 0.75rem 0.75rem 0 0;
 }
+.article-link--cover-card:has(.cover-card__pin) .cover-card__top {
+  padding-right: 2.5rem;
+}
+.home-recent-grid .article-link--cover-card:has(.cover-card__pin) .cover-card__top {
+  padding-right: 1.25rem;
+}
+.article-link--cover-card:has(.cover-card__draft) .cover-card__top {
+  padding-right: 4.5rem;
+}
 
 /* 顶部 meta 行 */
 .cover-card__top .cover-card__meta {
@@ -273,6 +282,9 @@ html.dark .cover-card__icon-fallback {
   color: var(--cover-card-meta-accent);
   opacity: 0.72;
   margin: 0 0.1rem;
+}
+.cover-card__meta-sep:last-child {
+  display: none;
 }
 /* views/likes 占位条固定为暖白，避免随站点主题反转。 */
 .cover-card__meta-item .bg-neutral-300,
@@ -441,6 +453,20 @@ html.dark .article-link--cover-card:hover {
   .cover-card__top {
     margin: -0.9rem -1rem 0;
     padding: 0.7rem 1rem 0.6rem;
+  }
+  .article-link--cover-card:has(.cover-card__pin) .cover-card__top {
+    padding-right: 2.35rem;
+  }
+  .home-recent-grid .article-link--cover-card:has(.cover-card__pin) .cover-card__top {
+    padding-right: 1rem;
+  }
+  .article-link--cover-card:has(.cover-card__draft) .cover-card__top {
+    padding-right: 4.25rem;
+  }
+  .cover-card__top .cover-card__meta {
+    gap: 0.35rem;
+    padding: 0.28rem 0.5rem;
+    font-size: 0.64rem;
   }
   .cover-card__bottom {
     margin: 0 -1rem -0.9rem;

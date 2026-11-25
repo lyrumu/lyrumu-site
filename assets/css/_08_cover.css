@@ -394,15 +394,15 @@ html.dark .cover-music-field__engraving {
     min-height: 4.5rem;
   }
   .cover-content {
-    min-height: 100svh;
+    min-height: 0;
     padding-top: var(--cover-header-height);
-    padding-bottom: 2rem;
+    padding-bottom: 1.25rem;
   }
   .cover-page {
     --cover-header-height: 4.5rem;
     --cover-pad-inline: 0.95rem;
     border-radius: 0;
-    min-height: 100svh;
+    min-height: 0;
     padding-inline: 0.95rem;
   }
   .cover-content,
@@ -431,12 +431,12 @@ html.dark .cover-music-field__engraving {
     white-space: normal;
   }
   .cover-divider {
-    margin: 1.65rem 0 1.3rem;
+    margin: 1.15rem 0 0.85rem;
   }
   .cover-music-field {
     left: 64%;
-    top: 38%;
-    width: 135vw;
+    top: 54%;
+    width: 120vw;
     --cover-music-detail-opacity: 0.5;
     /* 小屏唱片占 field 比例更大（右缘 ~77%），衰减起点后移避免削到唱片。 */
     -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent 100%);
@@ -449,7 +449,7 @@ html.dark .cover-music-field__engraving {
     --cover-music-detail-opacity: 0.62;
   }
   .cover-music-field__disc {
-    width: 18rem;
+    width: 16.5rem;
   }
 }
 

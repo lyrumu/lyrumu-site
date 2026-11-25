@@ -1004,6 +1004,10 @@ html.dark .music-item.is-disabled:hover {
   transition: color 0.3s, border-color 0.3s,
               background 0.3s, box-shadow 0.5s ease;
 }
+/* 抵消 .prose a 的强调色串扰，保持外链文字常规色而不提高盒模型属性特异性 */
+.prose .music-list .music-item-link {
+  color: var(--fg-base);
+}
 .music-item-link::before {
   content: "";
   position: absolute;
@@ -1015,6 +1019,7 @@ html.dark .music-item.is-disabled:hover {
   z-index: -1;
   animation: ds-spectrum-flow 6s linear infinite paused;
 }
+.prose .music-list .music-item-link:hover,
 .music-item-link:hover {
   color: #1a1a22;
   border-color: transparent;
@@ -1124,11 +1129,13 @@ html.dark .music-item.is-disabled:hover {
               transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
               background-color 0.4s;
 }
-.music-item:hover::after {
-  /* hover 时从左到右渐显 + 从下方往上浮现 + 倾斜归位 */
-  opacity: 0.90;
-  clip-path: inset(0 0 0 0);
-  transform: translateY(0) rotate(45deg);
+@media (hover: hover) and (pointer: fine) {
+  .music-item:hover::after {
+    /* hover 时从左到右渐显 + 从下方往上浮现 + 倾斜归位 */
+    opacity: 0.90;
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0) rotate(45deg);
+  }
 }
 /* ensure disabled 状态不触发 */
 .music-item.is-disabled::after { display: none; }
@@ -1142,23 +1149,73 @@ html.dark .music-item.is-disabled:hover {
   }
 }
 
+/* 与主题 md = 853px 一致：移动端固定顶栏实测高 64px（4rem） */
+@media (max-width: 852px) {
+  .music-controls-bar { top: 4rem; }
+}
+
 @media (max-width: 640px) {
-  .music-controls-bar { flex-wrap: wrap; gap: 0.5rem 1rem; }
-  .music-ctrl-btn { width: 2.75rem; height: 2.75rem; }
-  .music-volume-slider { height: 1.5rem; background: transparent; }
+  .music-list {
+    gap: 0.6rem;
+  }
+  .music-controls-bar {
+    flex-wrap: wrap;
+    gap: 0.35rem 0.65rem;
+    padding: 0.35rem 0.7rem;
+  }
+  .music-controls-left,
+  .music-controls-right {
+    gap: 0.35rem;
+  }
+  .music-controls-label { display: none; }
+  .music-mode-label { min-width: 0; white-space: nowrap; }
+  .music-ctrl-btn { width: 2.5rem; height: 2.5rem; }
+  .music-volume-slider { width: 3.75rem; height: 1.5rem; background: transparent; }
   .music-volume-slider::-webkit-slider-thumb { opacity: 1; }
   .music-item {
-    grid-template-columns: 3rem 1fr auto;
-    gap: 0.75rem;
-    padding: 0.65rem 0.85rem;
+    grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+    gap: 0.6rem;
+    padding: 0.58rem 0.7rem;
+    contain-intrinsic-size: 0 4.5rem;
   }
-  .music-item-cover { width: 3rem; height: 3rem; }
+  .music-item-cover { width: 2.75rem; height: 2.75rem; }
+  .music-item-info { gap: 0.1rem; }
+  .music-item-title { font-size: 0.96rem; line-height: 1.25; }
+  .music-item-artist { font-size: 0.78rem; }
   .music-item-album { display: none; }
-  /* 移动端外链：padding 略压缩但保持可点击高度 ≥32px（icon + 文字均显示） */
+  .music-item-duration {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: start;
+    padding-top: 0.12rem;
+    font-size: 0.74rem;
+  }
+  .music-item-eq {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    align-self: end;
+    padding-bottom: 0.12rem;
+  }
+  .music-item-links {
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.25rem;
+  }
+  /* 移动端外链紧凑单行：360px 窄屏上 Apple Music 与 Spotify 稳定并排 */
   .music-item-link {
-    padding: 0.35rem 0.4rem;
-    min-height: 32px;
-    font-size: 0.75rem;
+    gap: 0.25rem;
+    padding: 0.28rem 0.46rem;
+    min-height: 28px;
+    font-size: 0.71rem;
+    white-space: nowrap;
+  }
+  .music-item-link svg {
+    width: 13px;
+    height: 13px;
+  }
+  .section-rule {
+    margin: 1.5rem 0;
   }
 }
 

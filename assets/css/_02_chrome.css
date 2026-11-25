@@ -142,6 +142,9 @@
   letter-spacing: 0.06em;
   font-weight: 500;
 }
+#menu-blur {
+  background: color-mix(in srgb, var(--bg-base) 82%, transparent) !important;
+}
 .main-menu a:hover,
 .main-menu a.active,
 .main-menu .site-menu-group--desktop:hover > .site-menu-group__trigger {
@@ -272,8 +275,22 @@ html.dark .site-menu-group {
   outline-offset: 2px;
   border-radius: 0.35rem;
 }
-#mobile-menu { overscroll-behavior: contain; }
+#mobile-menu {
+  overscroll-behavior: contain;
+  background: color-mix(in srgb, var(--bg-base) 96%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
+}
 #mobile-menu nav > div > a { min-height: 2.75rem; }
+#mobile-menu nav > div > a > span,
+#mobile-menu .site-menu-group--mobile > summary > span:first-child {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+#mobile-menu .site-menu-group__item-title {
+  font-size: 1rem;
+}
 /* 与主题 md = 853px 一致；横屏切回桌面导航后释放滚动。 */
 @media (max-width: 852px) {
   html:has(#mobile-menu-toggle:checked) { overflow: hidden; }
@@ -371,14 +388,25 @@ html.dark .site-brand-badge:hover {
 /* =============================================================================
    Scroll-to-top
    ============================================================================= */
+#scroll-to-top a,
 .scroll-to-top {
+  background: color-mix(in srgb, var(--fg-base) 88%, transparent) !important;
+  color: var(--bg-base) !important;
+  border: 1px solid color-mix(in srgb, var(--bg-base) 18%, transparent);
+  border-radius: 9999px !important;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--fg-base) 20%, transparent);
+  opacity: 0.9 !important;
+}
+#scroll-to-top a:hover,
+.scroll-to-top:hover {
   background: var(--fg-base) !important;
   color: var(--bg-base) !important;
-  border-radius: 9999px !important;
-  opacity: 0.85 !important;
-}
-.scroll-to-top:hover {
   opacity: 1 !important;
+}
+@media (max-width: 960px) {
+  body:has(.music-player.is-visible) #scroll-to-top {
+    bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 /* =============================================================================
@@ -630,6 +658,35 @@ html.dark body.is-music-page h1.page-title::after {
 #TableOfContents a.active {
   color: var(--fg-base);
   border-left-color: var(--accent);
+}
+@media (max-width: 1023px) {
+  .prose .toc {
+    padding-inline-start: 0;
+  }
+  .prose details.toc-inside {
+    margin: 0.75rem 0 1.25rem;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 0.55rem;
+    background: color-mix(in srgb, var(--bg-deep) 65%, transparent);
+  }
+  .prose details.toc-inside > summary {
+    margin: 0;
+    padding: 0.65rem 0.95rem;
+    background: transparent;
+    color: var(--fg-base);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .prose details.toc-inside > div {
+    margin: 0;
+    padding: 0.35rem 0.95rem 0.75rem;
+    border-inline-start: 0;
+    border-top: 1px solid color-mix(in srgb, var(--line) 65%, transparent);
+  }
+  .prose details.toc-inside ul {
+    margin: 0.25rem 0;
+  }
 }
 
 /* =============================================================================

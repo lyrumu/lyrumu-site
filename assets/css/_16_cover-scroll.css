@@ -185,22 +185,28 @@
   .cover-home-intro__description { font-size: 0.98rem; }
 }
 @media (max-width: 720px), (max-width: 980px) and (max-height: 500px) and (pointer: coarse) {
-  .cover-content { height: auto; min-height: 100svh; padding-bottom: 7rem; }
-  /* 音乐底片逐渐融入文章区的同色背景，保留一屏高度与清晰的文字入口。 */
+  .cover-content { height: auto; min-height: 0; padding-bottom: 1.5rem; }
+  /* 音乐底片逐渐融入文章区的同色背景，保留紧凑内容节奏与清晰的文字入口。 */
   .cover-music-camera {
-    -webkit-mask-image: linear-gradient(180deg, #000 50%, transparent 95%);
-    mask-image: linear-gradient(180deg, #000 50%, transparent 95%);
+    -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 98%);
+    mask-image: linear-gradient(180deg, #000 55%, transparent 98%);
   }
   .cover-home-intro {
     position: relative;
     inset: auto;
     width: 100%;
-    padding: 1.65rem 0 2.75rem;
+    padding: 0.9rem 0 0.75rem;
     transform: none;
   }
-  .cover-home-intro h1 { font-size: clamp(2.3rem, 10.2vw, 3.35rem); }
-  .cover-home-intro__description { max-width: 38ch; font-size: 1rem; }
-  .cover-explore-prompt { bottom: 2rem; }
+  .cover-home-intro h1 { font-size: clamp(2.25rem, 10vw, 3.2rem); }
+  .cover-home-intro__description { max-width: 38ch; font-size: 0.98rem; }
+  .cover-explore-prompt {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    margin: 1.35rem auto 0;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   html.is-cover-page { scroll-behavior: auto; }

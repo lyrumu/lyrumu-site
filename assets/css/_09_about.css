@@ -34,6 +34,8 @@
 
 /* ----- 头像 + 个人信息块 ----- */
 .about-profile {
+  position: relative;
+  z-index: 30;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,9 +58,11 @@
   align-items: flex-start; /* 文字左对齐（不要 center，center 会让多行文字看起来怪） */
 }
 
+.prose .about-avatar,
 .about-avatar {
   width: 144px;
   height: 144px;
+  border: 0;
   border-radius: 50%;
   box-shadow: 0 4px 12px var(--about-avatar-shadow);
   object-fit: cover;
@@ -164,6 +168,18 @@
 .about-focus-item,
 .prose details.about-timeline-group {
   background: var(--bg-base);
+}
+/* 抵消 .prose details 默认 padding/margin，避免 Timeline 卡片双层留白与过大间隙 */
+.prose details.about-timeline-group,
+.prose details.about-milestone {
+  margin: 0;
+  padding: 0;
+}
+.prose details.about-timeline-group {
+  border-radius: 1.25rem;
+}
+.prose details.about-milestone {
+  border-radius: 1rem;
 }
 
 .about-timeline-group summary {
@@ -381,6 +397,8 @@
    ============================================================================= */
 
 .about-contact {
+  position: relative;
+  z-index: 30;
   margin: 0.25rem 0 2.5rem;
   display: flex;
   flex-direction: column;
@@ -646,24 +664,43 @@ html.dark .about-contact-btn:hover {
 }
 
 /* 移动端：缩小图标按钮和卡片间距 */
-@media (max-width: 540px) {
+@media (max-width: 640px) {
   .about-focus-list {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin: 0.65rem 0 1rem;
   }
   .about-timeline-group-summary {
     grid-template-columns: 1fr auto;
     gap: 0.75rem;
+    padding: 0.85rem 0.9rem;
+  }
+  .about-timeline {
+    gap: 0.6rem;
+    padding: 0 0.75rem 0.75rem;
   }
   .about-timeline-mark {
-    width: 2.1rem;
+    min-width: 2rem;
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.78rem;
   }
+  /* 移动端保持 3 列单行，避免箭头落到第 2 行制造大块空白 */
   .about-milestone-summary {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.7rem;
+    padding: 0.75rem 0.85rem;
   }
-  .about-milestone-summary::after {
-    grid-column: 2;
-    justify-self: end;
-    margin-top: -0.1rem;
+  .about-milestone-title {
+    font-size: 1rem;
+    line-height: 1.28;
+  }
+  .about-milestone-meta {
+    font-size: 0.84rem;
+    line-height: 1.35;
+  }
+  .about-milestone-panel {
+    padding: 0 0.85rem 0.8rem;
   }
   .about-milestone-layout--has-media {
     grid-template-columns: 1fr;

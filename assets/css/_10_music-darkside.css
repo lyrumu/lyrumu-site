@@ -168,13 +168,13 @@ html.dark .music-list .music-item-link:hover {
   top: 3.5rem;
   z-index: 10;
   margin-bottom: 0.75rem;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.025),
-    rgba(255, 255, 255, 0.012) 60%);
+    color-mix(in srgb, var(--ds-space-card) 88%, transparent),
+    color-mix(in srgb, var(--ds-space-card-2) 82%, transparent) 60%);
   color: var(--ds-text-bright);
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.10);
 }
 .music-list .music-ctrl-btn          { color: var(--ds-text-dim); }
 .music-list .music-ctrl-btn:hover    { color: var(--ds-text-bright); border-color: rgba(255, 255, 255, 0.18); }
@@ -218,11 +218,22 @@ html.dark .music-list .music-item-link:hover {
 .music-player.music-player .music-player-artist,
 .music-player.music-player .music-player-time            { color: var(--ds-text-dim) !important; }
 
-/* 进度条：第一层光谱按 --progress 宽度渲染，第二层灰底 — 永远贴合进度不溢出 */
+/* 进度条：第一层光谱按 --progress 宽度渲染，第二层底轨在亮/暗模式下都保持清晰可见 */
 .music-player.music-player .music-player-progress::-webkit-slider-runnable-track {
   background:
     var(--ds-spectrum) 0 0 / var(--progress, 0%) 100% no-repeat,
-    rgba(255, 255, 255, 0.08) !important;
+    color-mix(in srgb, var(--fg-base) 16%, transparent) !important;
+}
+html.dark .music-player.music-player .music-player-progress::-webkit-slider-runnable-track {
+  background:
+    var(--ds-spectrum) 0 0 / var(--progress, 0%) 100% no-repeat,
+    rgba(255, 255, 255, 0.14) !important;
+}
+.music-player.music-player .music-player-progress::-moz-range-track {
+  background: color-mix(in srgb, var(--fg-base) 16%, transparent) !important;
+}
+html.dark .music-player.music-player .music-player-progress::-moz-range-track {
+  background: rgba(255, 255, 255, 0.14) !important;
 }
 .music-player.music-player .music-player-progress::-webkit-slider-thumb {
   background: var(--ds-text-bright) !important;
@@ -278,6 +289,11 @@ html.dark .music-list .music-item-link:hover {
     animation: none !important;
   }
 }
+@media (max-width: 852px) {
+  .music-list .music-controls-bar {
+    top: 4rem;
+  }
+}
 @media (max-width: 640px) {
   /* 移动端噪点层过多显脏，缩到 2 个 */
   .music-list .music-item {
@@ -299,8 +315,8 @@ html.dark .music-list .music-item-link:hover {
    :root 已带浅色调色板，此处仅给控制栏、卡片棱镜阴影做轻量适配。 */
 :root:not(.dark) .music-list .music-controls-bar {
   background: linear-gradient(135deg,
-    color-mix(in srgb, var(--ds-space-card) 85%, transparent),
-    color-mix(in srgb, var(--ds-space-card-2) 70%, transparent) 60%);
+    color-mix(in srgb, var(--ds-space-card) 92%, transparent),
+    color-mix(in srgb, var(--ds-space-card-2) 86%, transparent) 60%);
   border-color: color-mix(in srgb, var(--line, #C9C7BF) 65%, transparent);
 }
 :root:not(.dark) .music-list .music-item {

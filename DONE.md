@@ -6,6 +6,12 @@
 
 > 以下 2026-10-04～05 的变更均未提交或部署；Hugo 0.164.0 超出 Blowfish 声明范围的既有兼容警告保留。
 
+## 2026-11-25 · 移动端布局与样式修复
+
+- `/life/music/` 移动端改单行紧凑 MiniPlayer（含贴底全宽进度条与亮色底轨修复）、歌曲卡 360px 外链并排与均衡器对齐、吸顶控制栏对齐 64px 顶栏并收敛单行（`_05_cards.css`、`_07_music-player.css`、`_10_music-darkside.css`）。
+- 首页 `≤720px` 移除 `100svh` 空隙；About 修微信二维码遮挡、头像变方及 Timeline 双层留白；文章页与全站修移动 TOC、表格横向滚动、封面卡图钉避让、64px 顶栏占位、`#mobile-menu` 字号、`.page-divider` 及 `#scroll-to-top`（`_02_chrome.css`、`_03_prose.css`、`_04_hero.css`、`_08_cover.css`、`_09_about.css`、`_13_notes-card.css`、`_16_cover-scroll.css`）。
+- 本地通过生产构建、49 页 SEO、31 项 Node 回归与补丁格式检查；真机实测与部署待验证，未提交或部署，Hugo 既有兼容警告保留。
+
 ## 2026-11-22 · About 联系方式
 
 - About 加入 X 链接和官方图标，统一 GitHub 与 X 的深浅主题配色，并调整窄屏二维码弹层（`about-contact.html`、`_09_about.css`）。生产构建和 49 页 SEO 检查通过，浏览器交互与部署待验证。
