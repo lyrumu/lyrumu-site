@@ -18,12 +18,16 @@
        {{ if $isDraft }}aria-disabled="true" data-draft="true"{{ end }}>
 
       {{ $style := $s.cover_style | default "image" }}
+      {{ $surfaceClass := "" }}
+      {{ if eq ($s.cover_surface | default "") "light" }}
+        {{ $surfaceClass = " life-sub-cover--light" }}
+      {{ end }}
       {{ if eq $style "emoji" }}
-        <div class="life-sub-cover">
+        <div class="life-sub-cover{{ $surfaceClass }}">
           <span class="life-sub-cover-emoji" aria-hidden="true">{{ $s.cover }}</span>
         </div>
       {{ else if eq $style "svg" }}
-        <div class="life-sub-cover">
+        <div class="life-sub-cover{{ $surfaceClass }}">
           <span class="life-sub-cover-svg" aria-hidden="true">{{ $s.cover | safeHTML }}</span>
         </div>
       {{ else }}
@@ -48,7 +52,7 @@
           {{ $imgSrc = $s.cover }}
         {{ end }}
 
-        <div class="life-sub-cover blur-img-wrapper"{{ if $imgLQIP }} style="--blur-img: url('{{ $imgLQIP }}')"{{ end }}>
+        <div class="life-sub-cover{{ $surfaceClass }} blur-img-wrapper"{{ if $imgLQIP }} style="--blur-img: url('{{ $imgLQIP }}')"{{ end }}>
           <img class="life-sub-cover-img blur-img"
                src="{{ if $imgLQIP }}{{ $imgLQIP }}{{ else }}{{ $imgSrc }}{{ end }}"
                data-full-src="{{ $imgSrc }}"

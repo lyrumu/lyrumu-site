@@ -22,12 +22,17 @@
       <span class="docs-taxonomy-chip__count">{{ len (where $projects "category" "demo") }}</span>
     </label>
     <div class="projects-grid">
+      {{ $seenDefaultProject := false }}
       {{ range $i, $p := $projects }}
-      {{ $isDraft := eq ($p.status | default "live") "draft" }}
+      {{ $isFirstVisible := and (eq $p.category "project") (not $seenDefaultProject) }}
+      {{ if $isFirstVisible }}{{ $seenDefaultProject = true }}{{ end }}
+      {{ $status := lower ($p.status | default "live") }}
+      {{ $isDraft := eq $status "draft" }}
+      {{ $isArchived := eq $status "archived" }}
       {{ $isFeatured := eq ($p.featured | default false) true }}
       {{ $detail := site.GetPage $p.page }}
       {{ if not $detail }}{{ errorf "Missing detail page for work %s: %s" $p.name $p.page }}{{ end }}
-      <article class="project-card{{ if $isFeatured }} is-featured{{ end }}{{ if $isDraft }} is-draft{{ end }}" data-category="{{ $p.category }}">
+      <article class="project-card{{ if $isFeatured }} is-featured{{ end }}{{ if $isDraft }} is-draft{{ end }}{{ if $isArchived }} is-archived{{ end }}" data-category="{{ $p.category }}" data-status="{{ $status }}">
         <a class="project-card-link" href="{{ $detail.RelPermalink }}" aria-labelledby="work-title-{{ $i }}">
         {{/* 封面：assets/image/ 资源 → LQIP blur-up；resources.Get 失败回退原 cover 直出 */}}
         {{ $coverPath := strings.TrimPrefix "/" $p.cover }}
@@ -55,7 +60,9 @@
                  {{ with $imgSrcset }}srcset="{{ . }}"{{ end }}
                  {{ if $imgLQIP }}data-lqip="1"{{ end }}
                  alt="{{ $p.name }}"
-                 loading="lazy"
+                 loading="{{ if $isFirstVisible }}eager{{ else }}lazy{{ end }}"
+                 decoding="async"
+                 fetchpriority="{{ if $isFirstVisible }}high{{ else }}low{{ end }}"
                  class="blur-img nozoom"
                  onerror="this.style.opacity='0.18'" />
           {{ else }}
@@ -72,17 +79,32 @@
         {{/* 文字区 */}}
         <div class="project-card-body">
           <div class="project-card-head">
-            {{ with $p.date }}<span class="project-card-date">{{ . }}</span>{{ end }}
-            {{ if $p.repo }}
-              <span class="project-card-source" aria-hidden="true">
-                {{ partial "cover/icon.html" (dict "name" "github" "size" 14) }}
+            <div class="project-card-meta">
+              {{ with $p.date }}<span class="project-card-date">{{ . }}</span>{{ end }}
+              {{ partial "works/status-badge.html" (dict "status" $status "class" "project-card-status") }}
+            </div>
+            {{- $icons := $p.icons | default (slice) -}}
+            {{- if or (gt (len $icons) 0) $p.repo -}}
+              <span class="project-card-sources" aria-hidden="true">
+                {{ range $icons }}
+                  <span class="project-card-source is-{{ . }}">
+                    {{ partial "cover/icon.html" (dict "name" . "size" 14) }}
+                  </span>
+                {{ end }}
+                {{ if $p.repo }}
+                  <span class="project-card-source is-github">
+                    {{ partial "cover/icon.html" (dict "name" "github" "size" 14) }}
+                  </span>
+                {{ end }}
               </span>
-            {{ end }}
+            {{- end -}}
           </div>
 
           <h3 class="project-card-name" id="work-title-{{ $i }}">{{ $p.name }}</h3>
-          <div class="project-card-title">{{ $p.title }}</div>
           <p class="project-card-desc">{{ $p.desc }}</p>
+          {{ with $p.status_note }}
+            <p class="project-card-status-note">{{ . }}</p>
+          {{ end }}
 
           {{ with $p.tags }}
           <div class="project-card-tags">

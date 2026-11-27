@@ -1,9 +1,27 @@
-{{ with .repo }}
+{{- $status := lower (.status | default "live") -}}
+{{- if or .repo .npm .pi_package $status -}}
   <div class="work-project-actions not-prose">
-    <a class="project-card-btn" href="{{ . }}#readme" target="_blank" rel="noopener noreferrer">
-      {{ partial "cover/icon.html" (dict "name" "github" "size" 18) }}
-      <span>README</span>
-      {{ partial "cover/icon.html" (dict "name" "external-link" "size" 12) }}
-    </a>
+    {{ partial "works/status-badge.html" (dict "status" $status "class" "work-project-status") }}
+    {{ with .repo }}
+      <a class="project-card-btn" href="{{ . }}#readme" target="_blank" rel="noopener noreferrer">
+        {{ partial "cover/icon.html" (dict "name" "github" "size" 18) }}
+        <span>README</span>
+        {{ partial "cover/icon.html" (dict "name" "external-link" "size" 12) }}
+      </a>
+    {{ end }}
+    {{ with .npm }}
+      <a class="project-card-btn" href="{{ . }}" target="_blank" rel="noopener noreferrer">
+        {{ partial "cover/icon.html" (dict "name" "npm" "size" 18) }}
+        <span>npm</span>
+        {{ partial "cover/icon.html" (dict "name" "external-link" "size" 12) }}
+      </a>
+    {{ end }}
+    {{ with .pi_package }}
+      <a class="project-card-btn" href="{{ . }}" target="_blank" rel="noopener noreferrer">
+        {{ partial "cover/icon.html" (dict "name" "pi" "size" 18) }}
+        <span>Pi Packages</span>
+        {{ partial "cover/icon.html" (dict "name" "external-link" "size" 12) }}
+      </a>
+    {{ end }}
   </div>
-{{ end }}
+{{- end -}}

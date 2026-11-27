@@ -10,6 +10,7 @@
 #   - href   : 跳转链接（推荐 /life/<id>/）
 #   - cover  : 封面图 / SVG / emoji（左侧"大字"位）
 #   - cover_style : cover 的展示形式 — image（图片）/ svg（内联 svg）/ emoji（字符）
+#   - cover_surface : 封面底板风格（可选）— light（透明暗色线稿插画在深色模式下保留暖米托底）
 #   - tags   : 底部小 tag 列表（可选）
 #   - draft  : true 则标注为"准备中"，渲染时显示 coming-soon 文案（可选）
 # =============================================================================
@@ -22,6 +23,7 @@ submodules:
     href: "/life/music/"
     cover: "image/life/musicheart.webp"
     cover_style: "image"
+    cover_surface: "light"
     tags: [playlist, lofi, classic]
 
   # 未来在这里继续添加（图片 / 读书 / 旅行 ...）

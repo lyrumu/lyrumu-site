@@ -34,9 +34,9 @@
 | 改 /life/music/ 的外链平台 / 精确 URL | [`data/music.yaml`](file:///f:/Notes/data/music.yaml) 的 `links[].url`；白名单是 `apple` + `spotify`（写在 [`music-list.html`](file:///f:/Notes/layouts/shortcodes/music-list.html)）；**Apple 推荐用 iTunes Search API 返回的精确 trackViewUrl** |
 | 改 /life/music/ 的合规声明 | [`content/life/music/_index.md`](file:///f:/Notes/content/life/music/_index.md) 末尾的 blockquote |
 | 换 /life/music/ 的封面/SVG 动画 | [`assets/css/_05_cards.css`](file:///F:/Notes/assets/css/_05_cards.css) 的 `.life-sub-cover-*` 规则 |
-| 换 /works/ 的作品卡与分类 | [`data/projects.yaml`](file:///f:/Notes/data/projects.yaml)（加一条填 `- name/title/category/page/desc/cover/href/repo/tags/date/featured`） |
+| 换 /works/ 的作品卡与分类 | [`data/projects.yaml`](file:///f:/Notes/data/projects.yaml)（加一条填 `- name/category/page/desc/cover/icons/href/repo/npm/pi_package/tags/date/status/status_note/featured`） |
 | 换 /works/resources/ 的资源卡 | [`data/resources.yaml`](file:///f:/Notes/data/resources.yaml)（加一条填 `- name/title/desc/cover/file/format/size/tags/date/source`） |
-| 改 Works 整卡链接与详情头部 | `projects-list.html` 的 `.project-card-link`；`layouts/page.html` 的 work 分支与 `layouts/partials/works/project-info.html` |
+| 改 Works 整卡链接、状态徽章与详情头部 | `projects-list.html` 的 `.project-card-link`；`layouts/partials/works/status-badge.html`；`layouts/page.html` 的 work 分支与 `layouts/partials/works/project-info.html` |
 | 加一个 Lucide icon | [`layouts/partials/cover/icon.html`](file:///f:/Notes/layouts/partials/cover/icon.html) 加 `else if` 分支 |
 | 改 /about/ 个人内容块（Now / Focus / Path） | [`content/about/_index.md`](file:///f:/Notes/content/about/_index.md) |
 | 改 /friends/ 友链页与条目 | `content/friends/_index.md` 控制页面文案、卡片列数与元信息；入口为 ABOUT ME 子菜单。沿用定制 `list.html` 与 `article-link/card.html`，条目使用 Blowfish 原生 `externalUrl`，按 `weight` 排序；友链分支沿用原生卡片外观，展示圆形头像、名称与简介 |
@@ -390,10 +390,10 @@ f:\Notes\
 
 | 元素 | 数据与入口 | 实现 |
 |------|------------|------|
-| 分类与整卡站内链接 | `data/projects.yaml` 的 `category` / `page` | `projects-list.html`；封面 `nozoom`，单一原生链接，无嵌套按钮 |
-| 卡片反馈 | `_06_works-cards.css` | 标签常显，整卡进入详情；边框、焦点与封面轻反馈，已移除倾斜库 |
+| 分类与整卡站内链接 | `data/projects.yaml` 的 `category` / `page` / `status` / `status_note` / `icons` | `projects-list.html` 与 `works/status-badge.html`；默认首屏卡片 `eager/high`，其余 `lazy/low`；卡片头右侧支持原色生态/仓库图标（`icon.html`）；封面 `nozoom` + LQIP blur-up，单一原生链接，无嵌套按钮 |
+| 卡片反馈 | `_06_works-cards.css` | 标签底部对齐与状态徽章常显，可选状态简述；整卡进入详情，归档态加载后降低封面饱和度；边框、焦点与封面轻反馈，已移除倾斜库 |
 | 独立内容模板 | `archetypes/work.md`，`type: work` / `layout: page` | 原生 Hugo 内容页，复用站内文章模板、目录、代码复制、图片放大 |
-| 详情项目头部 | 数据中 `page` 对应当前 `.RelPermalink` | `works/project-info.html` 仅展示一个 GitHub 原文按钮；默认面包屑 Works 链接由项目级 `breadcrumbs.html` 补充分类 hash，不额外添加返回入口 |
+| 详情项目头部 | 数据中 `page` 对应当前 `.RelPermalink` | `works/project-info.html` 展示状态徽章、GitHub `README` 与可选 `npm` / `Pi Packages` 按钮（官方图标）；默认面包屑 Works 链接由项目级 `breadcrumbs.html` 补充分类 hash，不额外添加返回入口 |
 | README 正文与来源 | 各叶子 bundle 的 `index.md` / `readmeSource` | 默认 README 本地快照，来源 URL 固定到提交且仅供源文件维护；徽章保持原始图片与链接 |
 | 图片与徽章 | bundle 原图、`render-image.html` | 截图使用 WebP / srcset / LQIP；work 类型的 Shields 徽章输出行内 `nozoom` 图片，仍依赖外站可用性 |
 | 发现范围 | `type: work` 区分于 `works` 栏目 | 收录到站内搜索与 sitemap，不加入首页 Recent / Popular；无相关文章推荐 |

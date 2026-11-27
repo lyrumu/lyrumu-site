@@ -16,6 +16,7 @@ class Page(HTMLParser):
         self.canonical, self.icons, self.images, self.links, self.schemas = [], [], [], [], []
         self.scripts, self.blur_wrappers = [], []
         self.inputs, self.project_cards, self.stylesheets = [], [], []
+        self.status_badges = []
         self.card_count, self.cover_images = 0, []
         self.ids, self.nested_links = [], []
         self.labels, self.label_for = {}, None
@@ -39,6 +40,8 @@ class Page(HTMLParser):
             self.inputs.append(attrs)
         if tag == "article" and "project-card" in attrs.get("class", "").split():
             self.project_cards.append(attrs)
+        if tag == "span" and "work-status-badge" in attrs.get("class", "").split():
+            self.status_badges.append(attrs)
         if tag == "article" and {"article-link--cover-card", "article-link--card"} & set(attrs.get("class", "").split()):
             self.card_count += 1
         if tag == "label":
@@ -208,8 +211,32 @@ def check(root):
     covers = [item for item in works_page.images if "blur-img" in item.get("class", "").split()]
     assert len(covers) == len(works_page.project_cards) == 3
     assert {image["alt"]: card["data-category"] for image, card in zip(covers, works_page.project_cards)} == {
-        "pi-diff PLUGIN": "project", "MusicPocket": "demo", "Linear Algebra Calculator": "demo",
+        "pi-diff": "project", "MusicPocket": "demo", "Linear Algebra Calculator": "demo",
     }
+    assert {image["alt"]: card.get("data-status") for image, card in zip(covers, works_page.project_cards)} == {
+        "pi-diff": "updating", "MusicPocket": "archived", "Linear Algebra Calculator": "archived",
+    }
+    assert {
+        image["alt"]: (image.get("loading"), image.get("fetchpriority"), image.get("decoding"))
+        for image in covers
+    } == {
+        "pi-diff": ("eager", "high", "async"),
+        "MusicPocket": ("lazy", "low", "async"),
+        "Linear Algebra Calculator": ("lazy", "low", "async"),
+    }, covers
+    assert "project-card-flag" not in works
+    assert "project-card-brand" not in works
+    assert "project-card-title" not in works
+    assert "project-card-source is-pi" in works
+    assert "project-card-source is-npm" in works
+    assert "project-card-source is-github" in works
+    assert "#cb3837" in works.lower()
+    assert "M420 280H280V140H0V0H420V280" in works
+    assert [badge.get("data-status") for badge in works_page.status_badges] == ["updating", "archived", "archived"], works_page.status_badges
+    assert "Updating" in works and "Archived" in works
+    assert "project-card-status-note" in works
+    assert "同类成熟产品较多，自用上架 iOS 成本过高，开发中途及时止损。" in works
+    assert "当时临时做着玩的项目，已归档。" in works
     for image in covers:
         assert image.get("data-lqip") == "1", image
         assert "nozoom" in image.get("class", "").split(), image
@@ -233,8 +260,20 @@ def check(root):
         repo_name = {"/works/musicpocket/": "MusicPocket", "/works/linear-algebra-calculator/": "linear_algebra_calculator"}.get(path, "pi-diff")
         repo = "https://github.com/lyrumu/" + repo_name
         assert repo + "#readme" in {a.get("href") for a, _ in detail.links}, path
-        buttons = [(a, label) for a, label in detail.links if "project-card-btn" in a.get("class", "").split()]
-        assert len(buttons) == 1 and buttons[0][0]["href"] == repo + "#readme" and buttons[0][1].strip() == "README", path
+        buttons = [(a["href"], label.strip()) for a, label in detail.links if "project-card-btn" in a.get("class", "").split()]
+        expected_buttons = [(repo + "#readme", "README")]
+        if path == "/works/pi-diff/":
+            expected_buttons.extend([
+                ("https://www.npmjs.com/package/@lyrumu/pi-diff", "npm"),
+                ("https://pi.dev/packages/@lyrumu/pi-diff", "Pi Packages"),
+            ])
+        assert buttons == expected_buttons, (path, buttons)
+        expected_status = "updating" if path == "/works/pi-diff/" else "archived"
+        assert [badge.get("data-status") for badge in detail.status_badges] == [expected_status], (path, detail.status_badges)
+        if path == "/works/musicpocket/":
+            assert "归档说明" in text and "及时止损" in text, path
+            assert "平台状态" not in text and "flutter pub get" not in text, path
+            assert not (root / "works/musicpocket/readme-cover.png").exists(), path
         assert not any(term in text for term in ("README 快照来源", "首次提交：", "work-project-summary", "work-back-link")), path
         category = "project" if path == "/works/pi-diff/" else "demo"
         returns = [label.strip() for a, label in detail.links if a.get("href") == "/works/#" + category]
@@ -259,6 +298,14 @@ def check(root):
         "#works-demo:checked~.projects-grid>[data-category=project]{display:none}"
     ) in css
     assert ".works-category-input:focus-visible+.works-category-label" in css
+    assert "inset(7px -48px -48px -48px)" in css and "inset(0 -48px -48px -48px)" in css
+    life_html = (root / "life/index.html").read_text()
+    assert "life-sub-cover--light" in life_html and "life-sub-cover--light" in css
+    for rel in ("index.html", "life/index.html", "friends/index.html", "notes/index.html", "works/index.html"):
+        html = (root / rel).read_text()
+        assert html.count("site-footer-divider") == 1 and html.count("section-rule") == 1, rel
+    about_html = (root / "about/index.html").read_text()
+    assert about_html.count("site-footer-divider") == 1 and about_html.count("section-rule") == 5
     assert not (root / "works/projects").exists()
     assert "https://lyrumu.top/works/projects/" not in (root / "sitemap.xml").read_text()
     for page in pages:

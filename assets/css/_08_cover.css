@@ -38,9 +38,9 @@ body.is-cover-page #site-footer {
   margin-top: 0;
 }
 
-/* 浅色交界更敏感，收紧页脚上沿；深色主题维持当前已确认效果。 */
-html:not(.dark) body.is-cover-page #site-footer {
-  padding-top: 1.25rem;
+/* 浅色交界更敏感，收紧页脚星型分隔线下距；深色主题维持当前已确认效果。 */
+html:not(.dark) body.is-cover-page #site-footer .site-footer-divider {
+  margin-bottom: 1.25rem;
 }
 
 /* =============================================================================

@@ -92,8 +92,15 @@
    ============================================================================= */
 #site-footer {
   font-family: var(--font-serif-display);
-  border-top: 1px solid var(--line);
-  margin-top: 4rem;
+  margin-top: 3.5rem;
+}
+#site-footer .site-footer-divider {
+  margin: 0 0 2.25rem;
+}
+@media (max-width: 640px) {
+  #site-footer .site-footer-divider {
+    margin: 0 0 1.5rem;
+  }
 }
 #site-footer p,
 #site-footer a,
@@ -245,8 +252,8 @@ html.dark .site-menu-group {
   /* 从主项下方舒展；收回使用同一组属性，反向时不会重启动画。 */
   transform: translateY(-6px) scale(0.96, 0.92);
   filter: blur(1.5px);
-  /* 上移 6px 会盖住触发器。裁掉同样的一截后，指针仍留在 ABOUT ME 上，下方留白继续连通菜单。 */
-  clip-path: inset(7px 0 0 0);
+  /* 上移 6px 会盖住触发器。只裁顶部 7px，右/下/左外扩留出阴影空间，避免 box-shadow 被裁出直角边。 */
+  clip-path: inset(7px -48px -48px -48px);
   pointer-events: none;
   transition: opacity var(--menu-duration), transform var(--menu-duration), filter var(--menu-duration), clip-path var(--menu-duration);
   transition-timing-function: cubic-bezier(0.4, 0, 0.7, 0.2);
@@ -255,7 +262,7 @@ html.dark .site-menu-group {
   opacity: 1;
   transform: translateY(0) scale(1);
   filter: none;
-  clip-path: inset(0 0 0 0);
+  clip-path: inset(0 -48px -48px -48px);
   pointer-events: auto;
   transition-timing-function: var(--menu-ease);
 }
@@ -432,8 +439,6 @@ html.dark .site-brand-badge:hover {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
 }
 
 .article-pagination-card {

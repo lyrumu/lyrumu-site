@@ -1,8 +1,10 @@
 {{/*
-  项目级 footer 覆写（2026-07-04）
-  唯一差异：底部行中间插入 RSS feed 入口。
+  项目级 footer 覆写
+  差异：顶部统一渲染星型分隔线，底部行中间插入 RSS feed 入口。
 */}}
-<footer id="site-footer" class="py-10 print:hidden">
+<footer id="site-footer" class="pb-10 print:hidden">
+  {{/* 全站统一页脚顶部星型分隔线，替代普通横线 border-top */}}
+  <div class="section-rule site-footer-divider not-prose" aria-hidden="true">✦</div>
   {{/* Footer menu */}}
   {{ if .Site.Params.footer.showMenu | default true }}
     {{ if .Site.Menus.footer }}

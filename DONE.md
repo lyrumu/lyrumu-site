@@ -6,6 +6,18 @@
 
 > 以下 2026-10-04～05 的变更均未提交或部署；Hugo 0.164.0 超出 Blowfish 声明范围的既有兼容警告保留。
 
+## 2026-11-26 · UI 细节修复与全站分隔线统一
+
+- `/life/` 为透明暗色线稿封面增加 `cover_surface: "light"` 可选暖米托底，修复深色模式不可见；顶栏下拉菜单 `clip-path` 右/下/左外扩 48px，消除浅色模式圆角外直角阴影裁切（`data/life.yaml`、`life-grid.html`、`_05_cards.css`、`_02_chrome.css`）。
+- 全站页脚由 `footer.html` 统一输出 `.site-footer-divider` 星型分隔线并移除 `#site-footer` 的 `border-top` 及 `list.html` 底部重复 `.section-rule`；同步移除 `.prose h2`、`.article-pagination-grid`、空列表提示的 `border-top` 并将 `single.html` 评论区 `<hr>` 统一为星型线（`footer.html`、`list.html`、`single.html`、`term.html`、`_02_chrome.css`、`_03_prose.css`、`_08_cover.css`）。
+- 本地通过生产构建、49 页 SEO 回归（含页脚星型线去重与 `life-sub-cover--light` 断言）、31 项 Node 单测及补丁格式检查；浏览器浅暗主题观感与线上部署待验证，未提交或部署。
+
+## 2026-11-26 · Works 作品状态、归档说明与细节优化
+
+- 为 `/works/` 列表卡片与作品详情头部新增统一状态徽章（`Updating` / `Archived` 红色 / `Live` / `Draft`）及可选卡片说明，并移除冗余副标题：`pi-diff`（统一标题，移除 `PLUGIN` 后缀）标为 `Updating`、卡片头右侧以品牌原色展示 `pi`、`npm` 与 `GitHub` 图标，详情头部新增 `npm` 与 `Pi Packages` 官方图标外链按钮；`MusicPocket` 与 `Linear Algebra Calculator` 标为 `Archived` 并附简短原因，移除后者冗余的 `featured` 标记（`data/projects.yaml`、`layouts/partials/cover/icon.html`、`status-badge.html`、`projects-list.html`、`project-info.html`、`_06_works-cards.css`）。
+- 列表封面保持默认首卡 `eager/high`、其余 `lazy/low` 的有序 LQIP 模糊加载，并在加载完成后对归档封面降饱和度；同排卡片标签改为底部对齐；`/works/musicpocket/` 替换为归档说明并删除未引用的 `readme-cover.png`，`/works/linear-algebra-calculator/` 正文顶部补充归档提示。
+- 本地通过生产构建、SEO 回归（含状态徽章、`npm` 按钮、有序加载与 `readme-cover.png` 清理断言）、Works 筛选单测及补丁格式检查；浏览器浅暗主题观感与线上部署待验证，未提交或部署，Hugo 既有兼容警告及 `content/works/pi-diff/` 未提交 WIP 保留。
+
 ## 2026-11-25 · 移动端布局与样式修复
 
 - `/life/music/` 移动端改单行紧凑 MiniPlayer（含贴底全宽进度条与亮色底轨修复）、歌曲卡 360px 外链并排与均衡器对齐、吸顶控制栏对齐 64px 顶栏并收敛单行（`_05_cards.css`、`_07_music-player.css`、`_10_music-darkside.css`）。

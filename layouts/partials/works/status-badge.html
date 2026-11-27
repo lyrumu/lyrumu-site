@@ -1,0 +1,12 @@
+{{- $raw := lower (.status | default "live") -}}
+{{- $labels := dict
+  "updating" "Updating"
+  "live" "Live"
+  "archived" "Archived"
+  "draft" "Draft"
+-}}
+{{- $label := index $labels $raw | default ($raw | title) -}}
+<span class="work-status-badge is-{{ $raw }}{{ with .class }} {{ . }}{{ end }}" data-status="{{ $raw }}">
+  <span class="work-status-badge__dot" aria-hidden="true"></span>
+  <span class="work-status-badge__label">{{ $label }}</span>
+</span>

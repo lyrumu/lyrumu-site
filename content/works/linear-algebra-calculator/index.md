@@ -2,6 +2,7 @@
 title: "Linear Algebra Calculator"
 description: "Explore the linear algebra calculator, its matrix and vector tools, technology stack, development setup, and online demo."
 date: 2026-10-16
+lastmod: 2026-11-26
 type: "work"
 layout: "page"
 draft: false
@@ -23,6 +24,7 @@ showComments: false
 [![GitHub language top](https://img.shields.io/github/languages/top/lyrumu/linear_algebra_calculator?color=blue)](https://github.com/lyrumu/linear_algebra_calculator)
 ![Website](https://img.shields.io/website?url=https%3A%2F%2Flyrumu.github.io%2Flinear_algebra_calculator%2F&label=online%20status)
 
+> **Archived**：当时临时做着玩的项目，目前已归档，不再维护；源码与在线 Demo 仍保留。
 
 An online linear algebra computation tool, rebuilt with React + TypeScript. All calculations run locally in the browser.
 

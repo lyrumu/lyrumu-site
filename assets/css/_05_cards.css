@@ -450,6 +450,16 @@ html.dark :is(.module-card, .article-link--card, .article-link--related, .articl
 html.dark .life-sub-cover {
   background: color-mix(in srgb, var(--fg-base) 4%, transparent);
 }
+/* 透明暗色线稿插画（由 data/life.yaml 的 cover_surface: light 启用）：
+   深色模式下保留柔和暖米托底，避免深色线条与暗底融合，同时保真彩色细节 */
+html.dark .life-sub-cover.life-sub-cover--light {
+  background: radial-gradient(
+    120% 90% at 30% 20%,
+    color-mix(in srgb, var(--accent) 12%, #EAE6DC) 0%,
+    #EAE6DC 65%
+  );
+  border-color: color-mix(in srgb, var(--fg-base) 22%, var(--line));
+}
 
 /* 图片类型：呼吸式 hover 动画（缩放 + 旋转 + 轻微浮动） */
 .life-sub-cover-img {

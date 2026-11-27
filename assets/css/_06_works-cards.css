@@ -152,6 +152,7 @@ html.dark .project-card-cover {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.62rem;
   text-transform: uppercase;
@@ -159,14 +160,81 @@ html.dark .project-card-cover {
   color: var(--fg-soft);
   margin-bottom: 0.1rem;
 }
+.project-card-meta {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
 .project-card-date { font-feature-settings: "tnum"; }
+.project-card-sources {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex: none;
+}
 .project-card-source {
   display: inline-flex;
   align-items: center;
-  color: var(--fg-mute);
-  transition: color 0.3s;
+  color: var(--fg-base);
+  opacity: 0.92;
+  transition: opacity 0.25s ease;
 }
-.project-card:hover .project-card-source { color: var(--accent); }
+.project-card:hover .project-card-source { opacity: 1; }
+.project-card-source.is-github { color: #181717; }
+html.dark .project-card-source.is-github { color: #f0f6fc; }
+.project-card-source.is-pi { color: #111111; }
+html.dark .project-card-source.is-pi { color: #f6f6f6; }
+
+/* 作品状态徽章（列表卡片与详情页复用） */
+.work-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  border: 1px solid var(--line);
+  color: var(--fg-mute);
+}
+.work-status-badge__dot {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 9999px;
+  background: currentColor;
+  flex: none;
+}
+.work-status-badge.is-updating {
+  background: color-mix(in srgb, var(--tag-green-bg) 70%, transparent);
+  border-color: color-mix(in srgb, var(--tag-green-fg) 32%, transparent);
+  color: var(--tag-green-fg);
+}
+.work-status-badge.is-live {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 32%, transparent);
+  color: var(--accent);
+}
+.work-status-badge.is-archived {
+  background: color-mix(in srgb, #fee2e2 78%, transparent);
+  border-color: color-mix(in srgb, #dc2626 32%, transparent);
+  color: #dc2626;
+}
+html.dark .work-status-badge.is-archived {
+  background: color-mix(in srgb, #ef4444 18%, transparent);
+  border-color: color-mix(in srgb, #fca5a5 32%, transparent);
+  color: #fca5a5;
+}
+.work-status-badge.is-draft {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--line);
+  color: var(--fg-soft);
+}
 
 .project-card-name {
   font-family: var(--font-serif-display);
@@ -178,13 +246,6 @@ html.dark .project-card-cover {
   font-variation-settings: "opsz" 60;
   line-height: 1.2;
 }
-.project-card-title {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--fg-soft);
-}
 .project-card-desc {
   font-family: var(--font-serif-body);
   font-size: 0.9rem;
@@ -193,6 +254,20 @@ html.dark .project-card-cover {
   color: var(--fg-mute);
   margin: 0.2rem 0 0;
 }
+.project-card-status-note {
+  margin: 0.35rem 0 0;
+  padding: 0.4rem 0.65rem;
+  border-left: 2px solid color-mix(in srgb, var(--line) 90%, transparent);
+  background: color-mix(in srgb, var(--bg-base) 55%, transparent);
+  border-radius: 0 0.35rem 0.35rem 0;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--fg-mute);
+}
+html.dark .project-card-status-note {
+  background: color-mix(in srgb, var(--fg-base) 4%, transparent);
+}
 
 /* 标签常显，整卡可由触屏与键盘直接访问。 */
 .project-card-tags {
@@ -200,7 +275,8 @@ html.dark .project-card-cover {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.3rem;
-  margin-top: 0.6rem;
+  margin-top: auto;
+  padding-top: 0.6rem;
 }
 .project-card-link:focus-visible {
   outline: 2px solid var(--accent);
@@ -249,6 +325,18 @@ html.dark .project-card-btn {
   color: #f0f6fc;
 }
 
+/* 归档态：保留 LQIP 模糊过渡，加载完成后降低封面饱和度（无 LQIP 时直接生效） */
+html:not(.js-blurup) .project-card.is-archived .project-card-cover img,
+html.js-blurup .project-card.is-archived .project-card-cover .blur-img:not([data-lqip]),
+html.js-blurup .project-card.is-archived .project-card-cover .blur-img[data-lqip].is-loaded {
+  filter: saturate(0.55) opacity(0.88);
+}
+html:not(.js-blurup) .project-card.is-archived:hover .project-card-cover img,
+html.js-blurup .project-card.is-archived:hover .project-card-cover .blur-img:not([data-lqip]),
+html.js-blurup .project-card.is-archived:hover .project-card-cover .blur-img[data-lqip].is-loaded {
+  filter: saturate(0.8) opacity(0.96);
+}
+
 /* 草稿态 */
 .project-card.is-draft {
   opacity: 0.6;
@@ -262,7 +350,17 @@ html.dark .project-card-btn {
   .project-card:hover .project-card-cover img { transform: none; }
 }
 
-.work-project-actions { margin: 1rem 0; }
+.work-project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+.work-project-status {
+  font-size: 0.68rem;
+  padding: 0.3rem 0.7rem;
+}
 .article-content img.readme-badge {
   display: inline-block;
   width: auto;

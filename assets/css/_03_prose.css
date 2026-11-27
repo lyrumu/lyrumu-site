@@ -63,15 +63,8 @@
 .prose h2 {
   font-size: 1.85rem;
   margin-top: 2.5rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid var(--line);
 }
-.prose h2:first-child { border-top: 0; padding-top: 0; }
-.prose hr + h2,
-.prose .section-rule + h2 {
-  border-top: 0;
-  padding-top: 0;
-}
+.prose h2:first-child { margin-top: 0; }
 .prose h3 {
   font-size: 1.35rem;
   margin-top: 2rem;

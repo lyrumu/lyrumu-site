@@ -154,15 +154,12 @@
   {{ else }}
     {{ if and $showChildList (not .Content) }}
     <section class="not-prose prose dark:prose-invert max-w-none">
-      <p class="py-8 border-t border-neutral-200 dark:border-neutral-700 italic text-neutral-500">
+      <p class="py-8 italic text-neutral-500">
         （这里还没有内容 — 你可以在 <code>content/{{ .Section }}/</code> 下新建 <code>.md</code> 文件开始）
       </p>
     </section>
     {{ end }}
   {{ end }}
-
-  {{/* 底部星形分隔线 — 所有使用 list layout 的 section 页面自动生成 */}}
-  <div class="section-rule not-prose" aria-hidden="true">✦</div>
 {{ end }}
 
 {{ define "list-crumb" }}
